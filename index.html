@@ -623,13 +623,11 @@
 
     <div class="panel" id="commanderPanel">
       <h2>Mes fichiers</h2>
-      <p class="hint" style="color:#e4e5e7;">Générez vos fichiers de production, puis rendez-vous sur la boutique pour les importer et commander.</p>
+      <p class="hint" style="color:#e4e5e7;">Générez vos fichiers de production, vous serez ensuite redirigé vers la boutique pour commander.</p>
       <div class="actions">
-        <button class="act" id="checkoutBtn">Télécharger fichiers (ZIP)</button>
-        <button class="act" id="exportAllVoletsBtn">Découpe plotter (ZIP)</button>
+        <button class="act" id="exportAllVoletsBtn">Télécharger pour commander (ZIP)</button>
         <a id="perforatriceGabaritLink" href="https://canva.link/gabarit-de-decoupe-perforatrice-quadreti" target="_blank" rel="noopener" class="act" style="display:block; text-align:center; text-decoration:none; font-family:var(--font-main); font-weight:600; font-size:13px; border-radius:8px; padding:10px 14px; border:1px solid var(--border); letter-spacing:0.01em; color:#000000; background:#efefef; box-sizing:border-box;">Gabarit perforatrice</a>
       </div>
-      <a id="ionosShopLink" href="#" target="_blank" rel="noopener" class="modal-link-btn" style="margin-top:10px;">Aller à la boutique →</a>
     </div>
   </div>
 
@@ -723,7 +721,6 @@
     { id: 'mosaic_style',       label: 'Style photo (Pixel Photo/Mosaïque)', category: 'Mosaïque', el: 'mosaicStyleRow' },
     { id: 'double_lecture',     label: 'Filtre double lecture',        category: 'Mosaïque', el: 'featureBlock_double_lecture' },
     { id: 'harmonize',          label: 'Harmonisation des tons',       category: 'Mosaïque', el: 'featureBlock_harmonize' },
-    { id: 'decoupe_plotter',    label: 'Découpe plotter (ZIP)',        category: 'Production', el: 'exportAllVoletsBtn' },
     { id: 'gabarit_perforatrice', label: 'Gabarit perforatrice',       category: 'Production', el: 'perforatriceGabaritLink' },
   ];
 
@@ -784,11 +781,6 @@
 
   // ---------- Boutique ----------
   const IONOS_SHOP_URL = 'https://www.quadreti.fr/boutique/';
-
-  function updatePriceDisplay() {
-    const shopLink = document.getElementById('ionosShopLink');
-    if (shopLink) shopLink.href = IONOS_SHOP_URL;
-  }
 
   // ---------- State ----------
   // panelsCols/panelsRows remplacent l'ancienne dimension unique panelsPerSide : un mur
@@ -2401,7 +2393,6 @@
     currentPanelRow = 0; currentPanelCol = 0;
     buildPanelGrid();
     buildPanelNav();
-    updatePriceDisplay();
   }
 
   sizePrevBtn.addEventListener('click', () => { if (sizeCarouselIndex > 0) trySelectSizeIndex(sizeCarouselIndex - 1); });
@@ -2936,13 +2927,6 @@
     link.click();
 
     statusMsg.textContent = `Pré-découpe complète générée ✓ (${filename}, ${totalPanels} carreaux, ${totalPanels * 4} fichiers)`;
-    if (!silent) {
-      openFallbackModal(
-        'Votre ZIP est prêt',
-        'Le téléchargement s\'est peut-être lancé automatiquement. S\'il ne s\'est rien passé, ouvrez-le ici :',
-        [{ label: 'Ouvrir le ZIP', onClick: () => { const a = document.createElement('a'); a.href = zipUrl; a.download = filename; a.click(); } }]
-      );
-    }
   }
 
   // ---------- Verso (double codification carreau + tesselle) ----------
@@ -3086,12 +3070,12 @@
 
   const exportAllVoletsBtn = document.getElementById('exportAllVoletsBtn');
   exportAllVoletsBtn.addEventListener('click', () => withBusyButton(exportAllVoletsBtn, 'Génération…', async () => {
-    // Vérification directe au clic, pas seulement à l'ouverture du panneau admin — sinon
-    // quelqu'un qui devine l'URL ?admin=1 pourrait utiliser cet export sans jamais avoir
-    // à saisir le mot de passe, puisque le bouton lui-même n'était pas verrouillé.
-    const ok = await promptAdminPassword();
-    if (!ok) return;
     await downloadAllPanelsVoletsZip(false);
+    // Redirection vers la boutique juste après le téléchargement : le bouton devient le
+    // seul chemin d'export public (ux compose, télécharge, puis atterrit directement sur
+    // la boutique pour commander) — évite d'avoir deux boutons distincts qui créeraient
+    // une ambiguïté de parcours.
+    window.open(IONOS_SHOP_URL, '_blank');
   }));
 
   // ---------- Export CSV ----------
@@ -3133,21 +3117,9 @@
   }
 
   // ---------- Mes fichiers (production) ----------
-  const checkoutBtn = document.getElementById('checkoutBtn');
-  checkoutBtn.addEventListener('click', () => withBusyButton(checkoutBtn, 'Génération en cours…', async () => {
-    const zipUrl = await downloadAllPanelsZip(true);
-    if (!zipUrl) return; // grille vide, message déjà affiché
-    downloadCsv(true);
-
-    openFallbackModal(
-      'Vos fichiers sont prêts',
-      `Le ZIP (un fichier par carreau, échelle réelle) et le CSV se sont peut-être téléchargés automatiquement. Si rien ne s'est passé, réessayez ici, puis rendez-vous sur la boutique pour commander :`,
-      [
-        { label: 'Télécharger le ZIP', onClick: () => { const a = document.createElement('a'); a.download = `quadreti-production-${panelsCols}x${panelsRows}.zip`; a.href = zipUrl; a.click(); } },
-        { label: 'Aller à la boutique →', onClick: () => window.open(IONOS_SHOP_URL, '_blank') },
-      ]
-    );
-  }));
+  // Le bouton "Télécharger fichiers (ZIP)" (checkoutBtn) a été retiré : il faisait doublon
+  // avec "Télécharger pour commander" (ex-Découpe plotter), créant deux chemins possibles
+  // pour ux et un risque de confusion sur lequel utiliser. Un seul export public désormais.
 
   // ---------- Mode créatif (toute la surface murale) ----------
   const mosaicUploadZone = document.getElementById('mosaicUploadZone');
@@ -3207,17 +3179,6 @@
       const enabled = variant.features ? variant.features[f.id] !== false : true;
       el.style.display = enabled ? '' : 'none';
     });
-
-    // Verrou dur, indépendant du panneau de contrôle : sur le Designer complet, le
-    // bouton Découpe plotter (outil de production interne, jamais destiné à ux) ne reste
-    // visible que si l'URL contient ?admin=1 — jamais via une simple iframe publique
-    // embarquant l'app par défaut. Empêche qu'un oubli de configuration (ex: iframe sans
-    // ?variant=) expose malgré tout cet outil au public. Gabarit perforatrice n'est PAS
-    // concerné : ce lien Canva est volontairement destiné à rester accessible à ux.
-    if (key === 'default' && new URLSearchParams(window.location.search).get('admin') !== '1') {
-      const el = document.getElementById('exportAllVoletsBtn');
-      if (el) el.style.display = 'none';
-    }
 
     // Thème : couleurs surchargées pour cette app (variables CSS), le reste garde la charte par défaut
     THEME_REGISTRY.forEach(t => {
@@ -3846,7 +3807,6 @@
   renderPalette();
   buildPanelGrid();
   buildPanelNav();
-  updatePriceDisplay();
   applyAppVariant();
 </script>
 
