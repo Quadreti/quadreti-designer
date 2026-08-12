@@ -3203,6 +3203,17 @@
       el.style.display = enabled ? '' : 'none';
     });
 
+    // Verrou dur, indépendant du panneau de contrôle : sur le Designer complet, le
+    // bouton Découpe plotter (outil de production interne, jamais destiné à ux) ne reste
+    // visible que si l'URL contient ?admin=1 — jamais via une simple iframe publique
+    // embarquant l'app par défaut. Empêche qu'un oubli de configuration (ex: iframe sans
+    // ?variant=) expose malgré tout cet outil au public. Gabarit perforatrice n'est PAS
+    // concerné : ce lien Canva est volontairement destiné à rester accessible à ux.
+    if (key === 'default' && new URLSearchParams(window.location.search).get('admin') !== '1') {
+      const el = document.getElementById('exportAllVoletsBtn');
+      if (el) el.style.display = 'none';
+    }
+
     // Thème : couleurs surchargées pour cette app (variables CSS), le reste garde la charte par défaut
     THEME_REGISTRY.forEach(t => {
       const value = variant.theme && variant.theme[t.cssVar];
