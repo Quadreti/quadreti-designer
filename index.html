@@ -3086,6 +3086,11 @@
 
   const exportAllVoletsBtn = document.getElementById('exportAllVoletsBtn');
   exportAllVoletsBtn.addEventListener('click', () => withBusyButton(exportAllVoletsBtn, 'Génération…', async () => {
+    // Vérification directe au clic, pas seulement à l'ouverture du panneau admin — sinon
+    // quelqu'un qui devine l'URL ?admin=1 pourrait utiliser cet export sans jamais avoir
+    // à saisir le mot de passe, puisque le bouton lui-même n'était pas verrouillé.
+    const ok = await promptAdminPassword();
+    if (!ok) return;
     await downloadAllPanelsVoletsZip(false);
   }));
 
