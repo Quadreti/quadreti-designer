@@ -213,6 +213,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      corps du titre juste ce qu'il faut pour qu'il tienne sur une seule ligne. */
   .title-word{ opacity:0; animation: titleFade .4s ease 1.2s forwards; white-space: nowrap; }
   /* V131 — le logo Q (motif officiel) s'assemble tesselle par tesselle avant l'apparition du titre */
+  /* V137 — Bloc d'en-tete compact qui remplace le grand titre en double. */
+  .app-title{
+    font-family: var(--font-main); font-weight:700; letter-spacing:-.005em;
+    font-size: clamp(21px, 2.5vw, 30px); color: var(--title);
+    margin: 0 0 4px; text-align:center;
+  }
+  .app-baseline{
+    font-family: var(--font-main); font-weight:600; font-size:14px;
+    letter-spacing:.06em; text-transform:uppercase; color: var(--terracotta, #E2725B);
+    margin: 0 0 10px; text-align:center;
+  }
   h1.title-anim{ display:flex; align-items:center; justify-content:center; gap:.3em; }
   .title-mosaic{ display:grid; grid-template-columns:repeat(4,.26em); gap:.05em; flex-shrink:0; }
   .title-mosaic i{ width:.26em; height:.26em; border-radius:22%; background:#2b353e; opacity:0; transform:scale(.3); animation: titleTileIn .5s cubic-bezier(.34,1.56,.64,1) forwards; }
@@ -802,6 +813,46 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   }
 
   /* ============================================================
+     V137 — DISPOSITION ORDINATEUR (piste 6a)
+     Bloc en min-width : le telephone ne le lit meme pas, sa mise en page
+     reste rigoureusement celle d'avant.
+       - la colonne centrale prend toute la place restante au lieu d'etre
+         centree dans 1440px : le mur grandit d'autant (voir computeCellPx,
+         qui mesure desormais le conteneur) ;
+       - les deux colonnes laterales deviennent collantes : sur un mur 5x5,
+         les outils et les actions ne disparaissent plus vers le haut quand
+         on descend dans la page. Elles defilent en interne si elles sont
+         plus hautes que l'ecran.
+     ============================================================ */
+  @media (min-width: 1024px){
+    /* V137 — les trois cartouches de reglage passent dans la colonne de gauche : elles
+       occupaient 168px sur toute la largeur pour trois petits menus, juste au-dessus du mur.
+       Deplacees ici, elles rendent cette hauteur a la zone de composition. */
+    .config-bar.in-col{ flex-direction:column; max-width:none !important; gap:14px; margin:0 0 16px; width:100%; }
+    .config-bar.in-col .cartouche-row{ max-width:none; flex:0 0 auto; width:100%; }
+    .studio{
+      grid-template-columns: 240px minmax(0, 1fr) 240px;
+      max-width: 1760px;
+      padding: 0 24px;
+      gap: 28px;
+    }
+    #atelierCol{ justify-self: stretch; }
+    .grid-wrap{ max-width: 100%; }
+    /* .grid-stage garde la grille centree dans la colonne elargie */
+    #atelierCol .grid-stage,
+    #atelierCol .grid-wrap{ margin-left: auto; margin-right: auto; }
+    #toolsCol, #actionsCol{
+      position: sticky;
+      top: 74px;                 /* sous le bandeau de navigation colle */
+      align-self: start;
+      max-height: calc(100vh - 90px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+  }
+
+  /* ============================================================
      Bandeau de navigation + bas de page + écran de chargement
      ============================================================ */
   .appnav{ position:sticky; top:0; width:100%; z-index:500; background:#F5F5F5ee; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border-bottom:1px solid var(--border-light); max-width:none; text-align:left; margin-top:0; margin-bottom:0; }
@@ -813,6 +864,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .appnav-logo i.tail{ background:#E2725B; }
   .appnav-text{ display:flex; flex-direction:column; line-height:1.05; }
   .appnav-word{ font-family:var(--font-main); font-weight:700; font-size:16px; color:#2b353e; }
+  /* V137 — le bandeau porte desormais le nom de l'APP. "Quadreti" garde la graisse du nom
+     officiel de la marque, "Designer" passe en graisse fine : on lit d'abord la marque,
+     puis l'outil. C'est ce qui permet de supprimer le grand titre en double juste en dessous. */
+  .appnav-word-app{ font-weight:400; color:#5a636b; }
   .appnav-cat{ font-family:var(--font-main); font-weight:500; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:#8a8f83; margin-top:2px; }
   .appnav-links{ display:flex; align-items:center; gap:22px; }
   .appnav-links a{ font-family:var(--font-main); font-weight:600; font-size:13.5px; color:#2b353e; text-decoration:none; opacity:.75; }
@@ -1027,8 +1082,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         <i></i><i></i><i></i><i class="tail"></i>
       </span>
       <span class="appnav-text">
-        <span class="appnav-word">Quadreti</span>
-        <span class="appnav-cat">Support créatif modulaire</span>
+        <span class="appnav-word">Quadreti<span class="appnav-word-app"> Designer</span></span>
       </span>
     </a>
     <nav class="appnav-links" id="appnavLinks">
@@ -1061,7 +1115,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 <header>
   <!-- Titre animé (V120) : le point du "i" de Designer est une tesselle terracotta
        qui descend, pivote et se clipse à sa place — jouée une seule fois au chargement. -->
-  <h1 class="title-anim"><span class="title-mosaic" aria-hidden="true"><i style="animation-delay:.55s"></i><i style="animation-delay:.62s"></i><i style="animation-delay:.69s"></i><i class="tm-empty"></i><i style="animation-delay:.48s"></i><i class="tm-empty"></i><i style="animation-delay:.76s"></i><i class="tm-empty"></i><i style="animation-delay:.41s"></i><i class="tm-empty"></i><i style="animation-delay:.83s"></i><i class="tm-empty"></i><i style="animation-delay:.34s"></i><i style="animation-delay:.27s"></i><i style="animation-delay:.2s"></i><i class="tm-tail" style="animation-delay:0s"></i></span><span class="title-word">Quadret<span class="title-idot"><span class="title-tess q"></span></span> Des<span class="title-idot"><span class="title-tess d"></span></span>gner</span></h1>
+  <!-- V137 — Le grand titre "Quadreti Designer" faisait doublon avec le bandeau du haut, qui
+       porte desormais le nom de l'app. A la place : la categorie du produit en titre, la
+       promesse en une ligne, puis le texte marketing (conserve tel quel). On y gagne en
+       hauteur ET en sens : le nom n'est plus dit deux fois, et on annonce ce qu'on vend. -->
+  <h1 class="app-title">Support créatif modulaire</h1>
+  <p class="app-baseline">De l'app au mur</p>
   <script>
   // V132 — les tesselles du logo et les points des i suivent la souris au survol du titre :
   // chaque tesselle est doucement repoussée par le curseur puis revient à sa place.
@@ -2576,13 +2635,51 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     return panels[currentPanelRow][currentPanelCol];
   }
 
+  // V137 — La taille d'une tesselle se calculait sur la largeur de la FENETRE et etait
+  // plafonnee a 52px en dur. Deux consequences : le mur restait a 382px de large quelle que
+  // soit la taille de l'ecran (sur un 27 pouces, il flottait au milieu du vide), et aucune
+  // reorganisation des colonnes ne pouvait l'agrandir puisque la place reellement disponible
+  // n'entrait pas dans le calcul.
+  //
+  // On mesure desormais la COLONNE de l'atelier, et surtout pas .grid-wrap : ce conteneur-la
+  // s'ajuste a son contenu (son parent .center-col centre ses enfants), donc le mesurer
+  // revenait a demander a la grille sa propre taille — elle repondait 0 et les tesselles
+  // tombaient au minimum. La colonne, elle, a une largeur imposee par la mise en page.
+  const CELL_PX_MIN = 24;
+  const CELL_PX_MAX_MOBILE = 52;   // inchange sur telephone : c'est le doigt qui commande
+  const CELL_PX_MAX_DESKTOP = 78;  // sur ordinateur, le mur peut respirer
   function computeCellPx() {
     const gap = 3;
-    const sideMargin = 40; // reserved per side so a thumb can scroll without touching the grid
-    const wrapPadding = 20; // grid-wrap has 10px padding each side
-    const available = window.innerWidth - (sideMargin * 2) - wrapPadding;
-    let cellPx = Math.floor((available - gap * (PANEL_SIZE - 1)) / PANEL_SIZE);
-    return Math.max(24, Math.min(52, cellPx));
+    const desktop = window.innerWidth >= 1024;
+
+    // --- TELEPHONE / TABLETTE : formule historique, volontairement inchangee. ---
+    // Les 40px de marge de chaque cote ne sont pas decoratifs : une case capture le toucher
+    // pour peindre au glisser, donc sans cette bande libre le pouce ne peut plus faire
+    // defiler la page depuis le bord de la grille.
+    if (!desktop) {
+      const dispo = window.innerWidth - 80 - 20;
+      const c = Math.floor((dispo - gap * (PANEL_SIZE - 1)) / PANEL_SIZE);
+      return Math.max(CELL_PX_MIN, Math.min(CELL_PX_MAX_MOBILE, c));
+    }
+
+    // --- ORDINATEUR : on mesure la place reellement disponible. ---
+    const multi = (panelsCols > 1 || panelsRows > 1); // fleches de navigation autour du mur
+    let available = 0;
+    const col = document.getElementById('atelierCol');
+    if (col) {
+      const w = col.getBoundingClientRect().width;
+      // padding de .grid-wrap (20) + place des fleches laterales si mur multi-carreaux
+      if (w > 0) available = w - 20 - (multi ? 96 : 8);
+    }
+    if (!(available > 0)) {
+      // repli : avant le tout premier rendu, la colonne n'a pas encore de largeur
+      available = window.innerWidth - 100;
+    }
+    // Le mur doit aussi tenir en HAUTEUR sans qu'on ait a faire defiler pour le voir entier.
+    const parHauteur = Math.floor((window.innerHeight - 300) / PANEL_SIZE);
+    const maxCell = Math.min(CELL_PX_MAX_DESKTOP, Math.max(CELL_PX_MIN, parHauteur));
+    const cellPx = Math.floor((available - gap * (PANEL_SIZE - 1)) / PANEL_SIZE);
+    return Math.max(CELL_PX_MIN, Math.min(maxCell, cellPx));
   }
 
   function buildPanelGrid() {
@@ -6947,4 +7044,32 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
 
 
+<script>
+// V137 — Deplacement des cartouches de reglage dans la colonne de gauche sur ordinateur.
+// Meme mecanique que celle qui place deja la galerie sous le studio. Sur telephone, la barre
+// reprend sa place d'origine au-dessus du studio : la disposition mobile est inchangee.
+(function(){
+  var mq = window.matchMedia('(min-width: 1024px)');
+  function place(){
+    var bar = document.querySelector('.config-bar');
+    var tools = document.getElementById('toolsCol');
+    var studio = document.querySelector('.studio');
+    if (!bar || !tools || !studio || !studio.parentElement) return;
+    if (mq.matches){
+      if (bar.parentElement !== tools){
+        tools.insertBefore(bar, tools.firstChild);
+        bar.classList.add('in-col');
+      }
+    } else if (bar.parentElement === tools){
+      studio.parentElement.insertBefore(bar, studio);
+      bar.classList.remove('in-col');
+    }
+    window.dispatchEvent(new Event('resize'));
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', place);
+  else place();
+  if (mq.addEventListener) mq.addEventListener('change', place);
+  else if (mq.addListener) mq.addListener(place);
+})();
+</script>
 </body></html>
