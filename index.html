@@ -879,6 +879,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     /* V141 — le reperage du carreau et le bouton d'agrandissement prennent moins de hauteur :
        c'est autant de gagne au-dessus du mur sur les petits ecrans d'ordinateur portable. */
     .below-grid{ font-size:15px; margin:0 0 6px; }
+    #growWallBtn.in-col{ width:100%; margin:0 0 16px; }
+    /* V142 — marge haute du contenu resserree : 32px au-dessus du plan de travail, c'etait
+       de l'espace perdu une fois le bloc de titre parti. */
+    .app-content{ padding-top:12px; }
     #growWallBtn{ margin-bottom:4px; }
     header.in-col #headerHint{ max-width:620px; margin-left:auto; margin-right:auto; }
     .config-bar.in-col .cartouche-row{ max-width:none; flex:0 0 auto; width:100%; }
@@ -1104,11 +1108,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 })();
 </script>
 
-<div class="appticker" aria-hidden="true">
-  <div class="appticker-track" id="appTickerTrack"></div>
-</div>
+<!-- V142 — le bandeau defilant est descendu juste au-dessus du pied de page : il
+     occupait 30px tout en haut, avant meme la barre de navigation, et repoussait le plan
+     de travail d'autant. Ses arguments restent lisibles, en fin de parcours. -->
+
 <script>
-(function(){
+document.addEventListener('DOMContentLoaded', function(){
   var items = [
     'Composez, imprimez, clipsez, changez à volonté.',
     'Pas de colle, pas d\'outils, pas d\'attente.',
@@ -1116,6 +1121,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     'Le mur qui grandit avec vous.',
     'Support créatif modulaire — brevet déposé.'
   ];
+  // V142 — le bandeau est desormais en bas de page : ce script s'executait avant lui et ne
+  // le trouvait plus, le bandeau restait vide. On attend donc que le document soit pret.
   var track = document.getElementById('appTickerTrack');
   if (!track) return;
   var html = '';
@@ -1125,7 +1132,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     });
   }
   track.innerHTML = html;
-})();
+});
 </script>
 
 <header class="appnav" id="appnavHeader">
@@ -7103,6 +7110,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
 </div>
 
+<div class="appticker" aria-hidden="true">
+  <div class="appticker-track" id="appTickerTrack"></div>
+</div>
 <footer class="appfoot">
   <div class="appfoot-inner">
     <div>
@@ -7131,7 +7141,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     var tools = document.getElementById('toolsCol');
     var studio = document.querySelector('.studio');
     if (!bar || !tools || !studio || !studio.parentElement) return;
-    var head = document.querySelector('.app-content > header');
+    // le bloc a pu etre deplace dans la colonne : on le cherche aux deux endroits, sinon
+    // le retour en arriere ne le retrouvait plus.
+    var head = document.querySelector('.app-content > header, #atelierCol > header');
     var atelier = document.getElementById('atelierCol');
     if (mq.matches){
       if (bar.parentElement !== tools){
@@ -7148,6 +7160,15 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         actions.insertBefore(nav, actions.firstChild);
         nav.classList.add('in-col');
       }
+      // V142 — "Agrandir le mur" est une action, pas un element du plan de travail : il
+      // occupait 52px juste au-dessus du carreau. Il rejoint la colonne de droite, sous le
+      // reperage, et rend cette hauteur au mur.
+      var grandir = document.getElementById('growWallBtn');
+      if (grandir && actions && grandir.parentElement !== actions){
+        if (nav && nav.parentElement === actions) nav.insertAdjacentElement('afterend', grandir);
+        else actions.insertBefore(grandir, actions.firstChild);
+        grandir.classList.add('in-col');
+      }
       // V138 — le bloc de titre descend dans la colonne centrale : les colonnes laterales
       // remontent alors a son niveau au lieu de commencer sous lui. La place vide de chaque
       // cote du texte est enfin utilisee, et toute l'app se compacte vers le haut.
@@ -7162,6 +7183,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }
       var nav2 = document.getElementById('panelNavWrap');
       var atelier2 = document.getElementById('atelierCol');
+      var grandir2 = document.getElementById('growWallBtn');
+      if (grandir2 && atelier2 && grandir2.parentElement !== atelier2){
+        atelier2.insertBefore(grandir2, atelier2.firstChild);
+        grandir2.classList.remove('in-col');
+      }
       if (nav2 && atelier2 && nav2.parentElement !== atelier2){
         atelier2.insertBefore(nav2, atelier2.firstChild);
         nav2.classList.remove('in-col');
