@@ -918,12 +918,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .appnav{ position:sticky; top:0; width:100%; z-index:500; background:#F5F5F5ee; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border-bottom:1px solid var(--border-light); max-width:none; text-align:left; margin-top:0; margin-bottom:0; }
   .appnav-inner{ width:100%; margin:0; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 24px; box-sizing:border-box; }
   .appnav-brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
-  .appnav-logo{ display:grid; grid-template-columns:repeat(4,1fr); gap:2px; width:26px; height:26px; flex-shrink:0; }
-  .appnav-logo i{ border-radius:2px; background:#2b353e; }
+  .appnav-logo{ display:grid; grid-template-columns:repeat(4,1fr); gap:1.03px; width:26px; height:26px; flex-shrink:0; }
+  .appnav-logo i{ border-radius:1.26px; background:#2b353e; }
   .appnav-logo i.empty{ background:transparent; }
   .appnav-logo i.tail{ background:#E2725B; }
   .appnav-text{ display:flex; flex-direction:column; line-height:1.05; }
-  .appnav-word{ font-family:var(--font-main); font-weight:700; font-size:16px; color:#2b353e; }
+  .appnav-word{ font-family:var(--font-main); font-weight:600; font-size:16px; color:#2b353e; }
+  .appnav-word .i-dot, .appfoot-brand .i-dot{ position:relative; display:inline-block; }
+  .appnav-word .accent-dot, .appfoot-brand .accent-dot{ position:absolute; left:50%; top:0.02em; transform:translateX(-50%); width:.16em; height:.16em; border-radius:.035em; background:#E2725B; }
   /* V137 — le bandeau porte desormais le nom de l'APP. "Quadreti" garde la graisse du nom
      officiel de la marque, "Designer" passe en graisse fine : on lit d'abord la marque,
      puis l'outil. C'est ce qui permet de supprimer le grand titre en double juste en dessous. */
@@ -952,7 +954,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .appfoot-logo-row{ display:inline-flex; align-items:center; gap:10px; text-decoration:none; }
   .appfoot-logo-row .appnav-logo i{ background:#F2EEDF; }
   .appfoot-logo-row .appnav-logo i.tail{ background:#E2725B; }
-  .appfoot-brand{ font-family:var(--font-main); font-weight:700; font-size:14px; color:#F2EEDF; }
+  .appfoot-brand{ font-family:var(--font-main); font-weight:600; font-size:14px; color:#F2EEDF; }
   .appfoot-tag{ font-family:var(--font-main); font-size:12px; color:#8a938c; }
   .appfoot-links{ display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
   .appfoot-links a{ font-family:var(--font-main); font-weight:600; font-size:12.5px; color:#c9c3b2; text-decoration:none; }
@@ -1197,7 +1199,7 @@ document.addEventListener('DOMContentLoaded', function(){
         <i></i><i></i><i></i><i class="tail"></i>
       </span>
       <span class="appnav-text">
-        <span class="appnav-word">Quadreti<span class="appnav-word-app"> Designer</span></span>
+        <span class="appnav-word">Quadret<span class="i-dot">ı<i class="accent-dot"></i></span><span class="appnav-word-app"> Designer</span></span>
       </span>
     </a>
     <nav class="appnav-links" id="appnavLinks">
@@ -7198,7 +7200,7 @@ document.addEventListener('DOMContentLoaded', function(){
         <i></i><i class="empty"></i><i></i><i class="empty"></i>
         <i></i><i></i><i></i><i class="tail"></i>
       </span>
-      <span class="appfoot-brand">Quadreti</span>
+      <span class="appfoot-brand">Quadret<span class="i-dot">ı<i class="accent-dot"></i></span></span>
     </a>
     <div class="appfoot-tag">Composez, imprimez, clipsez, changez à volonté.</div>
     <nav class="appfoot-links">
