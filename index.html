@@ -929,17 +929,20 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      puis l'outil. C'est ce qui permet de supprimer le grand titre en double juste en dessous. */
   .appnav-word-app{ font-weight:400; color:#5a636b; }
   .appnav-cat{ font-family:var(--font-main); font-weight:500; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:#8a8f83; margin-top:2px; }
-  .appnav-links{ display:flex; align-items:center; gap:22px; }
-  .appnav-links a{ font-family:var(--font-main); font-weight:600; font-size:13.5px; color:#2b353e; text-decoration:none; opacity:.75; }
-  .appnav-links a:hover{ opacity:1; }
-  .appnav-burger{ display:none; background:none; border:none; cursor:pointer; padding:6px; flex-direction:column; gap:4px; }
-  .appnav-burger span{ display:block; width:20px; height:2px; background:#2b353e; }
-  @media (max-width:720px){
-    .appnav-links{ position:fixed; top:57px; left:0; right:0; background:#F5F5F5; flex-direction:column; align-items:flex-start; gap:0; padding:8px 20px 16px; border-bottom:1px solid var(--border-light); transform:translateY(-8px); opacity:0; pointer-events:none; transition:opacity .18s, transform .18s; }
-    .appnav-links.open{ opacity:1; transform:translateY(0); pointer-events:auto; }
-    .appnav-links a{ padding:10px 0; width:100%; opacity:1; }
-    .appnav-burger{ display:flex; }
+  /* Harmonisation du 20/08/2026 : menu sandwich permanent (même mécanique que le site),
+     plus de bascule à 720px vers une barre de liens en clair. Le ticker reste en bas de
+     page (décision V142 conservée, pas de changement d'espace de travail). */
+  .appnav-links{
+    position:fixed; top:57px; left:0; right:0; z-index:499; background:#F5F5F5;
+    display:flex; flex-direction:column; align-items:flex-start; gap:0;
+    padding:8px 20px 16px; border-bottom:1px solid var(--border-light);
+    transform:translateY(-8px); opacity:0; pointer-events:none; transition:opacity .18s, transform .18s;
   }
+  .appnav-links.open{ opacity:1; transform:translateY(0); pointer-events:auto; }
+  .appnav-links a{ font-family:var(--font-main); font-weight:600; font-size:13.5px; color:#2b353e; text-decoration:none; padding:10px 0; width:100%; }
+  .appnav-links a:hover{ opacity:.7; }
+  .appnav-burger{ display:flex; background:none; border:none; cursor:pointer; padding:6px; flex-direction:column; gap:4px; }
+  .appnav-burger span{ display:block; width:20px; height:2px; background:#2b353e; }
 
   .appfoot{ width:100%; margin-top:56px; background:#2b353e; color:#c9c3b2; }
   .appfoot-inner{ width:100%; margin:0; padding:28px 24px; box-sizing:border-box; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px; }
