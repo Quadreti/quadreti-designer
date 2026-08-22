@@ -1106,7 +1106,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      contenu qui glisse sous le pouce. Un onglet actif retouché replie le pont.
      Le PC (>=1024px) garde le B+ valide, rien ne change au-dessus du seuil. ---- */
   @media (max-width: 1023px){
-    body.v142-m{ padding-bottom:54px; }
+    body.v142-m{ padding-bottom:54px; overscroll-behavior-y:contain; }
     .v140-rail{ display:none; } /* le pont remplace le rail sur mobile */
     /* En mode pont, le bloc titre/pitch au-dessus du mur est redondant (la marque
        vit dans le bandeau) : masque, sa hauteur devient de la tesselle. */
@@ -1154,7 +1154,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     .dkthemewrap{ display:none; align-items:center; justify-content:center; padding:8px 12px; }
     body.v142-open .dkthemewrap{ display:flex; }
     .dkbody{ display:none; max-height:46vh; overflow-y:auto; padding:4px 10px 12px;
-      scrollbar-width:thin; scrollbar-color:var(--teal) transparent; }
+      scrollbar-width:thin; scrollbar-color:var(--teal) transparent;
+      /* V142.10 — tirer vers le bas en haut du tiroir declenchait le "tirer pour
+         rafraichir" du navigateur (rechargement intempestif) au lieu de rester
+         dans le defilement interne. Empeche le geste de remonter jusqu'a la page. */
+      overscroll-behavior-y: contain; }
     body.v142-open .dkbody{ display:block; }
     /* le pont heberge les blocs existants ; les classes de body choisissent la vue */
     .dkbody > *{ display:none !important; }
