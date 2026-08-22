@@ -264,22 +264,32 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   #actionsCol{ grid-area: actions; }
 
   * { box-sizing: border-box; }
+  /* V142.6 — correctif radical : la page ne doit JAMAIS pouvoir glisser sur le
+     cote, quelle qu'en soit la cause exacte (probleme rapporte : mur qui semble
+     decale, marges asymetriques). En interdisant tout defilement horizontal a la
+     racine, un eventuel debordement reste invisible au lieu de decaler la vue. */
+  html{ overflow-x:hidden; width:100%; }
   body{
-    margin:0; min-height:100vh;
+    margin:0; min-height:100vh; max-width:100vw; overflow-x:hidden;
     background: var(--bg);
     color: var(--title); font-family: var(--font-main);
     display:flex; flex-direction:column; align-items:stretch; padding: 0;
   }
   /* V140.8 — arriere-plan « tesselles eparpillees » (visuel valide par le fondateur).
-     Recree en SVG vectoriel integre plutot qu'en image : UNE seule piece calee sur
-     l'ecran (position:fixed + cover), jamais de repetition ni de raccord, s'adapte
-     a toutes les tailles, et laisse le fond prendre la couleur du theme en cours.
-     Rendu derriere tout le contenu (z-index:-1), au-dessus de la couleur du body. */
+     Recree en SVG vectoriel integre plutot qu'en image. Rendu derriere tout le
+     contenu (z-index:-1), au-dessus de la couleur du body.
+     V142.5 — corrige : en cover+no-repeat, ce motif carre 1600x1600 se faisait
+     ecraser/zoomer enormement sur un ecran de telephone tres haut et etroit (cover
+     cale sur la hauteur, ce qui ecrase la largeur) : quelques gros carres epars et
+     grossiers au lieu du semis dense prevu — rapporte par le fondateur comme des
+     « pastilles flottantes » qui trainent. Fix : le motif SE REPETE en mosaique a
+     taille fixe (comme un papier peint), densite identique quelle que soit la forme
+     de l'ecran, plus de zoom qui deforme. */
   body::before{
     content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1600"><g fill="%232B353E"><rect x="310" y="30" width="40" height="40" rx="10"/><rect x="1210" y="170" width="34" height="34" rx="9"/><rect x="1360" y="150" width="52" height="52" rx="13"/><rect x="480" y="330" width="56" height="56" rx="14"/><rect x="640" y="325" width="50" height="50" rx="12"/><rect x="930" y="318" width="42" height="42" rx="10"/><rect x="600" y="480" width="44" height="44" rx="11"/><rect x="780" y="470" width="58" height="58" rx="14"/><rect x="60" y="610" width="42" height="42" rx="10"/><rect x="775" y="905" width="38" height="38" rx="10"/><rect x="60" y="1035" width="52" height="52" rx="13"/><rect x="765" y="1045" width="38" height="38" rx="10"/><rect x="20" y="1240" width="50" height="50" rx="12"/><rect x="650" y="1215" width="52" height="52" rx="13"/><rect x="1095" y="1245" width="30" height="30" rx="8"/><rect x="330" y="1375" width="30" height="30" rx="8"/><rect x="510" y="1355" width="52" height="52" rx="13"/><rect x="1370" y="1370" width="34" height="34" rx="9"/><rect x="185" y="1510" width="34" height="34" rx="9"/><rect x="360" y="1530" width="52" height="52" rx="13"/><rect x="1240" y="1500" width="46" height="46" rx="11"/><rect x="1400" y="1545" width="48" height="48" rx="12"/></g><g fill="%23CBBD93"><rect x="1090" y="25" width="40" height="40" rx="10"/><rect x="45" y="200" width="52" height="52" rx="13"/><rect x="470" y="180" width="46" height="46" rx="11"/><rect x="790" y="308" width="34" height="34" rx="9"/><rect x="180" y="470" width="40" height="40" rx="10"/><rect x="760" y="610" width="50" height="50" rx="12"/><rect x="1105" y="960" width="50" height="50" rx="12"/><rect x="1530" y="945" width="42" height="42" rx="10"/><rect x="470" y="1210" width="46" height="46" rx="11"/><rect x="895" y="1330" width="44" height="44" rx="11"/><rect x="1540" y="1345" width="36" height="36" rx="9"/><rect x="195" y="1365" width="48" height="48" rx="12"/></g><g fill="%23E2725B"><rect x="925" y="190" width="52" height="52" rx="13"/><rect x="345" y="300" width="60" height="60" rx="15"/><rect x="1190" y="335" width="42" height="42" rx="10"/><rect x="1495" y="340" width="56" height="56" rx="14"/><rect x="170" y="770" width="46" height="46" rx="11"/><rect x="160" y="1055" width="30" height="30" rx="8"/><rect x="60" y="1490" width="42" height="42" rx="10"/></g><g fill="%23556B2F"><rect x="1330" y="325" width="52" height="52" rx="13"/><rect x="1065" y="780" width="42" height="42" rx="10"/><rect x="1055" y="1070" width="48" height="48" rx="12"/></g></svg>');
-    background-size: cover; background-position: center; background-repeat: no-repeat;
-    opacity:.55;
+    background-size: 480px 480px; background-position: center; background-repeat: repeat;
+    opacity:.4;
   }
   .app-content{
     width:100%; box-sizing:border-box;
@@ -707,8 +717,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .pan-arrow.right{ right:-40px; top:50%; transform:translateY(-50%); }
   /* V134 mobile — les flèches latérales recouvraient des tesselles cliquables en
      surimpression : on les descend au niveau de la flèche bas, de part et d'autre,
-     hors de toute zone de coloriage. */
-  @media (max-width:760px){
+     hors de toute zone de coloriage.
+     V142 — seuil relevé de 760 à 1023px : sur tout l'intervalle couvert par le pont
+     d'outils (téléphone paysage compris, souvent 700-900px de large), les marges
+     laterales sont plus etroites qu'avant et la flèche « right:-40px » dépassait de
+     l'écran — carreau visuellement rogné à droite. Bas partout sous le seuil PC. */
+  @media (max-width:1023px){
     .pan-arrow.left{ left:calc(50% - 62px); top:auto; bottom:-40px; transform:none; }
     .pan-arrow.right{ right:calc(50% - 62px); top:auto; bottom:-40px; transform:none; }
   }
@@ -995,7 +1009,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      Les actions rares vivent derrière une pastille en bas à droite.
      Le rail reste charbon dans les deux thèmes (comme le mur).
      ============================================================ */
-  .v140-rail, #v140Fab, #v140FabMenu, #v140FabMinus, #v140FabMenuMinus, #v140Toast, #v140Recap{ display:none; }
+  .v140-rail, #v140Fab, #v140FabMenu, #v140FabMinus, #v140FabMenuMinus, #v140Toast, #v140Recap, #v142Deck{ display:none; }
   /* V140.2 — la rangee d'outils sous le mur (Apercu / Annuler / Dupliquer) est regroupee
      par script dans #v140WallTools : colonne sur mobile, rangee sur ordinateur. */
   #v140WallTools{ display:flex; flex-direction:column; align-items:center; gap:6px; }
@@ -1086,58 +1100,129 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     body.v140-fab #v140Toast{ bottom:250px; }
     #v140Toast.show{ opacity:1; transform:none; }
   }
-  /* ---- V140 — B+ mobile/tablette : le rail passe en bas, sous le pouce ;
-     les tiroirs remontent depuis le bas comme des bottom sheets. Les cartouches
-     de reglage restent au-dessus du mur (inchangees), seuls les panneaux
-     outils/fichiers passent en tiroir. ---- */
+  /* ---- V142 — MOBILE « C : Atelier au pouce » (choix fondateur, remplace le
+     rail bas + tiroirs de V140) : le mur occupe presque toute la largeur, et un
+     PONT D'OUTILS permanent vit en bas — onglets Format / Création / Fichiers + ?,
+     contenu qui glisse sous le pouce. Un onglet actif retouché replie le pont.
+     Le PC (>=1024px) garde le B+ valide, rien ne change au-dessus du seuil. ---- */
   @media (max-width: 1023px){
-    .v140-rail{ display:flex; position:fixed; left:0; right:0; bottom:0; top:auto; width:auto;
-      height:60px; z-index:499; background:#2b353e; flex-direction:row; justify-content:center;
-      align-items:center; gap:22px; padding:4px 12px calc(4px + env(safe-area-inset-bottom, 0px)); }
-    .v140-rail button{ width:64px; background:none; border:none; border-radius:10px;
-      color:#F2EEDF; cursor:pointer; font-family:var(--font-main); display:flex;
-      flex-direction:column; align-items:center; gap:2px; padding:6px 0 5px; font-size:17px; }
-    .v140-rail button small{ font-size:9px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; opacity:.85; }
-    body.v140-tools .v140-rail #railCreate,
-    body.v140-files .v140-rail #railFiles{ background:var(--teal); color:var(--accent-ink); }
-    /* Sur mobile les cartouches restent au-dessus du mur : pas de tiroir Réglages */
-    .v140-rail #railSettings{ display:none; }
-    body{ padding-bottom:60px; }
-    #toolsCol, #actionsCol{ position:fixed; left:0; right:0; bottom:60px; top:auto;
-      width:auto; height:62vh; max-height:none; overflow-y:auto; z-index:498;
-      background:var(--grout); padding:16px 16px 26px; border-radius:16px 16px 0 0;
-      border-top:1px solid var(--border); box-shadow:0 -10px 30px rgba(0,0,0,.18);
-      transform:translateY(112%); transition:transform .28s ease;
-      scrollbar-width:thin; scrollbar-color: var(--teal) transparent; }
-    body.v140-tools #toolsCol{ transform:none; }
-    body.v140-files #actionsCol{ transform:none; }
-    #v140Fab{ display:grid; position:fixed; right:14px; bottom:74px; width:50px; height:50px;
-      border-radius:50%; background:var(--teal); color:var(--accent-ink); border:none;
-      place-items:center; font-size:22px; cursor:pointer; z-index:497;
-      box-shadow:0 6px 18px rgba(0,0,0,.25); }
-    body.v140-fab #v140Fab{ background:#2b353e; color:#F2EEDF; }
-    #v140FabMenu{ display:flex; position:fixed; right:14px; bottom:134px;
-      flex-direction:column; gap:8px; z-index:497; pointer-events:none; align-items:flex-end; }
-    #v140FabMenu button, #v140FabMenuMinus button{ opacity:0; pointer-events:none; transform:translateY(8px);
-      transition:transform .22s ease, opacity .22s ease; display:flex; align-items:center; gap:8px;
-      background:var(--grout); color:var(--text); border:1px solid var(--border);
-      border-radius:999px; padding:10px 16px; font-family:var(--font-main);
-      font-weight:700; font-size:13px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.15); }
-    body.v140-fab #v140FabMenu button{ opacity:1; pointer-events:auto; transform:none; }
-    #v140FabMinus{ display:grid; position:fixed; right:72px; bottom:74px; width:50px; height:50px;
-      border-radius:50%; background:var(--teal); color:var(--accent-ink); border:none;
-      place-items:center; font-size:24px; cursor:pointer; z-index:497;
-      box-shadow:0 6px 18px rgba(0,0,0,.25); }
-    body.v140-fabminus #v140FabMinus{ background:#2b353e; color:#F2EEDF; }
-    #v140FabMenuMinus{ display:flex; position:fixed; right:72px; bottom:134px;
-      flex-direction:column; gap:8px; z-index:497; pointer-events:none; align-items:flex-end; }
-    body.v140-fabminus #v140FabMenuMinus button{ opacity:1; pointer-events:auto; transform:none; }
-    #v140Toast{ display:block; position:fixed; left:14px; right:14px; bottom:74px; max-width:none;
+    body.v142-m{ padding-bottom:54px; }
+    .v140-rail{ display:none; } /* le pont remplace le rail sur mobile */
+    /* En mode pont, le bloc titre/pitch au-dessus du mur est redondant (la marque
+       vit dans le bandeau) : masque, sa hauteur devient de la tesselle. */
+    body.v142-m .app-content > header{ display:none; }
+    body.v142-m .app-content{ padding-top:8px; }
+    /* V142.3 — le bandeau défilant + pied de page du site vivaient encore dans le
+       flux NORMAL de la page, sous le studio : en mode pont la page n'est plus censée
+       défiler du tout, mais ce bloc restait scrollable et remontait sous les éléments
+       fixes (pastilles, pont) — plusieurs couches empilées cachaient le mur.
+       Signalé par le fondateur (capture d'écran) : masqué en mode pont. */
+    body.v142-m .appticker, body.v142-m .appfoot{ display:none; }
+    body.v142-m .below-grid{ font-size:12px; margin:4px 0; }
+    /* Les colonnes vivent dans le pont : le studio n'a plus qu'une colonne, sinon
+       la grille reserve 220px de vide de chaque cote et le mur deborde (tablette). */
+    body.v142-m .studio{ grid-template-columns:minmax(0,1fr); grid-template-areas:"atelier"; gap:0; }
+    /* V142.7 — LA vraie cause des colonnes coupées depuis le début : .grid-wrap
+       (regle historique, plus bas) plafonne a max-width:90vw avec overflow:auto —
+       un reste d'epoque ou les tesselles etaient bien plus petites. Depuis que
+       computeCellPx() calcule une tesselle plus grande en mode pont, le mur devient
+       parfois plus large que ce plafond : il ne debordait pas, il etait DECOUPE en
+       silence par ce cadre, qui masquait le reste au lieu de s'agrandir. Le calcul
+       de largeur se fait deja dans computeCellPx() (JS) : le cadre n'a plus besoin
+       de son propre plafond en mode pont. */
+    body.v142-m .grid-wrap{ max-width:none; overflow:visible; }
+    #v142Deck{ display:flex; flex-direction:column; position:fixed; left:0; right:0; bottom:0;
+      z-index:499; background:var(--grout); border-top:1px solid var(--border);
+      box-shadow:0 -6px 22px rgba(0,0,0,.14);
+      padding-bottom:env(safe-area-inset-bottom, 0px); }
+    .dktabs{ display:flex; align-items:stretch; gap:4px; padding:6px 8px; }
+    .dktabs button{ flex:1; font-family:var(--font-main); font-weight:700; font-size:12px;
+      background:none; border:none; border-radius:9px; padding:9px 4px; color:var(--text-muted); cursor:pointer; }
+    .dktabs button.on{ background:var(--teal); color:var(--accent-ink); }
+    .dktabs #dkHelp{ flex:0 0 40px; font-size:14px; }
+    .dktabs .dktab-plus, .dktabs .dktab-minus{ flex:0 0 40px; font-size:17px; font-weight:400; }
+    /* V142.2 — poignée « Réduire » : le grand tiroir (le pont) se replie sur elle,
+       pas seulement en re-tapant l'onglet actif (moins évident à deviner). */
+    .dkgrip{ display:none; width:100%; align-items:center; justify-content:center; gap:8px;
+      background:none; border:none; border-top:1px solid var(--border); padding:8px 0 4px;
+      font-family:var(--font-main); font-weight:700; font-size:11.5px; color:var(--text-muted);
+      letter-spacing:.04em; text-transform:uppercase; cursor:pointer; }
+    .dkgrip span{ display:block; width:34px; height:4px; border-radius:2px; background:var(--teal); }
+    body.v142-open .dkgrip{ display:flex; }
+    /* V142.9 — capsule pas centree verticalement dans le tiroir : padding haut/bas
+       asymetrique (8px/0). Corrige, symetrique. */
+    .dkthemewrap{ display:none; align-items:center; justify-content:center; padding:8px 12px; }
+    body.v142-open .dkthemewrap{ display:flex; }
+    .dkbody{ display:none; max-height:46vh; overflow-y:auto; padding:4px 10px 12px;
+      scrollbar-width:thin; scrollbar-color:var(--teal) transparent; }
+    body.v142-open .dkbody{ display:block; }
+    /* le pont heberge les blocs existants ; les classes de body choisissent la vue */
+    .dkbody > *{ display:none !important; }
+    /* V142.2 — accordéon des cartouches (Dimension tesselle / Nombre de carreau / Mode) :
+       chacune se replie une fois utilisée (auto, cf script) ou sur tap manuel — un
+       « tiroir dans le tiroir », pour ne montrer que ce qui reste à régler. */
+    .dkbody .cartouche-row > h2{ cursor:pointer; user-select:none; position:relative;
+      display:flex; align-items:center; justify-content:center; gap:6px; }
+    .dkbody .cartouche-row > h2::after{ content:'▾'; color:var(--teal); font-size:11px;
+      display:inline-block; transition:transform .22s; }
+    .dkbody .cartouche-row.collapsed > h2::after{ transform:rotate(-90deg); }
+    .dkbody .cartouche-row.collapsed > *:not(h2){ display:none !important; }
+    .dkbody .cartouche-row.collapsed{ margin-bottom:8px; }
+    .dkbody .cartouche-row.collapsed > h2{ margin-bottom:0; }
+    /* miniature de la valeur choisie, affichée seulement une fois replié */
+    .dkbody .cartouche-row .dkval{ display:none; font-weight:700; color:var(--text); text-transform:none; letter-spacing:0; }
+    .dkbody .cartouche-row.collapsed .dkval{ display:inline; }
+    body.v142-pane-format .dkbody > .config-bar{ display:block !important; }
+    body.v142-pane-format .dkbody .config-bar .cartouche-row:has(#modeViewport){ display:none; }
+    body.v142-pane-creation .dkbody > .config-bar{ display:block !important; }
+    body.v142-pane-creation .dkbody .config-bar .cartouche-row:not(:has(#modeViewport)){ display:none; }
+    body.v142-pane-creation .dkbody > #toolsCol{ display:flex !important; }
+    body.v142-pane-fichiers .dkbody > #actionsCol{ display:block !important; }
+    .dkbody .config-bar{ background:none; border:none; padding:6px 0 0; max-width:none !important; }
+    .dkbody .cartouche-row{ max-width:none; margin:0 0 10px; }
+    .dkbody #toolsCol, .dkbody #actionsCol{ position:static; width:auto; transform:none;
+      box-shadow:none; border:none; background:none; padding:6px 0 0; max-height:none; overflow:visible; }
+    .dkbody .panel{ width:100%; max-width:none; }
+    /* V142.4 — les pastilles flottantes ＋/− sont retirées de la surface du mur :
+       ce sont désormais deux onglets de plus dans le pont (comme Format/Création/
+       Fichiers), leur contenu s'affichant normalement dans le tiroir, jamais
+       par-dessus le mur. Plus aucun bouton flottant sur mobile. */
+    #v140Fab, #v140FabMinus{ display:none !important; }
+    .dktabs .dktab-plus.on{ background:var(--teal); color:var(--accent-ink); }
+    .dktabs .dktab-minus.on{ background:var(--danger); color:#F2EEDF; }
+    body.v142-pane-plus .dkbody > #v140FabMenu{ display:flex !important; }
+    body.v142-pane-minus .dkbody > #v140FabMenuMinus{ display:flex !important; }
+    .dkbody #v140FabMenu, .dkbody #v140FabMenuMinus{ position:static; flex-direction:column; gap:8px;
+      padding:6px 0 4px; pointer-events:auto; }
+    .dkbody #v140FabMenu button, .dkbody #v140FabMenuMinus button{ opacity:1 !important; pointer-events:auto !important;
+      transform:none !important; width:100%; justify-content:flex-start; box-sizing:border-box;
+      display:flex; align-items:center; gap:8px; background:var(--surface-2); color:var(--text);
+      border:1px solid var(--border); border-radius:10px; padding:12px 14px; font-family:var(--font-main);
+      font-weight:700; font-size:13.5px; cursor:pointer; }
+    #v140Toast{ display:block; position:fixed; left:12px; right:12px; bottom:66px; max-width:none;
       background:#2b353e; color:#F2EEDF; border-radius:12px; padding:12px 16px;
       font-size:13px; font-family:var(--font-main); z-index:496; opacity:0;
       transform:translateY(8px); transition:opacity .25s ease, transform .25s ease; pointer-events:none; }
-    body.v140-fab #v140Toast{ opacity:0; }
     #v140Toast.show{ opacity:1; transform:none; }
+  }
+
+  /* ---- V142 — TABLETTE PORTRAIT (768-1023px) : le pont C profite de la largeur.
+     Contenu du pont sur 2 colonnes au lieu d'une pile, pont moins haut, onglets
+     centrés. Paysage tablette (>=1024) recoit le B+ bureau, deja bon au doigt. ---- */
+  @media (min-width: 768px) and (max-width: 1023px){
+    .dktabs{ max-width:620px; margin:0 auto; width:100%; }
+    .dktabs button{ font-size:13px; padding:11px 4px; }
+    .dkbody{ max-height:34vh; padding:6px 24px 14px; }
+    /* Format : les deux cartouches cote a cote */
+    body.v142-pane-format .dkbody > .config-bar{ display:grid !important;
+      grid-template-columns:1fr 1fr; gap:0 20px; max-width:640px; margin:0 auto; }
+    /* Création : cartouche Mode et panneau d'outils cote a cote */
+    body.v142-pane-creation .dkbody > .config-bar{ max-width:640px; margin:0 auto; }
+    body.v142-pane-creation .dkbody > #toolsCol{ max-width:640px; margin:0 auto; width:100%; }
+    /* Fichiers : panneau centre, largeur de lecture */
+    body.v142-pane-fichiers .dkbody > #actionsCol{ max-width:520px; margin:0 auto; width:100%; }
+    /* toast et pastilles un peu plus a l'aise */
+    #v140Toast{ left:auto; right:16px; max-width:380px; }
   }
   @media (prefers-reduced-motion: reduce){
     #toolsCol, #actionsCol, #v140FabMenu button, #v140Toast{ transition:none; }
@@ -1175,6 +1260,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     padding:8px 16px; cursor:pointer; flex-shrink:0; transition:filter .15s ease; }
   .connect-btn:hover{ filter:brightness(1.07); }
   .connect-btn:focus-visible{ outline:2px solid var(--terracotta); outline-offset:2px; }
+  /* V142.9 — trop imposant sur mobile/tablette a cote du logo et du menu ☰ ; le PC
+     (>=1024px, plus de place) garde la taille d'origine ci-dessus. */
+  @media (max-width:1023px){
+    .connect-btn{ font-size:11px; padding:6px 11px; }
+    .connect-btn svg.v140-icon{ width:12px !important; height:12px !important; margin-right:4px !important; }
+  }
   /* V137 — le bandeau porte desormais le nom de l'APP. "Quadreti" garde la graisse du nom
      officiel de la marque, "Designer" passe en graisse fine : on lit d'abord la marque,
      puis l'outil. C'est ce qui permet de supprimer le grand titre en double juste en dessous. */
@@ -1222,7 +1313,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     content:''; position:absolute; inset:0;
     background:radial-gradient(ellipse 480px 380px at center, #2b353ee0 0%, #2b353e99 55%, #2b353e40 80%, transparent 100%);
   }
-  .boot-inner{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:18px; }
+  .boot-inner{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:18px; max-width:min(92vw, 560px); } /* V142 — borne la boite CGU sur petit ecran */
   .boot-q{ display:grid; grid-template-columns:repeat(4,1fr); gap:4px; width:64px; height:64px; }
   .boot-q i{ border-radius:4px; background:#F2EEDF22; opacity:0; transform:scale(.3); animation:bootTileIn .5s cubic-bezier(.34,1.56,.64,1) forwards; }
   .boot-q i.empty{ background:transparent; animation:none; }
@@ -1407,13 +1498,16 @@ document.addEventListener('DOMContentLoaded', function(){
       <a href="quadreti-guide-interactif.html" target="_blank" rel="noopener">Guide</a>
       <a href="https://quadreti.fr/boutique/" target="_blank" rel="noopener">Boutique</a>
     </nav>
-    <button class="connect-btn" id="connectBtn" type="button"><svg class="v140-icon" style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:5px"><use href="#i-user"/></svg>Se connecter</button>
     <button class="theme-sw" id="themeSwitch" type="button" aria-label="Changer d'ambiance visuelle">
       <span data-t="kraft" class="on">Kraft</span><span data-t="magazine">Magazine</span>
     </button>
+    <!-- V142.8 — ordre inversé sur demande fondateur : le menu ☰ se retrouve au
+         centre (entre la marque et Se connecter), Se connecter tout à droite.
+         .appnav-inner est deja en justify-content:space-between, l'ordre DOM suffit. -->
     <button class="appnav-burger" id="appnavBurger" aria-label="Menu" aria-expanded="false" type="button">
       <span></span><span></span><span></span>
     </button>
+    <button class="connect-btn" id="connectBtn" type="button"><svg class="v140-icon" style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:5px"><use href="#i-user"/></svg>Se connecter</button>
   </div>
 </header>
 <script>
@@ -1488,7 +1582,157 @@ document.addEventListener('DOMContentLoaded', function(){
   <button id="v140MinusClear" type="button"><svg class="v140-icon"><use href="#i-eraser"/></svg>Effacer ce carreau</button>
   <button id="v140MinusWall" type="button"><svg class="v140-icon"><use href="#i-trash"/></svg>Effacer tout le mur</button>
 </div>
+<!-- V142 — Pont d'outils mobile « Atelier au pouce » : onglets permanents en bas,
+     le contenu (cartouches et panneaux existants) est déplacé dedans par script
+     sous 1024px, et rendu à sa place d'origine au-dessus. -->
+<div id="v142Deck" aria-label="Outils de l'atelier">
+  <div class="dktabs">
+    <button type="button" data-p="format">Format</button>
+    <button type="button" data-p="creation">Création</button>
+    <button type="button" data-p="fichiers">Fichiers</button>
+    <button type="button" class="dktab-plus" data-p="plus" aria-label="Enregistrer et exporter">＋</button>
+    <button type="button" class="dktab-minus" data-p="minus" aria-label="Effacer">−</button>
+    <button type="button" id="dkHelp" aria-label="Ouvrir le guide">?</button>
+  </div>
+  <!-- V142.8 — le bouton d'ambiance Kraft/Magazine vit ici sur mobile (déplacé du
+       bandeau par script), visible en permanence tant que le tiroir est ouvert,
+       quel que soit l'onglet actif. -->
+  <div class="dkthemewrap" id="dkThemeWrap"></div>
+  <button type="button" class="dkgrip" id="dkGrip" aria-label="Réduire le tiroir"><span></span>Réduire</button>
+  <div class="dkbody" id="v142DeckBody"></div>
+</div>
 <div id="v140Toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  var mqDesk = window.matchMedia('(min-width:1024px)');
+  var body = document.body;
+  var stored = {};
+  function dk(){ return document.getElementById('v142DeckBody'); }
+  function setPane(p, fromTap){
+    var wasSame = body.classList.contains('v142-pane-' + p) && body.classList.contains('v142-open');
+    ['format','creation','fichiers','plus','minus'].forEach(function(x){ body.classList.toggle('v142-pane-' + x, x === p); });
+    if (fromTap && wasSame) body.classList.remove('v142-open');   /* re-taper l'onglet actif replie le pont */
+    else body.classList.add('v142-open');
+    var open = body.classList.contains('v142-open');
+    document.querySelectorAll('.dktabs button[data-p]').forEach(function(t){
+      t.classList.toggle('on', open && t.getAttribute('data-p') === p);
+    });
+  }
+  function closeDeck(){
+    body.classList.remove('v142-open');
+    document.querySelectorAll('.dktabs button[data-p]').forEach(function(t){ t.classList.remove('on'); });
+  }
+  function toDeck(){
+    var host = dk(); if (!host) return;
+    body.classList.add('v142-m');
+    if (!/v142-pane-/.test(body.className)) setPane('creation', false);
+    var bar = document.querySelector('.config-bar');
+    var tools = document.getElementById('toolsCol');
+    var actions = document.getElementById('actionsCol');
+    if (!stored.studio) stored.studio = document.querySelector('.studio');
+    if (bar && bar.parentElement !== host) host.appendChild(bar);
+    if (tools && tools.parentElement !== host) host.appendChild(tools);
+    if (actions && actions.parentElement !== host) host.appendChild(actions);
+    /* V142.4 — les menus des pastilles ＋/− rejoignent le pont (onglets dktab-plus/minus),
+       ils s'y affichent en liste normale au lieu de flotter par-dessus le mur. */
+    var fabMenu = document.getElementById('v140FabMenu');
+    var fabMenuMinus = document.getElementById('v140FabMenuMinus');
+    if (fabMenu && fabMenu.parentElement !== host) host.appendChild(fabMenu);
+    if (fabMenuMinus && fabMenuMinus.parentElement !== host) host.appendChild(fabMenuMinus);
+    /* V142.8 — le bouton d'ambiance Kraft/Magazine rejoint le pont, visible sur
+       tous les onglets tant que le tiroir est ouvert. */
+    var themeWrap = document.getElementById('dkThemeWrap');
+    var themeSwitch = document.getElementById('themeSwitch');
+    if (themeWrap && themeSwitch && themeSwitch.parentElement !== themeWrap) themeWrap.appendChild(themeSwitch);
+  }
+  function fromDeck(){
+    body.classList.remove('v142-m', 'v142-open');
+    var studio = stored.studio || document.querySelector('.studio');
+    if (!studio) return;
+    var host = dk();
+    var tools = document.getElementById('toolsCol');
+    var actions = document.getElementById('actionsCol');
+    var bar = document.querySelector('.config-bar');
+    if (tools && tools.parentElement === host) studio.insertBefore(tools, studio.firstChild);
+    if (actions && actions.parentElement === host) studio.appendChild(actions);
+    /* la config-bar est rendue au flux ; le script V137 la re-rangera dans la colonne */
+    if (bar && bar.parentElement === host && studio.parentElement) studio.parentElement.insertBefore(bar, studio);
+    var fabMenu = document.getElementById('v140FabMenu');
+    var fabMenuMinus = document.getElementById('v140FabMenuMinus');
+    if (fabMenu && fabMenu.parentElement === host) document.body.appendChild(fabMenu);
+    if (fabMenuMinus && fabMenuMinus.parentElement === host) document.body.appendChild(fabMenuMinus);
+    var themeWrap = document.getElementById('dkThemeWrap');
+    var themeSwitch = document.getElementById('themeSwitch');
+    var navInner = document.querySelector('.appnav-inner');
+    if (themeWrap && themeSwitch && themeSwitch.parentElement === themeWrap && navInner){
+      navInner.insertBefore(themeSwitch, navInner.querySelector('#appnavBurger'));
+    }
+  }
+  var replay = null;
+  var lastMode = null; /* garde anti-boucle : on ne redispatch resize que si l'etat a change */
+  function v142Place(){
+    /* 60ms apres le place() de V137 (mq change immediat / resize debounce 180ms) */
+    clearTimeout(replay);
+    replay = setTimeout(function(){
+      var mode = mqDesk.matches ? 'desk' : 'deck';
+      if (mode === 'desk') fromDeck(); else toDeck();
+      if (mode !== lastMode){
+        lastMode = mode;
+        window.dispatchEvent(new Event('resize')); /* le mur recalcule sa taille */
+      }
+    }, 60);
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    var deckEl = document.getElementById('v142Deck');
+    if (!deckEl) return;
+    deckEl.addEventListener('click', function(e){
+      var b = e.target.closest('button[data-p]');
+      if (b) setPane(b.getAttribute('data-p'), true);
+    });
+    var help = document.getElementById('dkHelp');
+    if (help) help.addEventListener('click', function(){ window.open('quadreti-guide-interactif.html', '_blank', 'noopener'); });
+    var grip = document.getElementById('dkGrip');
+    if (grip) grip.addEventListener('click', closeDeck);
+
+    /* V142.2 — « un tiroir avec plein de tiroirs » : chaque cartouche (Dimension
+       tesselle / Nombre de carreau / Mode) est un accordéon repliable — à la main
+       (on tape son titre) ou tout seul une fois qu'on a fait son choix, pour ne
+       montrer que ce qu'il reste à régler. */
+    function labelFor(rowId){
+      if (rowId === 'profileRow'){
+        var b = document.querySelector('#profileRow .profile-btn.active');
+        return b ? b.textContent.trim() : '';
+      }
+      var dots = rowId === 'sizeRow' ? '#sizeDots .dot.active' : '#modeDots .dot.active';
+      var d = document.querySelector(dots);
+      return d ? (d.getAttribute('aria-label') || '') : '';
+    }
+    function setCollapsed(row, collapsed){
+      row.classList.toggle('collapsed', collapsed);
+      var v = row.querySelector(':scope > h2 > .dkval');
+      if (v) v.textContent = collapsed ? (' · ' + labelFor(row.id)) : '';
+    }
+    ['profileRow', 'sizeRow', 'modeRow'].forEach(function(id){
+      var row = document.getElementById(id);
+      if (!row) return;
+      var h2 = row.querySelector(':scope > h2');
+      if (h2) h2.addEventListener('click', function(){ setCollapsed(row, !row.classList.contains('collapsed')); });
+      var autoTimer = null;
+      row.addEventListener('click', function(e){
+        if (!document.body.classList.contains('v142-m')) return;
+        if (!e.target.closest('.profile-btn, .dot, .arrow-btn')) return;
+        clearTimeout(autoTimer);
+        autoTimer = setTimeout(function(){ setCollapsed(row, true); }, 450);
+      });
+    });
+    v142Place();
+  });
+  if (mqDesk.addEventListener) mqDesk.addEventListener('change', v142Place);
+  else if (mqDesk.addListener) mqDesk.addListener(v142Place);
+  var att = null;
+  window.addEventListener('resize', function(){ clearTimeout(att); att = setTimeout(v142Place, 280); });
+})();
+</script>
 <script>
 (function(){
   var body = document.body;
@@ -1755,15 +1999,15 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <div class="config-bar">
 <div class="cartouche-row" id="profileRow">
-  <h2>Dimension tesselle</h2>
+  <h2>Dimension tesselle<span class="dkval" id="dkvalProfile"></span></h2>
   <div class="profile-btn-row">
     <button class="profile-btn active" id="profileBtnStandard" data-profile="standard">25mm (7×7)</button>
     <button class="profile-btn" id="profileBtnFine" data-profile="fine">18mm (10×10)</button>
   </div>
 </div>
 
-<div class="cartouche-row">
-  <h2>Nombre de carreau</h2>
+<div class="cartouche-row" id="sizeRow">
+  <h2>Nombre de carreau<span class="dkval" id="dkvalSize"></span></h2>
   <div class="carousel-row">
     <button class="arrow-btn" id="sizePrevBtn" aria-label="Taille précédente">‹</button>
     <div class="slide-viewport" id="sizeViewport">
@@ -1774,8 +2018,8 @@ document.addEventListener('DOMContentLoaded', function(){
   <div class="dots" id="sizeDots"></div>
 </div>
 
-<div class="cartouche-row">
-  <h2>Mode</h2>
+<div class="cartouche-row" id="modeRow">
+  <h2>Mode<span class="dkval" id="dkvalMode"></span></h2>
   <div class="carousel-row">
     <button class="arrow-btn" id="modePrevBtn" aria-label="Mode précédent">‹</button>
     <div class="slide-viewport" id="modeViewport">
@@ -3293,8 +3537,26 @@ document.addEventListener('DOMContentLoaded', function(){
     // pour peindre au glisser, donc sans cette bande libre le pouce ne peut plus faire
     // defiler la page depuis le bord de la grille.
     if (!desktop) {
+      // V142.8 — CORRECTION IMPORTANTE (retour en arriere assume) : le mode pont avait
+      // reduit la marge laterale a 24px pour maximiser la tesselle, mais le fondateur a
+      // teste et confirme que ca ne laisse plus assez de place au pouce pour faire un
+      // geste vertical (haut/bas) sans toucher une case du mur — meme si la PAGE ne
+      // defile plus, le doigt a besoin de cette bande neutre pour un balayage naturel.
+      // Les 40px de marge de chaque cote (80 au total) redeviennent la regle, identiques
+      // en et hors mode pont : la securite du geste prime sur la taille de la tesselle.
+      const deckMode = document.body.classList.contains('v142-m');
       const dispo = window.innerWidth - 80 - 20;
-      const c = Math.floor((dispo - gap * (PANEL_SIZE - 1)) / PANEL_SIZE);
+      let c = Math.floor((dispo - gap * (PANEL_SIZE - 1)) / PANEL_SIZE);
+      if (deckMode) {
+        // le mur doit aussi tenir en hauteur entre le bandeau et les onglets du pont
+        const stage = document.getElementById('gridStage');
+        const top = stage ? stage.getBoundingClientRect().top + window.scrollY : 120;
+        const hDispo = window.innerHeight - top - 64;
+        if (hDispo > 0) c = Math.min(c, Math.floor((hDispo - gap * (PANEL_SIZE - 1)) / PANEL_SIZE));
+        // plafond releve : largeur et hauteur bornent deja, et sur tablette une grande
+        // tesselle est un confort, pas un probleme de doigt
+        return Math.max(CELL_PX_MIN, Math.min(72, c));
+      }
       return Math.max(CELL_PX_MIN, Math.min(CELL_PX_MAX_MOBILE, c));
     }
 
