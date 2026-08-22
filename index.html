@@ -13,7 +13,12 @@
 <meta property="og:locale" content="fr_FR">
 <!-- Pour l'image d'aperçu au partage, ajoutez ici, une fois l'adresse connue :
      <meta property="og:image" content="https://VOTRE-COMPTE.github.io/quadreti/apercu.png"> -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' rx='46' fill='%23F5F5F5'/%3E%3Cg transform='translate%2836.50,36.50%29'%3E%3Crect x='0.00' y='0.00' width='50.00' height='50.00' rx='11.00' fill='%232B353E'/%3E%3Crect x='59.00' y='0.00' width='50.00' height='50.00' rx='11.00' fill='%232B353E'/%3E%3Crect x='118.00' y='0.00' width='50.00' height='50.00' rx='11.00' fill='%232B353E'/%3E%3Crect x='0.00' y='59.00' width='50.00' height='50.00' rx='11.00' fill='%232B353E'/%3E%3Crect x='118.00' y='59.00' width='50.00' height='50.00' rx='11.00' fill='%232B353E'/%3E%3Crect x='0.00' y='118.00' width='50.00' height='50.00' rx='11.00' fill='%232B353E'/%3E%3Crect x='118.00' y='118.00' width='50.00' height='50.00' rx='11.00' fill='%232B353E'/%3E%3Crect x='0.00' y='177.00' width='50.00' height='50.00' rx='11.00' fill='%232B353E'/%3E%3Crect x='59.00' y='177.00' width='50.00' height='50.00' rx='11.00' fill='%232B353E'/%3E%3Crect x='118.00' y='177.00' width='50.00' height='50.00' rx='11.00' fill='%232B353E'/%3E%3Crect x='177.00' y='177.00' width='50.00' height='50.00' rx='11.00' fill='%23E2725B'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='18' fill='%232b353e'/%3E%3Cg fill='%23F2EEDF'%3E%3Crect x='30' y='30' width='12' height='12' rx='3'/%3E%3Crect x='44' y='30' width='12' height='12' rx='3'/%3E%3Crect x='58' y='30' width='12' height='12' rx='3'/%3E%3Crect x='30' y='44' width='12' height='12' rx='3'/%3E%3Crect x='58' y='44' width='12' height='12' rx='3'/%3E%3Crect x='30' y='58' width='12' height='12' rx='3'/%3E%3Crect x='58' y='58' width='12' height='12' rx='3'/%3E%3Crect x='30' y='72' width='12' height='12' rx='3'/%3E%3Crect x='44' y='72' width='12' height='12' rx='3'/%3E%3Crect x='58' y='72' width='12' height='12' rx='3'/%3E%3C/g%3E%3Crect x='72' y='72' width='12' height='12' rx='3' fill='%23E2725B'/%3E%3C/svg%3E">
+
+<!-- V140 — Playfair Display pour les titres du theme Magazine. Chargee en ligne
+     uniquement ; hors connexion les titres retombent proprement sur Georgia. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&display=swap">
 
 <style>/* vietnamese */
 @font-face {
@@ -183,26 +188,61 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      ============================================================ */
 
   :root{
-    /* --- Couleurs — V119 : ambiance charbon/kraft unique (grand public + pro) --- */
-    --bg: #F5F5F5;            /* gris clair officiel (était #e4e5e7) */
-    --surface: #2b353e;       /* charbon (était olive #556b2f) */
-    --surface-2: #37434e;
-    --grout: #2b353e;
-    --grid-bg: #1f272e;       /* légèrement plus sombre que la surface pour détacher la grille */
-    --title: #2b353e;
-    --text: #F2EEDF;          /* contraste corrigé (était #adaeb3, ratio ≈ 2,4:1) */
-    --text-muted: #c9c3b2;
-    --text-strong: #ffffff;
-    --teal: #CBBD93;          /* Kraft officiel (était #d5b59c hors charte) */
+    /* --- Couleurs — V140 : thème 02 « Kraft Atelier » (défaut) ---
+       Panneaux clairs sur fond kraft, texte encre chaude, accents kraft.
+       Le mur (grille) garde son cadre charbon dans les deux thèmes. */
+    --bg: #E9DEC2;            /* fond kraft */
+    --surface: #F8F2E2;       /* surfaces claires (selects, sous-blocs) */
+    --surface-2: #EFE5CC;
+    --grout: #F8F2E2;         /* fond des panneaux et cartouches */
+    --grid-bg: #1f272e;       /* le mur reste charbon — c'est le produit */
+    --title: #3C3627;
+    --text: #3C3627;
+    --text-muted: #6f654e;    /* assez fonce pour rester lisible en petit corps sur kraft */
+    --text-strong: #1f1b12;
+    --teal: #CBBD93;          /* Kraft officiel — boutons actifs */
     --teal-hover: #b9a97a;
     --ochre: #CBBD93;
-    --border: #ffffff1f;      /* bord clair sur surfaces charbon */
-    --border-light: #2b353e26;/* bord sombre pour les éléments clairs (inputs, boutons blancs) */
+    --border: #3c362726;      /* bords encre douce sur surfaces claires */
+    --border-light: #3c362733;
     --danger: #a85a4a;
     --tessella-empty: #ffffff;
+    --panel-ink: #3C3627;     /* texte courant des panneaux (ex-#e5e1e1) */
+    --dot-bg: #3c362733;      /* points de carrousel */
+    --dot-bg-hover: #3c362766;
+    --terracotta: #E2725B;
+    --accent-ink: #3C3627;    /* texte sur les boutons accent (kraft clair → encre) */
+    --ink-on-dark: #F2EEDF;   /* texte sur les zones qui restent charbon (mur, galerie) */
+    --nav-bg: #E9DEC2ee;      /* bandeau translucide assorti au fond */
 
-    /* --- Police --- */
+    /* --- Polices --- */
     --font-main: 'Quicksand', sans-serif;
+    --font-display: 'Quicksand', sans-serif;
+  }
+
+  /* --- Thème 08 « Magazine Déco » — bascule utilisateur (bouton en haut) ---
+     V140.1 : fond « Lin ivoire » (M2 valide par le fondateur — le blanc #FFFDF9
+     etait trop froid). Lin chaud dore, filets encre, terracotta profond, titres serif. */
+  html[data-theme="magazine"]{
+    --bg: #EFE8D8;
+    --surface: #F8F4E9;
+    --surface-2: #F0EADA;
+    --grout: #F8F4E9;
+    --title: #33302a;
+    --text: #33302a;
+    --text-muted: #6b654f;
+    --text-strong: #141210;
+    --teal: #c95a44;          /* terracotta profond = accent actif du thème magazine */
+    --teal-hover: #b04a36;
+    --ochre: #d9cfbc;
+    --border: #33302a33;
+    --border-light: #33302a40;
+    --panel-ink: #33302a;
+    --dot-bg: #33302a33;
+    --dot-bg-hover: #33302a66;
+    --accent-ink: #F8F4E9;    /* accent terracotta fonce → texte lin clair */
+    --nav-bg: #EFE8D8ee;
+    --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
   }
 
   /* --- Disposition des 3 grands blocs de l'atelier ---
@@ -230,6 +270,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     color: var(--title); font-family: var(--font-main);
     display:flex; flex-direction:column; align-items:stretch; padding: 0;
   }
+  /* V140.8 — arriere-plan « tesselles eparpillees » (visuel valide par le fondateur).
+     Recree en SVG vectoriel integre plutot qu'en image : UNE seule piece calee sur
+     l'ecran (position:fixed + cover), jamais de repetition ni de raccord, s'adapte
+     a toutes les tailles, et laisse le fond prendre la couleur du theme en cours.
+     Rendu derriere tout le contenu (z-index:-1), au-dessus de la couleur du body. */
+  body::before{
+    content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1600"><g fill="%232B353E"><rect x="310" y="30" width="40" height="40" rx="10"/><rect x="1210" y="170" width="34" height="34" rx="9"/><rect x="1360" y="150" width="52" height="52" rx="13"/><rect x="480" y="330" width="56" height="56" rx="14"/><rect x="640" y="325" width="50" height="50" rx="12"/><rect x="930" y="318" width="42" height="42" rx="10"/><rect x="600" y="480" width="44" height="44" rx="11"/><rect x="780" y="470" width="58" height="58" rx="14"/><rect x="60" y="610" width="42" height="42" rx="10"/><rect x="775" y="905" width="38" height="38" rx="10"/><rect x="60" y="1035" width="52" height="52" rx="13"/><rect x="765" y="1045" width="38" height="38" rx="10"/><rect x="20" y="1240" width="50" height="50" rx="12"/><rect x="650" y="1215" width="52" height="52" rx="13"/><rect x="1095" y="1245" width="30" height="30" rx="8"/><rect x="330" y="1375" width="30" height="30" rx="8"/><rect x="510" y="1355" width="52" height="52" rx="13"/><rect x="1370" y="1370" width="34" height="34" rx="9"/><rect x="185" y="1510" width="34" height="34" rx="9"/><rect x="360" y="1530" width="52" height="52" rx="13"/><rect x="1240" y="1500" width="46" height="46" rx="11"/><rect x="1400" y="1545" width="48" height="48" rx="12"/></g><g fill="%23CBBD93"><rect x="1090" y="25" width="40" height="40" rx="10"/><rect x="45" y="200" width="52" height="52" rx="13"/><rect x="470" y="180" width="46" height="46" rx="11"/><rect x="790" y="308" width="34" height="34" rx="9"/><rect x="180" y="470" width="40" height="40" rx="10"/><rect x="760" y="610" width="50" height="50" rx="12"/><rect x="1105" y="960" width="50" height="50" rx="12"/><rect x="1530" y="945" width="42" height="42" rx="10"/><rect x="470" y="1210" width="46" height="46" rx="11"/><rect x="895" y="1330" width="44" height="44" rx="11"/><rect x="1540" y="1345" width="36" height="36" rx="9"/><rect x="195" y="1365" width="48" height="48" rx="12"/></g><g fill="%23E2725B"><rect x="925" y="190" width="52" height="52" rx="13"/><rect x="345" y="300" width="60" height="60" rx="15"/><rect x="1190" y="335" width="42" height="42" rx="10"/><rect x="1495" y="340" width="56" height="56" rx="14"/><rect x="170" y="770" width="46" height="46" rx="11"/><rect x="160" y="1055" width="30" height="30" rx="8"/><rect x="60" y="1490" width="42" height="42" rx="10"/></g><g fill="%23556B2F"><rect x="1330" y="325" width="52" height="52" rx="13"/><rect x="1065" y="780" width="42" height="42" rx="10"/><rect x="1055" y="1070" width="48" height="48" rx="12"/></g></svg>');
+    background-size: cover; background-position: center; background-repeat: no-repeat;
+    opacity:.55;
+  }
   .app-content{
     width:100%; box-sizing:border-box;
     display:flex; flex-direction:column; align-items:center;
@@ -252,7 +303,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   /* V131 — le logo Q (motif officiel) s'assemble tesselle par tesselle avant l'apparition du titre */
   /* V137 — Bloc d'en-tete compact qui remplace le grand titre en double. */
   .app-title{
-    font-family: var(--font-main); font-weight:700; letter-spacing:-.005em;
+    font-family: var(--font-display); font-weight:700; letter-spacing:-.005em;
     font-size: clamp(21px, 2.5vw, 30px); color: var(--title);
     margin: 0 0 4px; text-align:center;
   }
@@ -297,7 +348,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   /* ===== Le mur qui grandit — carreau fantôme "+" (V120) ===== */
   #growWallBtn{
     display:block; margin: 10px auto 0; font-family: var(--font-main); font-weight:600; font-size:12.5px;
-    background:none; border:2px dashed #ffffff3d; color:#ffffffb0; border-radius:9px;
+    background:none; border:2px dashed var(--dot-bg-hover); color:var(--text-muted); border-radius:9px; /* V140 — encre sur fond clair (etait blanc sur charbon) */
     padding: 9px 16px; cursor:pointer; transition: border-color .2s, color .2s;
   }
   #growWallBtn:hover{ border-color: var(--teal); color: var(--teal); }
@@ -308,7 +359,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     font-family: var(--font-main); font-weight:700; font-size:12px; cursor:pointer;
     border-radius:20px; padding:7px 16px; border:1.5px solid var(--teal); background:none; color:var(--teal);
   }
-  .preview-toggle button.on{ background: var(--teal); color: var(--title); }
+  .preview-toggle button.on{ background: var(--teal); color: var(--accent-ink); }
   /* V123 — deux scènes "en situation" (salon / bureau), recomposées d'après les références validées.
      PHOTOS RÉELLES : renseigner SCENE_PHOTOS dans le script (URL ou data:) — la photo remplace
      alors l'illustration automatiquement, sans autre modification. */
@@ -369,9 +420,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .tabs{ display:flex; gap:8px; background: var(--surface-2); border:1px solid var(--border); border-radius: 10px; padding: 4px; margin-bottom: 0; }
   .tab-btn{
     font-family: var(--font-main); font-weight:600; font-size:13.5px; background:none; border:none;
-    color: #e5e1e1; padding: 9px 18px; border-radius: 7px; cursor:pointer;
+    color: var(--panel-ink); padding: 9px 18px; border-radius: 7px; cursor:pointer;
   }
-  .tab-btn.active{ background: var(--teal); color: var(--title); }
+  .tab-btn.active{ background: var(--teal); color: var(--accent-ink); }
 
   /* ===== V132 — indicateur kraft glissant sous le bouton actif ===== */
   .has-ind{ position:relative; }
@@ -384,9 +435,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .draw-tools-row{ display:flex; gap:6px; background: var(--surface-2); border:1px solid var(--border); border-radius: 10px; padding: 4px; }
   .draw-tool-btn{
     font-family: var(--font-main); font-weight:600; font-size:12px; background:none; border:none;
-    color: #e5e1e1; padding: 8px 6px; border-radius: 7px; cursor:pointer; flex:1;
+    color: var(--panel-ink); padding: 8px 6px; border-radius: 7px; cursor:pointer; flex:1;
   }
-  .draw-tool-btn.active{ background: var(--teal); color: var(--title); }
+  .draw-tool-btn.active{ background: var(--teal); color: var(--accent-ink); }
 
   .cartouche-row{
     background: var(--grout); border: 1px solid var(--border); border-radius: 14px; padding: 16px;
@@ -407,7 +458,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     display:flex; flex-direction:column; align-items:center;
   }
   .inspi-bar h2{ font-family:var(--font-main); font-weight:600; font-size:13px; text-transform:uppercase;
-    letter-spacing:0.08em; color:#e5e1e1; margin:0 0 10px; }
+    letter-spacing:0.08em; color:var(--panel-ink); margin:0 0 10px; }
   .inspi-stage{ position:relative; width:100%; overflow:hidden; }
   .inspi-track{ display:flex; gap:16px; width:max-content; animation: inspiGlide 24s linear infinite; }
   .inspi-track:hover{ animation-play-state:paused; }
@@ -424,7 +475,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      exactement le format que le client va composer. */
   .inspi-mosaic{ display:grid; grid-template-columns:repeat(7,1fr); gap:2px; width:91px; height:91px; }
   .inspi-mosaic div{ border-radius:2px; }
-  .inspi-name{ font-family:var(--font-main); font-weight:600; font-size:16px; color:#e5e1e1; }
+  .inspi-name{ font-family:var(--font-main); font-weight:600; font-size:16px; color:var(--ink-on-dark); } /* V140 — la galerie reste sombre dans les deux themes */
   @media (max-width: 900px){ .inspi-bar{ display:none; } }
   /* V133 — défilement figé si le visiteur a demandé des animations réduites */
   @media (prefers-reduced-motion: reduce){ .inspi-track{ animation:none; } }
@@ -441,15 +492,15 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .side-col .panel{ margin:0; }
   .cartouche-row h2{
     font-family: var(--font-main); font-weight:600; font-size:13px; text-transform: uppercase;
-    letter-spacing: 0.08em; color: #e5e1e1; margin: 0 0 12px; text-align: center;
+    letter-spacing: 0.08em; color: var(--panel-ink); margin: 0 0 12px; text-align: center;
   }
 
   .profile-btn-row{ display:flex; gap:8px; background: var(--surface-2); border:1px solid var(--border); border-radius: 10px; padding: 4px; width:100%; max-width:280px; }
   .profile-btn{
     font-family: var(--font-main); font-weight:600; font-size:12.5px; background:none; border:none;
-    color: #e5e1e1; padding: 9px 10px; border-radius: 7px; cursor:pointer; flex:1;
+    color: var(--panel-ink); padding: 9px 10px; border-radius: 7px; cursor:pointer; flex:1;
   }
-  .profile-btn.active{ background: var(--teal); color: var(--title); }
+  .profile-btn.active{ background: var(--teal); color: var(--accent-ink); }
 
   .size-row{
     display:flex; flex-direction:column; align-items:center; gap:6px;
@@ -461,7 +512,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .carousel-row{ display:flex; align-items:center; gap:6px; width:100%; max-width:280px; }
   .arrow-btn{
     background: var(--surface-2); border:none; border-radius:50%; width:32px; height:32px; flex-shrink:0;
-    color:#e5e1e1; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    color:var(--panel-ink); font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center;
   }
   .arrow-btn:disabled{ opacity:.3; cursor:default; }
   .slide-viewport{
@@ -472,18 +523,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .slide{ flex-shrink:0; width:100%; display:flex; flex-direction:column; align-items:center; gap:4px; padding:10px 6px; }
   .size-pic-grid{ display:grid; gap:1.5px; width:52px; height:52px; }
   .size-pic-cell{ border-radius:1px; }
-  .slide-label{ font-size:11.5px; font-weight:700; color:#e5e1e1; text-align:center; }
+  .slide-label{ font-size:11.5px; font-weight:700; color:var(--panel-ink); text-align:center; }
   .dots{ display:flex; gap:5px; justify-content:center; margin-top:8px; }
-  .dot{ width:6px; height:6px; border-radius:50%; background: #ffffff33;
+  .dot{ width:6px; height:6px; border-radius:50%; background: var(--dot-bg);
     /* V133 — les points sont cliquables : on le montre, et on élargit la cible tactile
        (6 px de diamètre visible, 22 px de zone réellement atteignable au doigt). */
     cursor:pointer; position:relative; transition: background .18s ease, transform .18s ease; }
   .dot::before{ content:''; position:absolute; inset:-8px; border-radius:50%; }
-  .dot:hover{ background:#ffffff66; transform:scale(1.25); }
+  .dot:hover{ background:var(--dot-bg-hover); transform:scale(1.25); }
   .dot:focus-visible{ outline:2px solid var(--teal); outline-offset:3px; }
   .dot.active{ background: var(--teal); }
   .checkbox-row{
-    display:flex; align-items:center; gap:8px; font-size:12.5px; color: #e5e1e1;
+    display:flex; align-items:center; gap:8px; font-size:12.5px; color: var(--panel-ink);
     margin: 4px 0 12px; cursor:pointer;
   }
   .checkbox-row input{ width:15px; height:15px; cursor:pointer; accent-color: var(--teal); }
@@ -499,7 +550,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   #commanderPanel{ background: var(--grout); }
   .panel h2{
     font-family: var(--font-main); font-weight:600; font-size:13px; text-transform: uppercase;
-    letter-spacing: 0.08em; color: #e5e1e1; margin: 0 0 14px; text-align: center;
+    letter-spacing: 0.08em; color: var(--panel-ink); margin: 0 0 14px; text-align: center;
   }
   .side-col{ display:flex; flex-direction:column; gap: 16px; }
 
@@ -522,7 +573,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   }
   .eyedropper-btn{
     width:34px; height:34px; border-radius:8px; background: var(--surface-2); border:1px solid var(--border);
-    color:#e5e1e1; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;
+    color:var(--panel-ink); display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;
   }
   .swatch-current{
     width: 34px; height: 34px; border-radius: 8px; border: 2px solid #ffffff22;
@@ -539,7 +590,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .adv-toggle{
     width:100%; display:flex; align-items:center; justify-content:space-between;
     background: var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:10px 12px;
-    color:#e5e1e1; font-family: var(--font-main); font-weight:600; font-size:12.5px; cursor:pointer; margin-bottom: 4px;
+    color:var(--panel-ink); font-family: var(--font-main); font-weight:600; font-size:12.5px; cursor:pointer; margin-bottom: 4px;
   }
   .adv-toggle .chevron{ transition: transform .2s ease; }
   .adv-toggle.open .chevron{ transform: rotate(180deg); }
@@ -558,7 +609,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .swatch:hover .rm{ display:block; }
   .empty-note{ font-size: 11.5px; color: var(--text-muted); font-style: normal; text-align: center; grid-column: 1/-1; }
   .sticker-tile{ background-size: cover; background-position: center; background-color: var(--grid-bg); }
-  .sticker-tile.none-tile{ display:flex; align-items:center; justify-content:center; color:#e5e1e1; font-size:10px; font-weight:600; text-align:center; }
+  .sticker-tile.none-tile{ display:flex; align-items:center; justify-content:center; color:var(--ink-on-dark); font-size:10px; font-weight:600; text-align:center; } /* V140 — tuile sombre dans les deux themes */
 
   .add-color-row{ display:flex; gap:6px; margin-top: 10px; }
   #addColorBtn{
@@ -566,17 +617,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     border-radius:7px; font-size:12.5px; font-weight:600; cursor:pointer;
   }
   .reset-palette-btn{
-    width:100%; margin-top: 10px; background: #e2725b; color: #e5e1e1;
+    width:100%; margin-top: 10px; background: #e2725b; color: var(--panel-ink);
     border: none; border-radius:7px; font-size:11.5px; font-weight:600;
     padding: 7px; cursor:pointer;
   }
   .reset-palette-btn:hover{ filter: brightness(1.08); }
 
   .mode-note{
-    font-size: 12.5px; color: #e5e1e1; line-height: 1.5; text-align:center;
+    font-size: 12.5px; color: var(--panel-ink); line-height: 1.5; text-align:center;
     background: var(--grid-bg); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px;
   }
-  .mode-note b{ color: #e5e1e1; }
+  .mode-note b{ color: var(--panel-ink); }
 
   .upload-zone{
     border: 1.5px dashed var(--border); border-radius: 10px; padding: 18px 12px;
@@ -588,18 +639,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .submode-row{ display:grid; grid-template-columns: 1fr 1fr; gap:6px; margin-bottom: 14px; }
   .submode-btn{
     font-family: var(--font-main); font-weight:600; font-size: 11.5px;
-    background: var(--grid-bg); color: #e5e1e1; border:1px solid var(--border);
+    background: var(--grid-bg); color: var(--panel-ink); border:1px solid var(--border);
     border-radius: 7px; padding: 8px 6px; cursor:pointer;
   }
-  .submode-btn.active{ background: var(--teal); color: var(--title); border-color: transparent; }
+  .submode-btn.active{ background: var(--teal); color: var(--accent-ink); border-color: transparent; }
   #submodeLibraryBtn{ grid-column: 1 / -1; }
   .hint{ font-size: 11.5px; color: var(--text-muted); line-height:1.5; margin: 8px 0; text-align:center; }
   #clearLibraryBtn{
-    background: var(--grid-bg); color: #e5e1e1; border:none;
+    background: var(--grid-bg); color: var(--panel-ink); border:none;
     border-radius:7px; font-size:12.5px; font-weight:600; cursor:pointer; padding: 9px 6px;
   }
   #generateLibraryBtn{
-    background: var(--teal); color: var(--title); border:none;
+    background: var(--teal); color: var(--accent-ink); border:none;
     border-radius:7px; font-size:12.5px; font-weight:600; cursor:pointer; padding: 9px 6px;
   }
   #generateLibraryBtn:hover{ background: var(--teal-hover); }
@@ -612,12 +663,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   }
   .panel-nav-wrap h2{
     font-family: var(--font-main); font-weight:600; font-size:12px; text-transform: uppercase;
-    letter-spacing: 0.07em; color: #e5e1e1; margin: 0 0 10px; text-align:center;
+    letter-spacing: 0.07em; color: var(--panel-ink); margin: 0 0 10px; text-align:center;
   }
   .panel-nav{ display:grid; gap: 4px; justify-content:center; }
   .panel-nav-head{
     display:flex; align-items:center; justify-content:center;
-    font-family: var(--font-main); font-weight:600; font-size: 11px; color: #e5e1e1;
+    font-family: var(--font-main); font-weight:600; font-size: 11px; color: var(--panel-ink);
   }
   .panel-tile{
     width: 26px; height: 26px; border-radius: 4px; background: var(--surface-2);
@@ -642,7 +693,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   @media (max-width:760px){ .grid-stage.multi{ margin: 40px 0; } }
   .pan-arrow{
     position:absolute; z-index:5; width:34px; height:34px; border-radius:50%;
-    border:1.5px solid var(--border); background: var(--surface); color:#e5e1e1;
+    border:1.5px solid var(--border); background: var(--surface); color:var(--panel-ink);
     font-size:14px; line-height:1; cursor:pointer;
     display:none; align-items:center; justify-content:center;
     transition: background .15s ease, opacity .15s ease;
@@ -683,24 +734,28 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
   .duplicate-row{ text-align:center; }
   #dupBtn{
-    background: var(--surface-2); color: #e5e1e1; border:1px solid var(--border);
+    background: var(--surface-2); color: var(--panel-ink); border:1px solid var(--border);
     border-radius: 8px; padding: 9px 14px; font-family: var(--font-main); font-weight:600; font-size:12.5px; cursor:pointer;
   }
-  #dupBtn:hover{ border-color: #ffffff44; }
+  #dupBtn:hover{ border-color: var(--text-muted); } /* V140.7 — etait #ffffff44 (theme sombre) */
   .undo-btn{
-    background: #e2725b; color: #e5e1e1; border:none;
+    /* V140.7 — harmonise : action secondaire aux jetons du theme (etait terracotta
+       code en dur + texte encre dessus, limite illisible) */
+    background: var(--surface-2); color: var(--text); border:1px solid var(--border);
     border-radius: 8px; padding: 9px 14px; font-family: var(--font-main); font-weight:600; font-size:12.5px; cursor:pointer;
   }
-  .undo-btn:hover{ filter: brightness(1.08); }
+  .undo-btn:hover{ border-color: var(--text-muted); }
+  /* V140.7 — bouton Pinterest replace pres de la galerie */
+  .v140-inspi-pin{ display:inline-block; width:auto !important; margin-left:10px; font-size:12px !important; padding:6px 14px !important; border-radius:999px !important; vertical-align:middle; }
 
   .actions{ display:flex; flex-direction:column; gap: 8px; margin-top: 4px; }
   button.act{
     font-family: var(--font-main); font-weight:600; font-size: 13px; border-radius: 8px;
     padding: 10px 14px; border: 1px solid var(--border); cursor:pointer; letter-spacing: 0.01em;
   }
-  #exportPanelPngBtn{ background: var(--teal); color: var(--title); border:none; }
+  #exportPanelPngBtn{ background: var(--teal); color: var(--accent-ink); border:none; }
   #exportPanelPngBtn:hover{ background: var(--teal-hover); }
-  #clearBtn{ background: #e2725b; color: #e5e1e1; border:none; }
+  #clearBtn{ background: var(--terracotta); color: #FBF3EC; border:none; } /* V140.7 — jetons */
   #clearBtn:hover{ filter: brightness(1.08); }
   #checkoutBtn{ background: var(--ochre); color: var(--title); border:none; font-size: 14px; padding: 12px 14px; }
   #checkoutBtn:hover{ filter: brightness(1.08); }
@@ -724,7 +779,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     font-family: var(--font-main); font-size:11.5px; font-weight:600; border-radius:6px; padding:5px 10px;
     border:none; cursor:pointer; white-space:nowrap;
   }
-  .design-item .design-load{ background: var(--teal); color: var(--title); }
+  .design-item .design-load{ background: var(--teal); color: var(--accent-ink); }
   .design-item .design-load:hover{ background: var(--teal-hover); }
   .design-item .design-del{ background:transparent; color:#e2725b; border:1px solid #e2725b55; }
   .design-item .design-del:hover{ background:#e2725b1a; }
@@ -763,6 +818,25 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     20%,72%{ transform:scale(1); background:var(--c); }
     82%,100%{ background:#ffffff22; transform:scale(1); }
   }
+  /* Logo vertical animé de la fenêtre du compte (2026-08-21) — même grille officielle que
+     le bandeau : le Q se clipse tesselle par tesselle (une seule fois, ordre du spinner),
+     la queue terracotta en dernier, puis le nom se pose. CSS pur, rejoué à chaque ouverture. */
+  .compte-logo{ display:flex; flex-direction:column; align-items:center; gap:10px; margin:2px 0 16px; }
+  .compte-logo .clg{ display:grid; grid-template-columns:repeat(4,1fr); gap:3px; width:56px; height:56px; }
+  .compte-logo .clg i{ border-radius:3px; background:var(--text); opacity:0; transform:scale(1.3); animation: compteClip .3s cubic-bezier(.34,1.56,.64,1) forwards; }
+  .compte-logo .clg i.empty{ background:transparent; animation:none; }
+  .compte-logo .clg i.tail{ background:var(--terracotta, #E2725B); }
+  .compte-logo .clg-word{ font-family:var(--font-main); font-weight:600; font-size:19px; color:var(--text-strong); letter-spacing:.02em; opacity:0; animation: compteWord .5s ease .95s forwards; }
+  /* Point du i en terracotta : pastille calée sur le point de la police (valeurs em calibrées
+     sur Quicksand, reprises du logo officiel — ne pas ajuster sans comparer à logo.png) */
+  .compte-logo .clg-word .idot{ position:relative; }
+  .compte-logo .clg-word .idot::after{ content:''; position:absolute; top:0.144em; left:0.055em; width:0.135em; height:0.135em; border-radius:50%; background:var(--terracotta, #E2725B); }
+  @keyframes compteClip{ to{ opacity:1; transform:scale(1); } }
+  @keyframes compteWord{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+  /* Option verrouillée par le forfait (2026-08-21) : visible mais grisée + cadenas —
+     elle donne envie au lieu de disparaître ; le clic ouvre l'invitation (voir JS). */
+  .forfait-verrou{ position:relative; opacity:.45; filter:grayscale(.6); cursor:pointer; }
+  .forfait-verrou::after{ content:'🔒'; position:absolute; top:2px; right:4px; font-size:14px; }
   /* Barre de progression tesselles — générations longues, chaque étape = une tesselle (V119) */
   .loading-progress{ display:flex; gap:5px; justify-content:center; margin:16px auto 0; }
   .loading-progress i{ width:24px; height:24px; border-radius:5px; background:#ffffff22; transition: background .3s, transform .3s; }
@@ -795,12 +869,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     .title-word{ animation:none; opacity:1; }
     .title-tess{ animation:none; opacity:1; transform:translate(-50%,0) rotate(0) scale(1); }
     .title-mosaic i{ animation:none; opacity:1; transform:scale(1); }
+    /* sans animation, le logo du compte doit rester pleinement visible */
+    .compte-logo .clg i, .compte-logo .clg-word{ animation:none; opacity:1; transform:none; }
   }
   .modal-close{
     position:absolute; top: 12px; right: 14px; background:none; border:none;
-    color: #e5e1e1; font-size: 22px; line-height:1; cursor:pointer;
+    color: var(--panel-ink); font-size: 22px; line-height:1; cursor:pointer;
   }
-  .modal-close:hover{ color: #e5e1e1; }
+  .modal-close:hover{ color: var(--panel-ink); }
   #fallbackModalTitle, #confirmModalTitle{
     font-family: var(--font-main); font-weight:600; font-size: 18px; color: var(--text-strong);
     margin: 0 0 14px; text-align:center;
@@ -913,101 +989,216 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   }
 
   /* ============================================================
+     V140 — Disposition B+ « Le Plateau » (bureau uniquement).
+     Les deux colonnes deviennent des tiroirs coulissants ouverts
+     par un rail d'icônes à gauche ; le mur prend toute la largeur.
+     Les actions rares vivent derrière une pastille en bas à droite.
+     Le rail reste charbon dans les deux thèmes (comme le mur).
+     ============================================================ */
+  .v140-rail, #v140Fab, #v140FabMenu, #v140FabMinus, #v140FabMenuMinus, #v140Toast, #v140Recap{ display:none; }
+  /* V140.2 — la rangee d'outils sous le mur (Apercu / Annuler / Dupliquer) est regroupee
+     par script dans #v140WallTools : colonne sur mobile, rangee sur ordinateur. */
+  #v140WallTools{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+  #v140WallTools .duplicate-row{ margin:0; }
+  @media (min-width: 1024px){
+    .v140-rail{ position:fixed; left:0; top:0; bottom:0; width:68px; z-index:499;
+      background:#2b353e; display:flex; flex-direction:column; align-items:center;
+      gap:10px; padding:86px 0 14px; }
+    .v140-rail button{ width:56px; background:none; border:none; border-radius:10px;
+      color:#F2EEDF; cursor:pointer; font-family:var(--font-main); display:flex;
+      flex-direction:column; align-items:center; gap:3px; padding:8px 0 7px; font-size:18px; }
+    .v140-rail button small{ font-size:9px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; opacity:.85; }
+    .v140-rail button:hover{ background:#3a4650; }
+    .v140-rail button:focus-visible{ outline:2px solid var(--terracotta); outline-offset:2px; }
+    body.v140-tools.v140-view-settings .v140-rail #railSettings,
+    body.v140-tools.v140-view-create .v140-rail #railCreate,
+    body.v140-files .v140-rail #railFiles{ background:var(--teal); color:var(--accent-ink); }
+    /* Le bouton Aide est epingle en bas du rail : toujours visible, jamais a chercher */
+    .v140-rail #railHelp{ margin-top:auto; }
+    /* Vues du tiroir gauche — V140.6 :
+       Réglages = format physique (Dimension tesselle + Nombre de carreaux) ;
+       Création = cartouche MODE + le panneau d'outils du mode en cours.
+       Le Mode vit dans Création : en changeant de mode, ses outils apparaissent
+       immédiatement sous les yeux (dans Réglages, rien ne semblait répondre). */
+    body.v140-view-settings #toolsCol > :not(.config-bar){ display:none !important; }
+    body.v140-view-settings #toolsCol .cartouche-row:has(#modeViewport){ display:none !important; }
+    body.v140-view-create #toolsCol .cartouche-row:not(:has(#modeViewport)){ display:none !important; }
+    .appnav-inner{ padding-left:88px; }
+    .app-content{ padding-left:84px; }
+    /* Rangee d'outils sous le mur : une seule ligne centree, la legende passe en infobulle */
+    #v140WallTools{ flex-direction:row; flex-wrap:wrap; justify-content:center; gap:8px; margin:10px 0 4px; }
+    #v140WallTools .hint{ display:none; }
+    /* Le plan de travail seul occupe la grille — les colonnes sont sorties du flux */
+    .studio{ grid-template-columns: minmax(0,1fr); grid-template-areas:"atelier"; }
+    /* Barre de rappel : les reglages en cours restent toujours lisibles au-dessus
+       du mur ; cliquer une puce ouvre le tiroir Créer ou elles se reglent. */
+    #v140Recap{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:0 0 12px; }
+    #v140Recap button{ font-family:var(--font-main); font-weight:600; font-size:12.5px;
+      background:var(--grout); color:var(--text); border:1px solid var(--border);
+      border-radius:999px; padding:7px 14px; cursor:pointer; transition:border-color .18s, color .18s; }
+    #v140Recap button:hover{ border-color:var(--teal); color:var(--text-strong); }
+    #v140Recap button:focus-visible{ outline:2px solid var(--terracotta); outline-offset:2px; }
+    #toolsCol, #actionsCol{ position:fixed; top:74px; bottom:0; width:320px;
+      /* hauteur EXPLICITE : le couple top+bottom seul laissait le tiroir prendre la
+         hauteur de son contenu (988px constatés) et le defilement devenait impossible */
+      height:calc(100vh - 74px);
+      max-height:none; overflow-y:auto; z-index:498; background:var(--grout);
+      padding:18px 18px 28px; box-shadow:0 10px 30px rgba(0,0,0,.18);
+      transition:transform .28s ease;
+      /* la barre pour glisser de haut en bas, bien visible dans les deux themes */
+      scrollbar-width:thin; scrollbar-color: var(--teal) transparent; }
+    #toolsCol{ left:68px; border-right:1px solid var(--border); transform:translateX(-110%); }
+    #actionsCol{ right:0; border-left:1px solid var(--border); transform:translateX(110%); }
+    body.v140-tools #toolsCol{ transform:none; }
+    body.v140-files #actionsCol{ transform:none; }
+    #v140Fab{ display:grid; position:fixed; right:22px; bottom:22px; width:54px; height:54px;
+      border-radius:50%; background:var(--teal); color:var(--accent-ink); border:none;
+      place-items:center; font-size:24px; cursor:pointer; z-index:497;
+      box-shadow:0 6px 18px rgba(0,0,0,.25); }
+    #v140Fab:focus-visible{ outline:2px solid var(--terracotta); outline-offset:2px; }
+    body.v140-fab #v140Fab{ background:#2b353e; color:#F2EEDF; }
+    #v140FabMenu{ display:flex; position:fixed; right:22px; bottom:86px;
+      flex-direction:column; gap:8px; z-index:497; pointer-events:none; align-items:flex-end; }
+    #v140FabMenu button, #v140FabMenuMinus button{ opacity:0; pointer-events:none; transform:translateY(8px);
+      transition:transform .22s ease, opacity .22s ease; display:flex; align-items:center; gap:8px;
+      background:var(--grout); color:var(--text); border:1px solid var(--border);
+      border-radius:999px; padding:10px 16px; font-family:var(--font-main);
+      font-weight:700; font-size:13px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.15); }
+    body.v140-fab #v140FabMenu button{ opacity:1; pointer-events:auto; transform:none; }
+    /* Pastille − : le pendant du + — même logique de couleur (kraft ou terracotta selon
+       le sélecteur d'ambiance), harmonisée plutôt qu'une couleur "danger" à part. Le contenu
+       du menu (Effacer) suffit à en indiquer la nature, pas besoin d'une couleur alarmante. */
+    #v140FabMinus{ display:grid; position:fixed; right:86px; bottom:22px; width:54px; height:54px;
+      border-radius:50%; background:var(--teal); color:var(--accent-ink); border:none;
+      place-items:center; font-size:26px; cursor:pointer; z-index:497;
+      box-shadow:0 6px 18px rgba(0,0,0,.25); }
+    #v140FabMinus:focus-visible{ outline:2px solid var(--terracotta); outline-offset:2px; }
+    body.v140-fabminus #v140FabMinus{ background:#2b353e; color:#F2EEDF; }
+    #v140FabMenuMinus{ display:flex; position:fixed; right:86px; bottom:86px;
+      flex-direction:column; gap:8px; z-index:497; pointer-events:none; align-items:flex-end; }
+    body.v140-fabminus #v140FabMenuMinus button{ opacity:1; pointer-events:auto; transform:none; }
+    /* Toast : miroir des messages de statut (statusMsg vit dans le tiroir Fichiers,
+       fermé la plupart du temps — sans ce miroir les messages seraient invisibles) */
+    #v140Toast{ display:block; position:fixed; right:22px; bottom:88px; max-width:360px;
+      background:#2b353e; color:#F2EEDF; border-radius:12px; padding:12px 16px;
+      font-size:13px; font-family:var(--font-main); z-index:496; opacity:0;
+      transform:translateY(8px); transition:opacity .25s ease, transform .25s ease; pointer-events:none; }
+    body.v140-fab #v140Toast{ bottom:250px; }
+    #v140Toast.show{ opacity:1; transform:none; }
+  }
+  /* ---- V140 — B+ mobile/tablette : le rail passe en bas, sous le pouce ;
+     les tiroirs remontent depuis le bas comme des bottom sheets. Les cartouches
+     de reglage restent au-dessus du mur (inchangees), seuls les panneaux
+     outils/fichiers passent en tiroir. ---- */
+  @media (max-width: 1023px){
+    .v140-rail{ display:flex; position:fixed; left:0; right:0; bottom:0; top:auto; width:auto;
+      height:60px; z-index:499; background:#2b353e; flex-direction:row; justify-content:center;
+      align-items:center; gap:22px; padding:4px 12px calc(4px + env(safe-area-inset-bottom, 0px)); }
+    .v140-rail button{ width:64px; background:none; border:none; border-radius:10px;
+      color:#F2EEDF; cursor:pointer; font-family:var(--font-main); display:flex;
+      flex-direction:column; align-items:center; gap:2px; padding:6px 0 5px; font-size:17px; }
+    .v140-rail button small{ font-size:9px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; opacity:.85; }
+    body.v140-tools .v140-rail #railCreate,
+    body.v140-files .v140-rail #railFiles{ background:var(--teal); color:var(--accent-ink); }
+    /* Sur mobile les cartouches restent au-dessus du mur : pas de tiroir Réglages */
+    .v140-rail #railSettings{ display:none; }
+    body{ padding-bottom:60px; }
+    #toolsCol, #actionsCol{ position:fixed; left:0; right:0; bottom:60px; top:auto;
+      width:auto; height:62vh; max-height:none; overflow-y:auto; z-index:498;
+      background:var(--grout); padding:16px 16px 26px; border-radius:16px 16px 0 0;
+      border-top:1px solid var(--border); box-shadow:0 -10px 30px rgba(0,0,0,.18);
+      transform:translateY(112%); transition:transform .28s ease;
+      scrollbar-width:thin; scrollbar-color: var(--teal) transparent; }
+    body.v140-tools #toolsCol{ transform:none; }
+    body.v140-files #actionsCol{ transform:none; }
+    #v140Fab{ display:grid; position:fixed; right:14px; bottom:74px; width:50px; height:50px;
+      border-radius:50%; background:var(--teal); color:var(--accent-ink); border:none;
+      place-items:center; font-size:22px; cursor:pointer; z-index:497;
+      box-shadow:0 6px 18px rgba(0,0,0,.25); }
+    body.v140-fab #v140Fab{ background:#2b353e; color:#F2EEDF; }
+    #v140FabMenu{ display:flex; position:fixed; right:14px; bottom:134px;
+      flex-direction:column; gap:8px; z-index:497; pointer-events:none; align-items:flex-end; }
+    #v140FabMenu button, #v140FabMenuMinus button{ opacity:0; pointer-events:none; transform:translateY(8px);
+      transition:transform .22s ease, opacity .22s ease; display:flex; align-items:center; gap:8px;
+      background:var(--grout); color:var(--text); border:1px solid var(--border);
+      border-radius:999px; padding:10px 16px; font-family:var(--font-main);
+      font-weight:700; font-size:13px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.15); }
+    body.v140-fab #v140FabMenu button{ opacity:1; pointer-events:auto; transform:none; }
+    #v140FabMinus{ display:grid; position:fixed; right:72px; bottom:74px; width:50px; height:50px;
+      border-radius:50%; background:var(--teal); color:var(--accent-ink); border:none;
+      place-items:center; font-size:24px; cursor:pointer; z-index:497;
+      box-shadow:0 6px 18px rgba(0,0,0,.25); }
+    body.v140-fabminus #v140FabMinus{ background:#2b353e; color:#F2EEDF; }
+    #v140FabMenuMinus{ display:flex; position:fixed; right:72px; bottom:134px;
+      flex-direction:column; gap:8px; z-index:497; pointer-events:none; align-items:flex-end; }
+    body.v140-fabminus #v140FabMenuMinus button{ opacity:1; pointer-events:auto; transform:none; }
+    #v140Toast{ display:block; position:fixed; left:14px; right:14px; bottom:74px; max-width:none;
+      background:#2b353e; color:#F2EEDF; border-radius:12px; padding:12px 16px;
+      font-size:13px; font-family:var(--font-main); z-index:496; opacity:0;
+      transform:translateY(8px); transition:opacity .25s ease, transform .25s ease; pointer-events:none; }
+    body.v140-fab #v140Toast{ opacity:0; }
+    #v140Toast.show{ opacity:1; transform:none; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    #toolsCol, #actionsCol, #v140FabMenu button, #v140Toast{ transition:none; }
+  }
+
+  /* ============================================================
      Bandeau de navigation + bas de page + écran de chargement
      ============================================================ */
-  .appnav{ position:sticky; top:0; width:100%; z-index:500; background:#F5F5F5ee; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border-bottom:1px solid var(--border-light); max-width:none; text-align:left; margin-top:0; margin-bottom:0; }
+  .appnav{ position:sticky; top:0; width:100%; z-index:500; background:var(--nav-bg); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border-bottom:1px solid var(--border-light); max-width:none; text-align:left; margin-top:0; margin-bottom:0; }
   .appnav-inner{ width:100%; margin:0; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 24px; box-sizing:border-box; }
   .appnav-brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
-  .appnav-logo{ display:grid; grid-template-columns:repeat(4,1fr); gap:1.03px; width:26px; height:26px; flex-shrink:0; }
-  .appnav-logo i{ border-radius:1.26px; background:#2b353e; }
+  .appnav-logo{ display:grid; grid-template-columns:repeat(4,1fr); gap:2px; width:26px; height:26px; flex-shrink:0; }
+  .appnav-logo i{ border-radius:2px; background:#2b353e; }
   .appnav-logo i.empty{ background:transparent; }
   .appnav-logo i.tail{ background:#E2725B; }
   .appnav-text{ display:flex; flex-direction:column; line-height:1.05; }
-  .appnav-word{ font-family:var(--font-main); font-weight:600; font-size:16px; color:#2b353e; }
-  .appnav-word .i-dot, .appfoot-brand .i-dot{ position:relative; display:inline-block; }
-  .appnav-word .accent-dot, .appfoot-brand .accent-dot{ position:absolute; left:50%; top:0.02em; transform:translateX(-50%); width:.16em; height:.16em; border-radius:.035em; background:#E2725B; }
+  .appnav-word{ font-family:var(--font-main); font-weight:700; font-size:16px; color:var(--title); }
+  /* V140 — interrupteur d'ambiance Kraft / Magazine (choix laisse a l'utilisatrice,
+     memorise dans localStorage). Deux segments, le thème actif est plein. */
+  .theme-sw{ display:inline-flex; border:1.5px solid var(--title); border-radius:999px; overflow:hidden; cursor:pointer; font-family:var(--font-main); font-weight:700; font-size:11.5px; flex-shrink:0; background:none; padding:0; }
+  .theme-sw span{ padding:6px 12px; color:var(--title); transition:background .2s, color .2s; }
+  .theme-sw span.on{ background:var(--title); color:var(--bg); }
+  .theme-sw:focus-visible{ outline:2px solid var(--terracotta); outline-offset:2px; }
+  /* V140.3 — pictos en traits fins, monochromes (prennent la couleur du texte)
+     à la place des emoji système : couleur et style variaient d'un ordinateur
+     à l'autre et juraient avec la charte. */
+  .v140-icon{ width:18px; height:18px; flex-shrink:0; display:block;
+    fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+  .v140-rail button .v140-icon{ width:20px; height:20px; }
+  #v140FabMenu .v140-icon, #v140FabMenuMinus .v140-icon{ width:17px; height:17px; }
+  /* V140.3 — Se connecter : l'entree du futur espace client (cloud, premium),
+     toujours visible dans le bandeau, jamais dans le menu replie. */
+  .connect-btn{ font-family:var(--font-main); font-weight:700; font-size:12.5px;
+    background:var(--teal); color:var(--accent-ink); border:none; border-radius:999px;
+    padding:8px 16px; cursor:pointer; flex-shrink:0; transition:filter .15s ease; }
+  .connect-btn:hover{ filter:brightness(1.07); }
+  .connect-btn:focus-visible{ outline:2px solid var(--terracotta); outline-offset:2px; }
   /* V137 — le bandeau porte desormais le nom de l'APP. "Quadreti" garde la graisse du nom
      officiel de la marque, "Designer" passe en graisse fine : on lit d'abord la marque,
      puis l'outil. C'est ce qui permet de supprimer le grand titre en double juste en dessous. */
   .appnav-word-app{ font-weight:400; color:#5a636b; }
   .appnav-cat{ font-family:var(--font-main); font-weight:500; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:#8a8f83; margin-top:2px; }
-  /* Harmonisation du 20/08/2026 : menu sandwich permanent (même mécanique que le site),
-     plus de bascule à 720px vers une barre de liens en clair. Le ticker reste en bas de
-     page (décision V142 conservée, pas de changement d'espace de travail). */
-  .appnav-links{
-    position:fixed; top:57px; left:0; right:0; z-index:499; background:#F5F5F5;
-    display:flex; flex-direction:column; align-items:flex-start; gap:0;
-    padding:8px 20px 16px; border-bottom:1px solid var(--border-light);
-    transform:translateY(-8px); opacity:0; pointer-events:none; transition:opacity .18s, transform .18s;
-  }
-  .appnav-links.open{ opacity:1; transform:translateY(0); pointer-events:auto; }
-  .appnav-links a{ font-family:var(--font-main); font-weight:600; font-size:13.5px; color:#2b353e; text-decoration:none; padding:10px 0; width:100%; }
-  .appnav-links a:hover{ opacity:.7; }
-  .appnav-burger{ display:flex; background:none; border:none; cursor:pointer; padding:6px; flex-direction:column; gap:4px; }
+  .appnav-links{ display:flex; align-items:center; gap:22px; }
+  .appnav-links a{ font-family:var(--font-main); font-weight:600; font-size:13.5px; color:#2b353e; text-decoration:none; opacity:.75; }
+  .appnav-links a:hover{ opacity:1; }
+  .appnav-burger{ display:none; background:none; border:none; cursor:pointer; padding:6px; flex-direction:column; gap:4px; }
   .appnav-burger span{ display:block; width:20px; height:2px; background:#2b353e; }
-
-  .appfoot{ width:100%; background:#2b353e; color:#c9c3b2; }
-  .appfoot-inner{
-    width:100%; max-width:1060px; margin:0 auto; padding:22px 24px 34px; box-sizing:border-box;
-    display:flex; flex-direction:column; align-items:center; text-align:center; gap:14px;
+  @media (max-width:720px){
+    .appnav-links{ position:fixed; top:57px; left:0; right:0; background:#F5F5F5; flex-direction:column; align-items:flex-start; gap:0; padding:8px 20px 16px; border-bottom:1px solid var(--border-light); transform:translateY(-8px); opacity:0; pointer-events:none; transition:opacity .18s, transform .18s; }
+    .appnav-links.open{ opacity:1; transform:translateY(0); pointer-events:auto; }
+    .appnav-links a{ padding:10px 0; width:100%; opacity:1; }
+    .appnav-burger{ display:flex; }
   }
-  .appfoot-logo-row{ display:inline-flex; align-items:center; gap:10px; text-decoration:none; }
-  .appfoot-logo-row .appnav-logo i{ background:#F2EEDF; }
-  .appfoot-logo-row .appnav-logo i.tail{ background:#E2725B; }
-  .appfoot-brand{ font-family:var(--font-main); font-weight:600; font-size:14px; color:#F2EEDF; }
-  .appfoot-tag{ font-family:var(--font-main); font-size:12px; color:#8a938c; }
-  .appfoot-links{ display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+
+  .appfoot{ width:100%; margin-top:56px; background:#2b353e; color:#c9c3b2; }
+  .appfoot-inner{ width:100%; margin:0; padding:28px 24px; box-sizing:border-box; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px; }
+  .appfoot-brand{ font-family:var(--font-main); font-weight:700; font-size:14px; color:#F2EEDF; }
+  .appfoot-tag{ font-family:var(--font-main); font-size:12px; color:#8a938c; margin-top:2px; }
+  .appfoot-links{ display:flex; gap:20px; flex-wrap:wrap; }
   .appfoot-links a{ font-family:var(--font-main); font-weight:600; font-size:12.5px; color:#c9c3b2; text-decoration:none; }
   .appfoot-links a:hover{ color:#F2EEDF; }
-
-  /* ===== Réseaux sociaux + footer légal (harmonisation 20/08/2026, identique au site) ===== */
-  /* 20/08/2026 — Direction D retenue (footer), harmonisée avec le site : structure
-     resserrée + accent terracotta renforcé. Cartouches en flex (aérées sur toute la
-     largeur desktop sans s'étirer géant), texte centré dans chaque bouton. */
-  .section-reseaux{ width:100%; background:#1a2126; padding:44px 22px; text-align:center; margin-top:56px; }
-  .section-reseaux .accroche{ font-family:var(--font-main); font-weight:600; font-size:20px; color:#F2EEDF; margin:0 0 4px; }
-  .section-reseaux .sub{ font-family:var(--font-main); font-size:12.5px; color:#9aa2a9; margin:0 0 24px; }
-  .section-reseaux .grid{ display:inline-grid; grid-template-columns:repeat(5,58px); gap:24px; }
-  .section-reseaux a{
-    width:58px; height:58px; border-radius:12.8px;
-    display:flex; align-items:center; justify-content:center;
-    text-decoration:none; transition:transform .15s, box-shadow .15s, background .15s;
-    background:#E2725B; color:#fff;
-  }
-  .section-reseaux a svg{ width:22px; height:22px; display:block; fill:currentColor; }
-  .section-reseaux a:hover, .section-reseaux a:focus-visible{
-    transform:translateY(-4px) scale(1.04);
-    box-shadow:0 10px 18px rgba(0,0,0,.35);
-    background:#c85a44;
-  }
-  @media (max-width:520px){
-    .section-reseaux .grid{ grid-template-columns:repeat(5, 1fr); gap:12px; max-width:320px; }
-  }
-  .foot-legal{ background:#1a2126; padding:32px 22px 40px; border-top:2px solid #E2725B; }
-  .foot-legal .wrap{
-    max-width:1320px; margin:0 auto;
-    display:flex; flex-wrap:wrap; justify-content:center; gap:20px;
-  }
-  .foot-legal a{
-    display:flex; align-items:center; justify-content:center; gap:10px;
-    background:#2d363f; border:1px solid rgba(226,114,91,.28); border-radius:12px;
-    padding:14px 22px; text-decoration:none; color:#e5e1e1;
-    font-family:var(--font-main); font-size:13px; font-weight:600;
-    transition:background .15s, border-color .15s; flex:0 1 auto;
-  }
-  .foot-legal a:hover{ background:#37434e; border-color:rgba(226,114,91,.5); }
-  .foot-legal a svg{ width:18px; height:18px; flex:0 0 auto; fill:none; stroke:#E2725B; stroke-width:1.7; }
-  .to-top{
-    position:fixed; right:20px; bottom:20px; z-index:600;
-    width:44px; height:44px; border-radius:50%; border:none;
-    background:#2b353e; color:#fff; box-shadow:0 8px 20px rgba(0,0,0,.28);
-    display:flex; align-items:center; justify-content:center;
-    opacity:0; pointer-events:none; transform:translateY(8px);
-    transition:opacity .2s ease, transform .2s ease, background .15s ease;
-  }
-  .to-top.show{ opacity:1; pointer-events:auto; transform:none; }
-  .to-top:hover{ background:#E2725B; }
-  .to-top svg{ width:18px; height:18px; fill:none; stroke:#fff; stroke-width:2.2; }
 
   /* ---------- Ticker défilant (repris du site) ---------- */
   .appticker{ width:100%; background:#2b353e; color:#F2EEDF; overflow:hidden; white-space:nowrap; padding:7px 0; font-family:var(--font-main); font-size:12.5px; font-weight:600; letter-spacing:.02em; }
@@ -1205,7 +1396,7 @@ document.addEventListener('DOMContentLoaded', function(){
         <i></i><i></i><i></i><i class="tail"></i>
       </span>
       <span class="appnav-text">
-        <span class="appnav-word">Quadret<span class="i-dot">ı<i class="accent-dot"></i></span><span class="appnav-word-app"> Designer</span></span>
+        <span class="appnav-word">Quadreti<span class="appnav-word-app"> Designer</span></span>
       </span>
     </a>
     <nav class="appnav-links" id="appnavLinks">
@@ -1216,6 +1407,10 @@ document.addEventListener('DOMContentLoaded', function(){
       <a href="quadreti-guide-interactif.html" target="_blank" rel="noopener">Guide</a>
       <a href="https://quadreti.fr/boutique/" target="_blank" rel="noopener">Boutique</a>
     </nav>
+    <button class="connect-btn" id="connectBtn" type="button"><svg class="v140-icon" style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:5px"><use href="#i-user"/></svg>Se connecter</button>
+    <button class="theme-sw" id="themeSwitch" type="button" aria-label="Changer d'ambiance visuelle">
+      <span data-t="kraft" class="on">Kraft</span><span data-t="magazine">Magazine</span>
+    </button>
     <button class="appnav-burger" id="appnavBurger" aria-label="Menu" aria-expanded="false" type="button">
       <span></span><span></span><span></span>
     </button>
@@ -1229,6 +1424,234 @@ document.addEventListener('DOMContentLoaded', function(){
   btn.addEventListener('click', function(){
     var open = menu.classList.toggle('open');
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+})();
+/* V140 — bascule d'ambiance Kraft / Magazine, memorisee entre les visites. */
+(function(){
+  var sw = document.getElementById('themeSwitch');
+  if (!sw) return;
+  function apply(theme){
+    if (theme === 'magazine'){ document.documentElement.setAttribute('data-theme','magazine'); }
+    else { theme = 'kraft'; document.documentElement.removeAttribute('data-theme'); }
+    var spans = sw.querySelectorAll('span');
+    for (var i = 0; i < spans.length; i++){
+      spans[i].classList.toggle('on', spans[i].getAttribute('data-t') === theme);
+    }
+    try { localStorage.setItem('quadretiTheme', theme); } catch(e){}
+  }
+  var saved = null;
+  try { saved = localStorage.getItem('quadretiTheme'); } catch(e){}
+  apply(saved === 'magazine' ? 'magazine' : 'kraft');
+  sw.addEventListener('click', function(){
+    var isMag = document.documentElement.getAttribute('data-theme') === 'magazine';
+    apply(isMag ? 'kraft' : 'magazine');
+  });
+})();
+</script>
+
+<!-- V140.3 — sprite d'icônes en traits fins, invisible, référencé par <use> partout
+     ci-dessous. Un seul jeu de tracés, cohérent avec la charte, pas d'emoji système. -->
+<svg style="display:none" aria-hidden="true">
+  <defs>
+    <symbol id="i-settings" viewBox="0 0 20 20"><line x1="3" y1="6" x2="17" y2="6"/><circle cx="12" cy="6" r="2.1"/><line x1="3" y1="14" x2="17" y2="14"/><circle cx="8" cy="14" r="2.1"/></symbol>
+    <symbol id="i-brush" viewBox="0 0 20 20"><path d="M13.5 3.5 16.5 6.5 8 15 4 16 5 12Z"/><path d="M12 5 15 8"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 20 20"><path d="M3 6c0-.8.7-1.5 1.5-1.5h3.4c.4 0 .8.2 1 .5l1 1.3h5.6c.8 0 1.5.7 1.5 1.5v6.7c0 .8-.7 1.5-1.5 1.5h-11C3.7 16 3 15.3 3 14.5Z"/></symbol>
+    <symbol id="i-close" viewBox="0 0 20 20"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></symbol>
+    <symbol id="i-help" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.2"/><path d="M7.7 8c.2-1.3 1.2-2.1 2.4-2.1 1.3 0 2.3.9 2.3 2 0 1.6-2.3 1.5-2.3 3.4"/><circle cx="10" cy="13.9" r="0.15" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 20 20"><path d="M6 15h8.5a2.9 2.9 0 0 0 .6-5.7A4.2 4.2 0 0 0 7 8.1 3.3 3.3 0 0 0 6 15Z"/></symbol>
+    <symbol id="i-save" viewBox="0 0 20 20"><rect x="3.5" y="3.5" width="13" height="13" rx="1.3"/><path d="M6.5 3.5v4h6v-4M6.5 16v-5h7v5"/></symbol>
+    <symbol id="i-download" viewBox="0 0 20 20"><path d="M10 3.5v9M6.3 9.2 10 12.7l3.7-3.5"/><path d="M4 14.5v1.3c0 .7.6 1.2 1.2 1.2h9.6c.7 0 1.2-.5 1.2-1.2v-1.3"/></symbol>
+    <symbol id="i-eraser" viewBox="0 0 20 20"><path d="M12.8 3.7 16 6.9c.5.5.5 1.3 0 1.8L9.8 15H5.4l-2-2 6.5-6.5"/><path d="M5.4 15H15"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 20 20"><path d="M4 5.5h12M8 5.5v-1c0-.5.4-1 1-1h2c.6 0 1 .5 1 1v1M6 5.5 6.7 16c0 .6.5 1 1 1h4.6c.5 0 1-.4 1-1L14 5.5"/><line x1="8.3" y1="8.5" x2="8.6" y2="13.8"/><line x1="11.7" y1="8.5" x2="11.4" y2="13.8"/></symbol>
+    <symbol id="i-user" viewBox="0 0 20 20"><circle cx="10" cy="7" r="3.3"/><path d="M3.7 16.3c.7-3.2 3.3-5 6.3-5s5.6 1.8 6.3 5"/></symbol>
+  </defs>
+</svg>
+
+<!-- V140 — Rail B+ « Le Plateau » : chaque icône porte son mot, les colonnes
+     deviennent des tiroirs, les actions rares vivent derrière la pastille. -->
+<nav class="v140-rail" aria-label="Outils de l'atelier">
+  <button id="railSettings" type="button" aria-label="Ouvrir le tiroir Réglages"><svg class="v140-icon"><use href="#i-settings"/></svg><small>Réglages</small></button>
+  <button id="railCreate" type="button" aria-label="Ouvrir le tiroir Création"><svg class="v140-icon"><use href="#i-brush"/></svg><small>Création</small></button>
+  <button id="railFiles" type="button" aria-label="Ouvrir le tiroir Fichiers"><svg class="v140-icon"><use href="#i-folder"/></svg><small>Fichiers</small></button>
+  <button id="railClose" type="button" aria-label="Fermer les tiroirs"><svg class="v140-icon"><use href="#i-close"/></svg><small>Fermer</small></button>
+  <button id="railHelp" type="button" aria-label="Ouvrir l'aide"><svg class="v140-icon"><use href="#i-help"/></svg><small>Aide</small></button>
+</nav>
+<button id="v140Fab" type="button" aria-label="Enregistrer et exporter">＋</button>
+<div id="v140FabMenu">
+  <button id="v140FabCloud" type="button"><svg class="v140-icon"><use href="#i-cloud"/></svg>Enregistrer dans le cloud</button>
+  <button id="v140FabSave" type="button"><svg class="v140-icon"><use href="#i-save"/></svg>Sauvegarder sur cet appareil</button>
+  <button id="v140FabLoad" type="button"><svg class="v140-icon"><use href="#i-folder"/></svg>Charger un design</button>
+  <button id="v140FabExport" type="button"><svg class="v140-icon"><use href="#i-download"/></svg>Télécharger ce carreau</button>
+</div>
+<button id="v140FabMinus" type="button" aria-label="Effacer">−</button>
+<div id="v140FabMenuMinus">
+  <button id="v140MinusClear" type="button"><svg class="v140-icon"><use href="#i-eraser"/></svg>Effacer ce carreau</button>
+  <button id="v140MinusWall" type="button"><svg class="v140-icon"><use href="#i-trash"/></svg>Effacer tout le mur</button>
+</div>
+<div id="v140Toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  var body = document.body;
+  function drawers(which){
+    body.classList.toggle('v140-tools', which === 'tools');
+    body.classList.toggle('v140-files', which === 'files');
+  }
+  function bind(id, fn){ var el = document.getElementById(id); if (el) el.addEventListener('click', fn); }
+  /* Deux vues pour le tiroir gauche : Réglages (cartouches) et Création (mode en cours).
+     Chaque vue est assez courte pour tenir sans barre de defilement sur ordinateur. */
+  function openView(view){
+    var already = body.classList.contains('v140-tools') && body.classList.contains('v140-view-' + view);
+    if (already){ drawers(null); return; }
+    body.classList.toggle('v140-view-settings', view === 'settings');
+    body.classList.toggle('v140-view-create', view === 'create');
+    drawers('tools');
+  }
+  bind('railSettings', function(){ openView('settings'); });
+  bind('railCreate', function(){ openView('create'); });
+  bind('railFiles', function(){ drawers(body.classList.contains('v140-files') ? null : 'files'); });
+  bind('railClose', function(){ drawers(null); });
+  /* Aide : toujours a un clic — ouvre le guide d'utilisation interactif
+     (meme cible que le lien « Guide » du bandeau, nouvel onglet). */
+  bind('railHelp', function(){
+    window.open('quadreti-guide-interactif.html', '_blank', 'noopener');
+  });
+  /* V140.5 — DEMANDE DU FONDATEUR : les tiroirs ne se ferment JAMAIS tout seuls.
+     On choisit une couleur, on va peindre sur le mur, on revient — le tiroir attend,
+     ouvert. Il ne se ferme que sur decision explicite : bouton ✕ Fermer du rail,
+     re-clic sur le meme bouton du rail, ou ouverture d'un autre tiroir.
+     Seuls les menus des pastilles + et − se replient encore sur clic exterieur
+     (comportement standard d'un menu), via composedPath() — fige le chemin du clic
+     au moment du clic, meme si l'element clique est ensuite reconstruit/detache. */
+  document.addEventListener('click', function(e){
+    var path = typeof e.composedPath === 'function' ? e.composedPath() : [e.target];
+    var onFab = path.some(function(el){
+      return el && el.nodeType === 1 && el.id &&
+        ['v140Fab','v140FabMenu','v140FabMinus','v140FabMenuMinus'].indexOf(el.id) !== -1;
+    });
+    if (onFab) return;
+    body.classList.remove('v140-fab');
+    body.classList.remove('v140-fabminus');
+  });
+  bind('v140Fab', function(){ body.classList.remove('v140-fabminus'); body.classList.toggle('v140-fab'); });
+  bind('v140FabMinus', function(){ body.classList.remove('v140-fab'); body.classList.toggle('v140-fabminus'); });
+  function closeFabs(){ body.classList.remove('v140-fab'); body.classList.remove('v140-fabminus'); }
+  function proxy(fabId, realId){
+    bind(fabId, function(){
+      closeFabs();
+      var real = document.getElementById(realId);
+      if (real) real.click();
+    });
+  }
+  proxy('v140FabExport', 'exportPanelPngBtn');
+  proxy('v140FabSave', 'saveDesignBtn');
+  proxy('v140FabLoad', 'openDesignsBtn');
+  proxy('v140MinusClear', 'clearBtn');
+  /* V140.7 — Cloud : branche sur le bouton cloud existant du chantier premium
+     (saveDesignToCloud + son verrou compte, deja en place dans l'app). */
+  proxy('v140FabCloud', 'saveCloudBtn');
+  bind('v140MinusWall', function(){
+    closeFabs();
+    if (window.quadretiClearWall) window.quadretiClearWall();
+  });
+  /* V141 — Se connecter : branché sur la fenêtre du compte du chantier monétisation
+     (openCompteModal est déclarée plus bas dans le module compte ; au clic, elle existe). */
+  bind('connectBtn', function(){
+    if (window.openCompteModal) window.openCompteModal();
+  });
+  /* Toast miroir de statusMsg — les messages restent visibles tiroir fermé.
+     statusMsg n'existe pas encore à ce stade du document : on câble au DOM prêt. */
+  document.addEventListener('DOMContentLoaded', function(){
+    var status = document.getElementById('statusMsg');
+    var toast = document.getElementById('v140Toast');
+    var toastTimer = null;
+    if (status && toast){
+      new MutationObserver(function(){
+        var t = status.textContent.trim();
+        if (!t) return;
+        toast.textContent = t;
+        toast.classList.add('show');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 4500);
+      }).observe(status, { childList:true, characterData:true, subtree:true });
+    }
+    /* Barre de rappel (bureau) : lit l'etiquette du slide visible de chaque
+       cartouche (Mode / Carreaux / Tesselle) et l'affiche en puces au-dessus
+       du mur. Cliquer une puce ouvre le tiroir Créer, ou tout se regle. */
+    var atelier = document.getElementById('atelierCol');
+    if (atelier){
+      var recap = document.createElement('div');
+      recap.id = 'v140Recap';
+      atelier.insertBefore(recap, atelier.firstChild);
+      function currentLabels(){
+        var out = [];
+        document.querySelectorAll('.cartouche-row').forEach(function(row){
+          var track = row.querySelector('.slide-track');
+          var vp = row.querySelector('.slide-viewport');
+          if (!track || !vp || !vp.clientWidth) return;
+          var m; try { m = new DOMMatrixReadOnly(getComputedStyle(track).transform); } catch(e){ return; }
+          var idx = Math.round(-m.m41 / vp.clientWidth);
+          var slides = track.children;
+          if (idx < 0 || idx >= slides.length) idx = 0;
+          var lab = slides[idx] && slides[idx].querySelector('.slide-label');
+          if (lab && lab.textContent.trim()) out.push(lab.textContent.trim());
+        });
+        return out;
+      }
+      var recapTimer = null;
+      function refreshRecap(){
+        if (recapTimer) clearTimeout(recapTimer);
+        recapTimer = setTimeout(function(){
+          var labels = currentLabels();
+          recap.innerHTML = '';
+          labels.forEach(function(txt){
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.textContent = txt;
+            b.setAttribute('aria-label', 'Réglage actuel : ' + txt + ' — ouvrir le tiroir Réglages');
+            b.addEventListener('click', function(){ openView('settings'); });
+            recap.appendChild(b);
+          });
+        }, 180);
+      }
+      refreshRecap();
+      document.addEventListener('click', refreshRecap);
+      document.addEventListener('change', refreshRecap);
+      document.addEventListener('transitionend', function(e){
+        if (e.target && e.target.classList && e.target.classList.contains('slide-track')) refreshRecap();
+      }, true);
+    }
+  });
+  /* Première visite sur grand écran : le tiroir Créer est déjà ouvert,
+     on comprend le principe en deux secondes. */
+  var first = null;
+  try { first = localStorage.getItem('quadretiRailSeen'); } catch(e){}
+  if (!first && window.matchMedia('(min-width:1024px)').matches){
+    openView('settings');
+    try { localStorage.setItem('quadretiRailSeen', '1'); } catch(e){}
+  }
+  /* V140.2 — la rangee d'outils sous le mur (Apercu / Annuler / Dupliquer) est
+     regroupee dans un conteneur : rangee sur ordinateur, colonne sur mobile.
+     La legende du bouton Dupliquer passe en infobulle sur ordinateur. */
+  document.addEventListener('DOMContentLoaded', function(){
+    var atelier = document.getElementById('atelierCol');
+    if (!atelier) return;
+    var rows = atelier.querySelectorAll(':scope > .duplicate-row');
+    if (!rows.length) return;
+    var wrap = document.createElement('div');
+    wrap.id = 'v140WallTools';
+    rows[0].parentElement.insertBefore(wrap, rows[0]);
+    rows.forEach(function(r){ wrap.appendChild(r); });
+    var dup = document.getElementById('dupBtn');
+    var hint = wrap.querySelector('.hint');
+    if (dup && hint) dup.title = hint.textContent.trim();
+    /* V140.7 — le bouton Pinterest rejoint la Galerie d'inspirations, sa famille
+       naturelle (le panneau Aide & inspiration du tiroir est masqué). */
+    var pin = document.getElementById('pinterestBtn');
+    var inspiTitle = document.querySelector('#inspiBar h2, .inspi-bar h2');
+    if (pin && inspiTitle){
+      inspiTitle.after(pin);
+      pin.classList.add('v140-inspi-pin');
+    }
   });
 })();
 </script>
@@ -1779,7 +2202,7 @@ document.addEventListener('DOMContentLoaded', function(){
         <button id="drawClearBtn" style="flex:1;">Effacer le dessin</button>
       </div>
       <button id="drawApplyPanelBtn" style="width:100%; background:#F5F5F5; color:var(--title); border:none; font-weight:700; padding:12px; border-radius:8px; cursor:pointer; margin-bottom:8px;">Appliquer sur ce carreau</button>
-      <button id="drawApplyBtn" style="width:100%; background:var(--teal); color:var(--title); border:none; font-weight:700; padding:12px; border-radius:8px; cursor:pointer;">Appliquer sur le mur</button>
+      <button id="drawApplyBtn" style="width:100%; background:var(--teal); color:var(--accent-ink); border:none; font-weight:700; padding:12px; border-radius:8px; cursor:pointer;">Appliquer sur le mur</button>
     </div>
   </div>
 
@@ -1808,7 +2231,7 @@ document.addEventListener('DOMContentLoaded', function(){
     </div>
     </div>
     <div class="duplicate-row">
-      <button id="wallPreviewBtn" class="act" style="background:var(--teal); color:var(--title); border:none;">Aperçu</button>
+      <button id="wallPreviewBtn" class="act" style="background:var(--teal); color:var(--accent-ink); border:none;">Aperçu</button>
     </div>
     <div class="duplicate-row">
       <button id="undoBtn" class="undo-btn">Annuler la dernière action</button>
@@ -1820,7 +2243,10 @@ document.addEventListener('DOMContentLoaded', function(){
   </div>
 
   <div class="side-col" id="actionsCol">
-    <div class="panel" id="actionsPanel">
+    <!-- V140.7 — panneau Actions masqué : ses deux boutons vivent dans les pastilles
+         + (Télécharger) et − (Effacer). statusMsg reste dans la page : l'app y écrit
+         toujours, et la notification flottante (toast) le relaie à l'écran. -->
+    <div class="panel" id="actionsPanel" style="display:none;">
       <h2>Actions</h2>
       <div class="actions">
         <button class="act" id="exportPanelPngBtn">Télécharger ce carreau (PNG)</button>
@@ -1834,7 +2260,10 @@ document.addEventListener('DOMContentLoaded', function(){
          qui a produit le mur (chaque case du mur ne retient qu'un type + une valeur finale,
          identique pour Mode Couleur, Mode Photo, les trois sous-modes du Mode Créatif, ou
          Mode Dessin) — un seul mécanisme sert donc tous les modes sans distinction. -->
-    <div class="panel" id="designsPanel">
+    <!-- V140.7 — panneau masqué : Sauvegarder (local + cloud) ET Charger vivent
+         désormais ensemble dans la pastille +. Boutons conservés dans la page :
+         la pastille les actionne par procuration (proxy .click()). -->
+    <div class="panel" id="designsPanel" style="display:none;">
       <h2 style="display:flex; align-items:center; justify-content:center; gap:6px;">
         Mes designs
         <button id="designsInfoBtn" class="info-dot" aria-label="À propos de la sauvegarde des designs" title="À propos de la sauvegarde">ⓘ</button>
@@ -1842,12 +2271,15 @@ document.addEventListener('DOMContentLoaded', function(){
       <div class="actions">
         <button class="act" id="saveDesignBtn">Sauvegarder ce design</button>
         <button class="act act-secondary" id="openDesignsBtn">Charger un design</button>
+        <!-- Monétisation 2026-08 — sauvegarde cloud, réservée aux comptes premium.
+             La sauvegarde locale ci-dessus reste gratuite et inchangée. -->
+        <button class="act act-secondary" id="saveCloudBtn">Sauvegarder dans le cloud ☁</button>
       </div>
       <!-- V129 — Code de composition : test volontairement isolé de tout serveur/compte.
-           Le design se transforme en texte, copiable/collable manuellement par ux (SMS,
-           email, notes...) pour le retrouver sur un autre appareil. Bloc autonome, retirable
-           sans rien casser ailleurs si l'essai ne convainc pas. -->
-      <div style="margin-top:14px; padding-top:14px; border-top:1px solid var(--border-light);">
+           V140.3 — RETIRÉ de l'interface à la demande du fondateur (l'essai n'a pas convaincu ;
+           les boutons officiels des réseaux sociaux le remplaceront). Le bloc est masqué et
+           non supprimé : ses scripts s'y accrochent encore, on nettoiera en profondeur plus tard. -->
+      <div style="display:none; margin-top:14px; padding-top:14px; border-top:1px solid var(--border-light);">
         <p class="hint" style="text-align:center; margin:0 0 8px;">Ou via un code texte (à copier-coller vous-même, sans compte)</p>
         <div class="actions">
           <button class="act act-secondary" id="copyDesignCodeBtn">Copier le code de ce mur</button>
@@ -1865,7 +2297,9 @@ document.addEventListener('DOMContentLoaded', function(){
          reste de cette colonne. Pinterest pointe vers un tableau de marque à créer
          (Morad) — URL provisoire à remplacer dans PINTEREST_BOARD_URL une fois le
          tableau existant, mémoire déjà notée comme un point en attente. -->
-    <div class="panel" id="helpPanel">
+    <!-- V140.7 — panneau masqué : Aide = bouton ❓ du rail ; le bouton Pinterest
+         est déplacé par script à côté de la Galerie d'inspirations, sa famille. -->
+    <div class="panel" id="helpPanel" style="display:none;">
       <h2>Aide &amp; inspiration</h2>
       <div class="actions">
         <button class="act act-secondary" id="helpBtn">Aide</button>
@@ -1875,11 +2309,15 @@ document.addEventListener('DOMContentLoaded', function(){
 
     <div class="panel" id="commanderPanel">
       <h2>Mes fichiers</h2>
-      <p class="hint" style="color:var(--text);">Générez vos fichiers de production, vous serez ensuite redirigé vers la boutique pour commander.</p>
+      <p class="hint" style="color:var(--text);">Commandez votre kit sur la boutique : vos fichiers de production se débloquent ici automatiquement après l'achat.</p>
       <div class="actions">
-        <button class="act" id="exportAllVoletsBtn">Télécharger pour commander (ZIP)</button>
-        <a id="perforatriceGabaritLink" href="https://canva.link/gabarit-de-decoupe-perforatrice-quadreti" target="_blank" rel="noopener" class="act" style="display:block; text-align:center; text-decoration:none; font-family:var(--font-main); font-weight:600; font-size:13px; border-radius:8px; padding:10px 14px; border:1px solid var(--border-light); letter-spacing:0.01em; color:#000000; background:#F5F5F5; box-sizing:border-box;">Gabarit perforatrice</a>
+        <button class="act" id="exportAllVoletsBtn">Télécharger mes fichiers (ZIP)</button>
+        <a id="perforatriceGabaritLink" href="https://canva.link/gabarit-de-decoupe-perforatrice-quadreti" target="_blank" rel="noopener" class="act" style="display:block; text-align:center; text-decoration:none; font-family:var(--font-main); font-weight:600; font-size:13px; border-radius:8px; padding:10px 14px; border:1px solid var(--border-light); letter-spacing:0.01em; color:var(--text); background:var(--surface-2); box-sizing:border-box;">Gabarit perforatrice</a>
       </div>
+      <!-- Monétisation 2026-08 — état du compte, mis à jour par refreshCompteLine() -->
+      <!-- V140.7 — ligne masquée : doublon du bouton « Se connecter » du bandeau
+           (décision fondateur : « se connecter en bouton suffit »). -->
+      <p class="hint" id="compteLine" style="display:none; color:var(--text); margin-top:10px; cursor:pointer; text-decoration:underline; text-underline-offset:3px;">Se connecter à mon compte</p>
     </div>
   </div>
 
@@ -1910,6 +2348,56 @@ document.addEventListener('DOMContentLoaded', function(){
     <div style="display:flex; gap:10px; margin-top:20px;">
       <button id="confirmModalCancel" class="modal-link-btn modal-cancel-btn" style="flex:1;">Annuler</button>
       <button id="confirmModalOk" class="modal-link-btn" style="flex:1;">Continuer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Monétisation 2026-08 — compte client (connexion par code reçu par email, sans mot de passe) -->
+<div id="compteOverlay" class="modal-overlay" style="display:none;">
+  <div class="modal-box" style="max-width:420px;">
+    <button id="compteClose" class="modal-close" aria-label="Fermer">×</button>
+    <!-- Logo vertical animé (grille officielle du Q, mêmes délais que le spinner : la
+         queue terracotta se clipse en dernier), rejoué à chaque ouverture de la fenêtre -->
+    <div class="compte-logo" aria-hidden="true">
+      <span class="clg">
+        <i style="animation-delay:.40s"></i><i style="animation-delay:.48s"></i><i style="animation-delay:.56s"></i><i class="empty"></i>
+        <i style="animation-delay:.32s"></i><i class="empty"></i><i style="animation-delay:.64s"></i><i class="empty"></i>
+        <i style="animation-delay:.24s"></i><i class="empty"></i><i style="animation-delay:.72s"></i><i class="empty"></i>
+        <i style="animation-delay:.16s"></i><i style="animation-delay:.08s"></i><i style="animation-delay:0s"></i><i class="tail" style="animation-delay:.88s"></i>
+      </span>
+      <span class="clg-word">Quadret<span class="idot">i</span></span>
+    </div>
+    <h3 id="compteTitle" style="text-align:center;">Mon compte</h3>
+    <div id="compteBody">
+      <!-- Étape 1 : email -->
+      <div id="compteStepEmail">
+        <p>Entrez l'email utilisé pour votre commande (ou celui que vous voulez associer à votre compte). Vous recevrez un code à 6 chiffres.</p>
+        <input type="email" id="compteEmailInput" class="hexval-input" style="text-transform:none; width:100%;" placeholder="votre@email.fr" autocomplete="email">
+        <button id="compteSendCodeBtn" class="modal-link-btn" style="width:100%; margin-top:12px;">Recevoir mon code</button>
+        <p class="hint" style="margin-top:10px;">Votre email sert uniquement à gérer votre accès premium. Aucune publicité, aucune revente.</p>
+      </div>
+      <!-- Étape 2 : code -->
+      <div id="compteStepCode" style="display:none;">
+        <p>Un code à 6 chiffres vient d'être envoyé à <b id="compteEmailEcho"></b>. Il peut prendre une minute à arriver (vérifiez les indésirables).</p>
+        <input type="text" id="compteCodeInput" class="hexval-input" style="text-transform:none; width:100%; letter-spacing:6px; text-align:center; font-size:20px;" placeholder="______" inputmode="numeric" maxlength="6" autocomplete="one-time-code">
+        <button id="compteVerifyBtn" class="modal-link-btn" style="width:100%; margin-top:12px;">Valider</button>
+        <button id="compteBackBtn" class="modal-link-btn modal-cancel-btn" style="width:100%; margin-top:8px;">Changer d'email</button>
+      </div>
+      <!-- Étape 3 : connecté -->
+      <div id="compteStepDone" style="display:none;">
+        <p id="compteStatusText"></p>
+        <button id="compteGoShopBtn" class="modal-link-btn" style="width:100%; margin-top:12px; display:none;">Aller à la boutique</button>
+        <!-- Code d'activation (carte fournie avec le kit, essai, geste commercial).
+             Concertation 2026-08-20 : les codes remplacent le paiement PayPal intégré
+             et le branchement Ecwid — un seul mécanisme d'activation, choisi par le fondateur. -->
+        <div id="codeZone" style="margin-top:14px; padding-top:12px; border-top:1px solid var(--border-light);">
+          <p class="hint" style="margin:0 0 8px;">Vous avez un code d'activation (fourni avec votre kit, ou un code d'essai) ?</p>
+          <input type="text" id="codeActivationInput" class="hexval-input" style="width:100%; text-align:center; letter-spacing:2px;" placeholder="QDT-XXXX-XXXX" maxlength="20" autocomplete="off">
+          <button id="codeActivationBtn" class="modal-link-btn" style="width:100%; margin-top:8px;">Activer ce code</button>
+        </div>
+        <button id="compteLogoutBtn" class="modal-link-btn modal-cancel-btn" style="width:100%; margin-top:8px;">Se déconnecter</button>
+      </div>
+      <p class="hint" style="margin-top:14px;"><a id="compteHelpLink" href="mailto:contact@quadreti.fr?subject=Probl%C3%A8me%20d%27acc%C3%A8s%20Quadreti%20Designer" style="color:inherit;">Un problème d'accès ? Écrivez-nous.</a></p>
     </div>
   </div>
 </div>
@@ -1983,6 +2471,12 @@ document.addEventListener('DOMContentLoaded', function(){
     <p class="hint" id="designsCountHint" style="margin:-8px 0 12px;"></p>
     <p class="hint" id="designsEmptyHint" style="display:none;">Aucun design sauvegardé pour l'instant — composez un mur puis utilisez « Sauvegarder ce design ».</p>
     <div id="designsList"></div>
+    <!-- Monétisation 2026-08 — designs cloud (compte premium) -->
+    <div id="cloudDesignsBlock" style="margin-top:16px; padding-top:12px; border-top:1px solid var(--border-light);">
+      <h3 style="font-size:15px; margin:0 0 6px;">Dans le cloud ☁</h3>
+      <p class="hint" id="cloudDesignsHint" style="margin:0 0 10px;"></p>
+      <div id="cloudDesignsList"></div>
+    </div>
   </div>
 </div>
 
@@ -1990,10 +2484,19 @@ document.addEventListener('DOMContentLoaded', function(){
   <div class="modal-box" style="max-width:640px; max-height:85vh; overflow-y:auto; text-align:left;">
     <button id="adminPanelClose" class="modal-close" aria-label="Fermer">×</button>
     <h3 style="text-align:center;">Panneau de contrôle — options par app</h3>
+    <p class="hint" style="text-align:center; margin:-6px 0 14px;">En tant qu'administrateur, vous voyez toujours tout : une option masquée pour les clients reste utilisable pour vous, entourée d'un liseré terracotta.</p>
     <p class="hint" style="text-align:center; margin:-8px 0 16px;">Édite chaque app, prévisualise dans ce navigateur, puis exporte le bloc à coller dans le fichier réel</p>
     <div id="adminAppTabs" class="tabs" style="margin-bottom:18px; flex-wrap:wrap;"></div>
     <h3 style="font-size:14px; margin:0 0 8px;">Options disponibles</h3>
     <div id="adminFeatureList"></div>
+    <!-- Options par forfait (2026-08-21) : rangées dans Supabase, appliquées à TOUS les
+         clients dès l'enregistrement — aucun fichier à republier. Une option décochée
+         apparaît grisée avec un cadenas pour ce forfait (invitation au clic). -->
+    <h3 style="font-size:14px; margin:20px 0 4px;">Options par forfait</h3>
+    <p class="hint" style="margin:0 0 10px;">Effet immédiat pour tous les clients à l'enregistrement (aucune republication). Décoché = option grisée 🔒 pour ce forfait.</p>
+    <div id="adminForfaitsGrid"></div>
+    <button id="adminForfaitsSaveBtn" class="modal-link-btn" style="width:100%; margin-top:12px;">Enregistrer les forfaits (tous les clients)</button>
+    <p class="hint" id="adminForfaitsMsg" style="margin:8px 0 0;"></p>
     <h3 style="font-size:14px; margin:20px 0 8px;">Couleurs (cette app)</h3>
     <div id="adminThemeList"></div>
     <div style="display:flex; gap:8px; margin-top:20px; flex-wrap:wrap;">
@@ -2269,7 +2772,7 @@ document.addEventListener('DOMContentLoaded', function(){
         const cell = document.createElement('div');
         cell.className = 'size-pic-cell';
         const used = row < rows && col < cols;
-        cell.style.background = used ? '#e5e1e1' : '#e5e1e11f';
+        cell.style.background = used ? 'var(--panel-ink)' : 'var(--panel-ink)1f';
         grid.appendChild(cell);
       }
     }
@@ -4037,6 +4540,28 @@ document.addEventListener('DOMContentLoaded', function(){
     }, cells.length * 8 + 260);
   });
 
+  // V140.2 — Effacer TOUT le mur (tous les carreaux d'un coup), avec confirmation.
+  // Demande du fondateur : le pendant « mur entier » du bouton « Effacer ce carreau ».
+  // Chaque carreau passe par pushPanelSnapshot : l'annulation reste possible carreau
+  // par carreau. Exposée sur window pour la pastille « − » du rail V140.
+  window.quadretiClearWall = async function(){
+    if (clearCascadeRunning) return;
+    var nb = panelsRows * panelsCols;
+    var msg = nb > 1
+      ? 'Effacer tout le mur ? Les ' + nb + ' carreaux seront vidés.'
+      : 'Effacer tout le mur ? Le carreau sera vidé.';
+    if (!(await confirmModal(msg, { title: 'Effacer tout le mur', okLabel: 'Tout effacer' }))) return;
+    for (let r = 0; r < panelsRows; r++){
+      for (let c = 0; c < panelsCols; c++){
+        pushPanelSnapshot(r, c);
+        panels[r][c] = new Array(PANEL_SIZE * PANEL_SIZE).fill(null);
+      }
+    }
+    buildPanelGrid();
+    refreshPanelNavDot();
+    showToast('Mur effacé');
+  };
+
   // ---------- Panel navigator ----------
   function colLetter(c) { return String.fromCharCode(65 + c); }
 
@@ -4973,6 +5498,7 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   async function openDesignsModal() {
+    refreshCloudDesignsBlock(); // section cloud (premium), rafraîchie en parallèle de la liste locale
     const list = document.getElementById('designsList');
     const emptyHint = document.getElementById('designsEmptyHint');
     const countHint = document.getElementById('designsCountHint');
@@ -5018,7 +5544,16 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
 
-  document.getElementById('saveDesignBtn').addEventListener('click', saveCurrentDesign);
+  // V140.2 — la sauvegarde locale est limitée à 3 designs (au-delà : le cloud Premium).
+  document.getElementById('saveDesignBtn').addEventListener('click', async () => {
+    let existing = [];
+    try { existing = await dbGetAll(); } catch (e) {}
+    if (existing.length >= 3){
+      showToast('3 sauvegardes locales maximum — supprimez-en une, ou passez au cloud');
+      return;
+    }
+    saveCurrentDesign();
+  });
   document.getElementById('openDesignsBtn').addEventListener('click', () => {
     document.getElementById('designsOverlay').style.display = 'flex';
     openDesignsModal();
@@ -5029,6 +5564,160 @@ document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('designsOverlay').addEventListener('click', e => {
     if (e.target === document.getElementById('designsOverlay')) e.currentTarget.style.display = 'none';
   });
+
+  // ---------- Sauvegarde cloud des designs (premium, monétisation 2026-08) ----------
+  // La sauvegarde locale ci-dessus reste gratuite et intouchée ; le cloud ajoute « retrouver
+  // ses designs sur n'importe quel appareil » pour les comptes premium. Le design voyage
+  // sous la même forme que le code de composition V129 (gzip + base64url) : un seul format
+  // de sérialisation dans toute l'app, et un design cloud reste lisible comme un code texte.
+  const CLOUD_DESIGNS_MAX = 10;
+  const CLOUD_CODE_MAX = 4 * 1024 * 1024; // au-delà (~4 Mo compressés), refus poli plutôt qu'un échec réseau obscur
+
+  // Vignette réduite (jpeg ~240px) : l'aperçu mur fait jusqu'à 800px/PNG, trop lourd
+  // pour en stocker 10 par client dans la base gratuite (500 Mo au total).
+  function shrinkThumbnail(dataUrl, maxPx) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, maxPx / Math.max(img.width, img.height));
+        const c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(img.width * scale));
+        c.height = Math.max(1, Math.round(img.height * scale));
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        resolve(c.toDataURL('image/jpeg', 0.8));
+      };
+      img.onerror = () => resolve(null);
+      img.src = dataUrl;
+    });
+  }
+
+  async function cloudFetch(path, options) {
+    const s = await ensureFreshSession();
+    if (!s) throw new Error('NON_CONNECTE');
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+      ...options,
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${s.access_token}`,
+        'Content-Type': 'application/json',
+        ...(options && options.headers),
+      },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text().catch(() => '')}`);
+    return res.status === 204 ? null : res.json();
+  }
+
+  async function saveDesignToCloud() {
+    if (!anyPanelHasContent()) {
+      statusMsg.textContent = 'Rien à sauvegarder — le mur est encore vide.';
+      return;
+    }
+    if (!(await ensurePremiumAccess())) return; // même verrou que les exports
+    let existants = [];
+    try { existants = await cloudFetch('designs_cloud?select=id'); }
+    catch (e) { statusMsg.textContent = 'Cloud indisponible — connexion internet requise.'; return; }
+    if (existants.length >= CLOUD_DESIGNS_MAX) {
+      statusMsg.textContent = `Limite de ${CLOUD_DESIGNS_MAX} designs cloud atteinte — supprimez-en un dans « Charger un design ».`;
+      return;
+    }
+    const name = await promptModal(
+      'Donnez un nom à ce design — vous le retrouverez sur tous vos appareils en vous connectant.',
+      { title: 'Sauvegarder dans le cloud', okLabel: 'Sauvegarder', placeholder: 'ex. Caméléon salon' }
+    );
+    if (!name) return;
+    statusMsg.textContent = 'Envoi vers le cloud…';
+    try {
+      const code = await encodeDesignToCode({ profileKey: currentProfileKey, panelsCols, panelsRows, panels });
+      if (code.length > CLOUD_CODE_MAX) {
+        statusMsg.textContent = 'Ce design est trop lourd pour le cloud (beaucoup de photos) — utilisez la sauvegarde locale.';
+        return;
+      }
+      const apercu = await shrinkThumbnail(await generateWallPreviewDataUrl(), 240);
+      await cloudFetch('designs_cloud', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: compteSession.email,
+          nom: name,
+          donnees: code,
+          apercu,
+          taille_octets: code.length,
+        }),
+      });
+      showToast(`Design « ${name} » sauvegardé dans le cloud ☁`);
+      statusMsg.textContent = '';
+    } catch (e) {
+      console.error(e);
+      statusMsg.textContent = /quota/i.test(String(e))
+        ? `Limite de ${CLOUD_DESIGNS_MAX} designs cloud atteinte — supprimez-en un d'abord.`
+        : 'Échec de la sauvegarde cloud — réessayez dans un instant.';
+    }
+  }
+
+  async function refreshCloudDesignsBlock() {
+    const hint = document.getElementById('cloudDesignsHint');
+    const list = document.getElementById('cloudDesignsList');
+    list.innerHTML = '';
+    if (!compteSession) {
+      hint.innerHTML = 'Réservé aux comptes premium — <a href="#" id="cloudConnectLink" style="color:inherit;">connectez-vous</a> pour retrouver vos designs sur tous vos appareils.';
+      const link = document.getElementById('cloudConnectLink');
+      if (link) link.addEventListener('click', e => { e.preventDefault(); openCompteModal(); });
+      return;
+    }
+    hint.textContent = 'Chargement…';
+    let records = [];
+    try {
+      records = await cloudFetch('designs_cloud?select=id,nom,apercu,date_modif&order=date_modif.desc');
+    } catch (e) {
+      hint.textContent = 'Cloud indisponible pour le moment (connexion internet requise).';
+      return;
+    }
+    hint.textContent = records.length
+      ? `${records.length} / ${CLOUD_DESIGNS_MAX} designs dans le cloud (compte ${compteSession.email})`
+      : 'Aucun design dans le cloud pour l\'instant — utilisez « Sauvegarder dans le cloud ☁ ».';
+    records.forEach(rec => {
+      const item = document.createElement('div');
+      item.className = 'design-item';
+      const date = new Date(rec.date_modif);
+      const dateLabel = date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      item.innerHTML = `
+        ${rec.apercu ? `<img src="${rec.apercu}" alt="">` : ''}
+        <div class="design-info">
+          <div class="design-name"></div>
+          <div class="design-meta">cloud · ${dateLabel}</div>
+        </div>
+        <div class="design-btns">
+          <button class="design-load">Charger</button>
+          <button class="design-del">Suppr.</button>
+        </div>`;
+      item.querySelector('.design-name').textContent = rec.nom; // textContent : le nom vient de la base, jamais interprété en HTML
+      item.querySelector('.design-load').addEventListener('click', async () => {
+        if (anyPanelHasContent() && !(await confirmModal(
+          'Charger ce design remplace le mur en cours — votre composition actuelle sera perdue si elle n\'est pas sauvegardée. Continuer ?',
+          { title: 'Charger le design' }
+        ))) return;
+        try {
+          const rows = await cloudFetch(`designs_cloud?select=donnees&id=eq.${rec.id}`);
+          const record = await decodeCodeToDesign(rows[0].donnees);
+          record.name = rec.nom;
+          await restoreDesignState(record);
+          document.getElementById('designsOverlay').style.display = 'none';
+        } catch (e) {
+          console.error(e);
+          statusMsg.textContent = 'Échec du chargement du design cloud.';
+        }
+      });
+      item.querySelector('.design-del').addEventListener('click', async () => {
+        if (!(await confirmModal(`Supprimer définitivement « ${rec.nom} » du cloud ?`, { title: 'Supprimer ce design', okLabel: 'Supprimer' }))) return;
+        try {
+          await cloudFetch(`designs_cloud?id=eq.${rec.id}`, { method: 'DELETE' });
+          refreshCloudDesignsBlock();
+        } catch (e) { statusMsg.textContent = 'Échec de la suppression.'; }
+      });
+      list.appendChild(item);
+    });
+  }
+
+  document.getElementById('saveCloudBtn').addEventListener('click', () => saveDesignToCloud());
 
   // ---------- V129 — Code de composition (test, sans serveur ni compte) ----------
   // Le design (panels + géométrie du mur) est sérialisé en JSON, compressé (gzip natif du
@@ -5444,11 +6133,6 @@ document.addEventListener('DOMContentLoaded', function(){
     openContentWindow('Image Quadreti', '<p class="hint">Clic droit sur l\'image → « Enregistrer l\'image sous… »</p><img src="' + dataUrl + '">');
   }
 
-  function openCsvWindow(csvText) {
-    const safe = csvText.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-    openContentWindow('Données Quadreti (CSV)', '<p class="hint">Sélectionnez tout (Ctrl/Cmd+A), copiez (Ctrl/Cmd+C), collez dans un fichier .csv</p><pre>' + safe + '</pre>');
-  }
-
   function showPngFallback(dataUrl) {
     openFallbackModal(
       'Votre image PNG est prête',
@@ -5579,7 +6263,7 @@ document.addEventListener('DOMContentLoaded', function(){
     for (let r = 0; r < panelsPerSide; r++) {
       for (let c = 0; c < panelsPerSide; c++) {
         const isActive = r === panelRow && c === panelCol;
-        ctx.fillStyle = isActive ? '#556b2f' : '#e5e1e1';
+        ctx.fillStyle = isActive ? '#556b2f' : 'var(--panel-ink)';
         ctx.fillRect(x + c * cellSize + 1, y + r * cellSize + 1, cellSize - 2, cellSize - 2);
       }
     }
@@ -5946,103 +6630,382 @@ document.addEventListener('DOMContentLoaded', function(){
     ctx.restore();
   }
 
-  // ---------- Export production : un fichier par carreau, échelle réelle garantie ----------
-  async function downloadAllPanelsZip(silent) {
-    if (!anyPanelHasContent()) {
-      statusMsg.textContent = 'Composez votre mur avant de télécharger les fichiers de production';
-      return null;
-    }
-    const totalPanels = panelsCols * panelsRows;
-    statusMsg.textContent = `Génération des ${totalPanels} fichiers de production…`;
-    const cellPx = Math.round(mmToPx(CELL_MM, EXPORT_DPI));   // toujours pleine échelle — jamais réduit, contrairement à l'aperçu du mur
-    const gap = Math.round(mmToPx(GRID_GAP_MM, EXPORT_DPI));
-    const zip = new JSZip();
+  // Audit monétisation 2026-08-20 : downloadAllPanelsZip (carreaux bruts pleine résolution,
+  // sans en-tête A4 ni filigrane) supprimé — plus appelé depuis le retrait de checkoutBtn,
+  // et c'était la sortie la plus détournable du fichier (carrés propres à recoller en poster).
 
-    for (let pr = 0; pr < panelsRows; pr++) {
-      for (let pc = 0; pc < panelsCols; pc++) {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        await drawSinglePanel(ctx, panels[pr][pc], cellPx, gap, 0);
-        const rawBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-        const blob = await injectPngDpi(rawBlob, EXPORT_DPI);
-        zip.file(`quadreti-carreau-${pr + 1}-${pc + 1}.png`, blob);
+  // ---------- Compte client & accès premium (monétisation 2026-08) ----------
+  // Parcours validé (cahier des charges MONETISATION ET ACCES APP) : l'achat boutique
+  // débloque les fichiers de production ; la conception et l'aperçu restent libres.
+  // Connexion par code email à 6 chiffres (pas de mot de passe : rien à retenir, et
+  // l'email est justement la clé qui relie la commande Ecwid au compte). Les appels
+  // Supabase se font en REST direct (fetch) : pas de librairie à embarquer, le fichier
+  // reste autonome. Ce verrou est dissuasif, pas inviolable : tout se joue côté client,
+  // un développeur motivé peut le contourner — le vrai objectif est d'empêcher l'usage
+  // « générateur d'affiches gratuit », pas de résister à une attaque.
+  const SUPABASE_URL = 'https://kmouckinihufnqxvvhxm.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_ZP-6tG2Iq0LA0ct0tlL6ng_FX39Wwmy'; // clé publique (publishable), prévue pour vivre dans le code client
+  const SESSION_STORE = 'quadretiCompteSession';
+  // Concertation 2026-08-20 : le paiement PayPal intégré a été retiré — toute activation
+  // (kit, pack d'exports, essai) passe par un code d'activation (voir codeZone plus bas).
+
+  let compteSession = null;   // { access_token, refresh_token, expires_at (s epoch), email }
+  let premiumStatus = null;   // dernière ligne users_premium lue, ou null
+  let isAdminUser = false;    // l'email connecté figure dans la table `admins` (fondateur)
+
+  // Statut administrateur : vérifié après chaque connexion. Débloque le bouton ⚙ du
+  // panneau de contrôle et l'exemption de verrouillage des options (applyAppVariant).
+  async function fetchIsAdmin() {
+    const etait = isAdminUser;
+    isAdminUser = false;
+    try {
+      const s = await ensureFreshSession();
+      if (s) {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/admins?select=email&limit=1`,
+          { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${s.access_token}` } });
+        if (res.ok) isAdminUser = (await res.json()).length > 0;
       }
-    }
-
-    const zipBlob = await zip.generateAsync({ type: 'blob' });
-    const zipUrl = URL.createObjectURL(zipBlob);
-    const filename = `quadreti-production-${panelsCols}x${panelsRows}.zip`;
-    const link = document.createElement('a');
-    link.download = filename;
-    link.href = zipUrl;
-    link.click();
-
-    if (!silent) {
-      openFallbackModal(
-        'Vos fichiers de production sont prêts',
-        `${totalPanels} fichier(s) PNG (un par carreau, ${CELL_MM}mm/tesselle exact) regroupés dans un ZIP. Si le téléchargement ne s'est pas lancé automatiquement, réessayez ici :`,
-        [{ label: 'Télécharger le ZIP', onClick: () => { const a = document.createElement('a'); a.download = filename; a.href = zipUrl; a.click(); } }]
-      );
-    }
-    statusMsg.textContent = `${totalPanels} fichier(s) générés ✓ (échelle réelle ${CELL_MM}mm/tesselle, ${EXPORT_DPI} DPI)`;
-    return zipUrl;
+    } catch (e) { /* hors ligne -> pas de privilèges admin cette session, sans bruit */ }
+    if (isAdminUser !== etait) { updateAdminGearBtn(); applyAppVariant(); }
+    return isAdminUser;
   }
+
+  // ---------- Options par forfait (2026-08-21) ----------
+  // Les options accessibles par forfait (gratuit / essai / premium) vivent dans la table
+  // Supabase `forfaits`, modifiable depuis le panneau de contrôle : un changement s'applique
+  // à tous les clients à leur prochaine ouverture, sans republier le fichier. Hors ligne ou
+  // table injoignable -> aucune restriction de forfait (le verrou d'export suffit déjà).
+  let forfaitsConfig = null; // { gratuit: {...}, essai: {...}, premium: {...} }
+  let dernierForfaitApplique = null;
+
+  async function fetchForfaitsConfig() {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/forfaits?select=nom,options`,
+        { headers: { apikey: SUPABASE_KEY } });
+      if (res.ok) {
+        const rows = await res.json();
+        forfaitsConfig = Object.fromEntries(rows.map(r => [r.nom, r.options || {}]));
+        dernierForfaitApplique = null;
+        applyForfaitSiChange();
+      }
+    } catch (e) { /* hors ligne -> config du fichier, toutes options visibles */ }
+  }
+
+  function forfaitCourant() {
+    if (!isPremiumActive(premiumStatus)) return 'gratuit';
+    return premiumStatus.date_expiration ? 'essai' : 'premium';
+  }
+
+  // Ne rejoue applyAppVariant() que si le forfait a réellement changé (connexion,
+  // déconnexion, essai expiré...) — pas à chaque simple relecture du statut.
+  function applyForfaitSiChange() {
+    const f = forfaitCourant();
+    if (f !== dernierForfaitApplique) { dernierForfaitApplique = f; applyAppVariant(); }
+  }
+  try { compteSession = JSON.parse(localStorage.getItem(SESSION_STORE)) || null; } catch (e) {}
+
+  function saveSession(s) {
+    compteSession = s;
+    try {
+      if (s) localStorage.setItem(SESSION_STORE, JSON.stringify(s));
+      else localStorage.removeItem(SESSION_STORE);
+    } catch (e) {}
+  }
+
+  async function sbAuth(path, body) {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.msg || data.error_description || data.error_code || `HTTP ${res.status}`);
+    return data;
+  }
+
+  // Rafraîchit le jeton s'il expire dans moins de 2 minutes. Déconnecte si le refresh échoue.
+  async function ensureFreshSession() {
+    if (!compteSession) return null;
+    const now = Math.floor(Date.now() / 1000);
+    if (compteSession.expires_at - now > 120) return compteSession;
+    try {
+      const data = await sbAuth('token?grant_type=refresh_token', { refresh_token: compteSession.refresh_token });
+      saveSession({
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+        expires_at: now + (data.expires_in || 3600),
+        email: (data.user && data.user.email) || compteSession.email,
+      });
+    } catch (e) {
+      saveSession(null);
+      premiumStatus = null;
+    }
+    return compteSession;
+  }
+
+  // Lit le statut premium du compte connecté (RLS Supabase : chacun ne voit que sa ligne).
+  async function fetchPremiumStatus() {
+    const s = await ensureFreshSession();
+    if (!s) { premiumStatus = null; return null; }
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/users_premium?select=source,statut,credits_restants,date_expiration&limit=1`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${s.access_token}` } }
+    );
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const rows = await res.json();
+    premiumStatus = rows[0] || null;
+    applyForfaitSiChange(); // le changement de forfait (connexion, essai expiré...) rejoue l'affichage
+    return premiumStatus;
+  }
+
+  function isPremiumActive(st) {
+    if (!st || st.statut !== 'actif') return false;
+    // Accès à durée limitée (code d'essai) : valable jusqu'à la fin du jour d'expiration
+    if (st.date_expiration && new Date(st.date_expiration + 'T23:59:59') < new Date()) return false;
+    if (st.credits_restants === null || st.credits_restants === undefined) return true; // accès illimité
+    return st.credits_restants > 0;
+  }
+
+  // Décompte un export pour les packs à crédits (RPC côté serveur, jamais décrémenté en
+  // local : la base fait foi). Silencieux pour les accès illimités.
+  async function consumeExportCredit() {
+    if (!premiumStatus || premiumStatus.credits_restants === null || premiumStatus.credits_restants === undefined) return;
+    const s = await ensureFreshSession();
+    if (!s) return;
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/rpc/consommer_credit_export`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY, Authorization: `Bearer ${s.access_token}` },
+        body: '{}',
+      });
+      if (premiumStatus.credits_restants > 0) premiumStatus.credits_restants--;
+    } catch (e) {}
+  }
+
+  // ---------- Modale du compte ----------
+  const compteOverlay = document.getElementById('compteOverlay');
+  const compteStepEmail = document.getElementById('compteStepEmail');
+  const compteStepCode = document.getElementById('compteStepCode');
+  const compteStepDone = document.getElementById('compteStepDone');
+  const compteEmailInput = document.getElementById('compteEmailInput');
+  const compteCodeInput = document.getElementById('compteCodeInput');
+  const compteEmailEcho = document.getElementById('compteEmailEcho');
+  const compteStatusText = document.getElementById('compteStatusText');
+  const compteGoShopBtn = document.getElementById('compteGoShopBtn');
+  const compteLine = document.getElementById('compteLine');
+  let compteResolve = null; // renseigné quand la modale est ouverte par le verrou d'export
+
+  function compteShowStep(step) {
+    compteStepEmail.style.display = step === 'email' ? '' : 'none';
+    compteStepCode.style.display = step === 'code' ? '' : 'none';
+    compteStepDone.style.display = step === 'done' ? '' : 'none';
+  }
+
+  async function compteShowDone() {
+    compteShowStep('done');
+    compteStatusText.textContent = 'Vérification de votre accès…';
+    compteGoShopBtn.style.display = 'none';
+    fetchIsAdmin(); // en parallèle : fait apparaître le bouton ⚙ si c'est le fondateur
+    let st = null;
+    try { st = await fetchPremiumStatus(); }
+    catch (e) {
+      compteStatusText.textContent = 'Impossible de vérifier votre accès (connexion internet requise). Réessayez dans un instant.';
+      return;
+    }
+    const email = compteSession ? compteSession.email : '';
+    if (isPremiumActive(st)) {
+      let credits = (st.credits_restants === null || st.credits_restants === undefined)
+        ? 'accès illimité' : `${st.credits_restants} export(s) restant(s)`;
+      if (st.date_expiration) {
+        credits += `, jusqu'au ${new Date(st.date_expiration + 'T12:00:00').toLocaleDateString('fr-FR')}`;
+      }
+      compteStatusText.textContent = `Connecté : ${email} — accès premium actif (${credits}). Vos téléchargements sont débloqués.`;
+    } else {
+      const expire = st && st.statut === 'actif' && st.date_expiration
+        && new Date(st.date_expiration + 'T23:59:59') < new Date();
+      compteStatusText.textContent = expire
+        ? `Connecté : ${email} — votre accès d'essai a expiré le ${new Date(st.date_expiration + 'T12:00:00').toLocaleDateString('fr-FR')}. Commandez votre kit sur la boutique, ou activez un nouveau code.`
+        : `Connecté : ${email} — aucun accès premium sur ce compte pour l'instant. Commandez votre kit sur la boutique : un code d'activation vous sera fourni avec.`;
+      compteGoShopBtn.style.display = '';
+    }
+    refreshCompteLine();
+  }
+
+  function openCompteModal() {
+    if (compteSession) compteShowDone();
+    else { compteShowStep('email'); requestAnimationFrame(() => compteEmailInput.focus()); }
+    compteOverlay.style.display = 'flex';
+  }
+
+  function closeCompteModal() {
+    compteOverlay.style.display = 'none';
+    const r = compteResolve; compteResolve = null;
+    if (r) r();
+  }
+
+  document.getElementById('compteClose').addEventListener('click', closeCompteModal);
+  compteOverlay.addEventListener('click', e => { if (e.target === compteOverlay) closeCompteModal(); });
+  compteLine.addEventListener('click', openCompteModal);
+  compteGoShopBtn.addEventListener('click', () => window.open(IONOS_SHOP_URL, '_blank'));
+
+  document.getElementById('compteSendCodeBtn').addEventListener('click', async e => {
+    const email = compteEmailInput.value.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { compteEmailInput.focus(); return; }
+    await withBusyButton(e.target, 'Envoi…', async () => {
+      try {
+        await sbAuth('otp', { email, create_user: true });
+        compteEmailEcho.textContent = email;
+        compteCodeInput.value = '';
+        compteShowStep('code');
+        requestAnimationFrame(() => compteCodeInput.focus());
+      } catch (err) {
+        statusMsg.textContent = /fetch|network/i.test(String(err))
+          ? 'Connexion internet requise pour se connecter au compte.'
+          : `Échec de l'envoi du code (${err.message}). Réessayez dans une minute.`;
+      }
+    });
+  });
+
+  document.getElementById('compteVerifyBtn').addEventListener('click', async e => {
+    const email = compteEmailEcho.textContent;
+    const code = compteCodeInput.value.trim();
+    if (code.length !== 6) { compteCodeInput.focus(); return; }
+    await withBusyButton(e.target, 'Vérification…', async () => {
+      try {
+        const data = await sbAuth('verify', { type: 'email', email, token: code });
+        saveSession({
+          access_token: data.access_token,
+          refresh_token: data.refresh_token,
+          expires_at: Math.floor(Date.now() / 1000) + (data.expires_in || 3600),
+          email: (data.user && data.user.email) || email,
+        });
+        // Accès premium confirmé -> la fenêtre se referme toute seule (et un export qui
+        // attendait derrière le verrou repart aussitôt). Elle ne reste ouverte que s'il
+        // y a quelque chose à montrer : pas d'accès, essai expiré, boutons boutique/code.
+        const st = await fetchPremiumStatus().catch(() => null);
+        fetchIsAdmin();
+        if (isPremiumActive(st)) {
+          refreshCompteLine();
+          showToast('Connecté — accès premium actif ✓');
+          closeCompteModal();
+        } else {
+          await compteShowDone();
+        }
+      } catch (err) {
+        statusMsg.textContent = 'Code incorrect ou expiré — vérifiez le dernier email reçu, ou demandez un nouveau code.';
+      }
+    });
+  });
+
+  // ---------- Code d'activation (carte du kit, essai à durée limitée, geste commercial) ----------
+  // La vérification et l'activation se font entièrement côté base (RPC) : le code est
+  // marqué utilisé et l'accès accordé dans la même opération, impossible à rejouer.
+  document.getElementById('codeActivationBtn').addEventListener('click', async e => {
+    const input = document.getElementById('codeActivationInput');
+    const code = input.value.trim().toUpperCase();
+    if (code.length < 6) { input.focus(); return; }
+    await withBusyButton(e.target, 'Activation…', async () => {
+      try {
+        const s = await ensureFreshSession();
+        if (!s) return;
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/utiliser_code_activation`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY, Authorization: `Bearer ${s.access_token}` },
+          body: JSON.stringify({ code_saisi: code }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data || data.ok === false) {
+          showToast((data && data.message) || 'Code refusé — vérifiez la saisie.');
+          return;
+        }
+        input.value = '';
+        showToast(data.message || 'Code activé ✓');
+        await compteShowDone(); // relit le statut : l'accès apparaît
+      } catch (err) {
+        statusMsg.textContent = 'Connexion internet requise pour activer un code.';
+      }
+    });
+  });
+
+  document.getElementById('compteBackBtn').addEventListener('click', () => compteShowStep('email'));
+  document.getElementById('compteLogoutBtn').addEventListener('click', () => {
+    saveSession(null); premiumStatus = null;
+    if (isAdminUser) { isAdminUser = false; updateAdminGearBtn(); applyAppVariant(); }
+    applyForfaitSiChange(); // retour au forfait gratuit
+    refreshCompteLine();
+    compteShowStep('email');
+  });
+
+  function refreshCompteLine() {
+    if (!compteSession) { compteLine.textContent = 'Se connecter à mon compte'; }
+    else {
+      compteLine.textContent = isPremiumActive(premiumStatus)
+        ? `${compteSession.email} — premium ✓`
+        : `${compteSession.email} — compte connecté`;
+    }
+    // V141 — le bandeau V140 porte l'entrée visible du compte (#connectBtn) : on ne
+    // remplace que son texte (dernier nœud), l'icône svg devant reste en place.
+    const cb = document.getElementById('connectBtn');
+    if (cb && cb.lastChild) {
+      const libelle = !compteSession ? 'Se connecter'
+        : (isPremiumActive(premiumStatus) ? 'Mon compte ✓' : 'Mon compte');
+      if (cb.lastChild.nodeType === 3) cb.lastChild.textContent = libelle;
+    }
+  }
+
+  // ---------- Le verrou : à passer avant tout téléchargement de fichier de production ----------
+  // Renvoie true si l'export peut continuer. Sinon, guide vers la connexion ou la boutique.
+  async function ensurePremiumAccess() {
+    if (!compteSession) {
+      openCompteModal();
+      await new Promise(resolve => { compteResolve = resolve; }); // attend la fermeture de la modale
+      if (!compteSession) return false;
+    }
+    try { await fetchPremiumStatus(); }
+    catch (e) {
+      statusMsg.textContent = 'Connexion internet requise pour vérifier votre accès premium.';
+      return false;
+    }
+    refreshCompteLine();
+    if (isPremiumActive(premiumStatus)) return true;
+    openCompteModal(); // affiche l'état du compte + le bouton boutique
+    return false;
+  }
+
+  // Au chargement : si une session existe, on rafraîchit l'état du compte en arrière-plan
+  // (sans bloquer l'ouverture de l'app, et sans bruit si hors ligne).
+  if (compteSession) {
+    fetchPremiumStatus().then(refreshCompteLine).catch(() => refreshCompteLine());
+    fetchIsAdmin();
+  }
+  fetchForfaitsConfig(); // toujours, même sans compte : les options du forfait gratuit en dépendent
 
   const exportPanelPngBtn = document.getElementById('exportPanelPngBtn');
   exportPanelPngBtn.addEventListener('click', () => withBusyButton(exportPanelPngBtn, 'Génération…', async () => {
     statusMsg.textContent = 'Génération de l\'aperçu…';
     const dataUrl = await generatePanelPreviewDataUrl();
-    openExportPreview(dataUrl, 'Aperçu du carreau', 'Télécharger ce carreau (PNG)', () => downloadPanelPng(false));
+    // L'aperçu à l'écran reste libre ; seul le téléchargement du fichier passe le verrou
+    // premium (cahier des charges : « aperçu écran uniquement » en gratuit).
+    openExportPreview(dataUrl, 'Aperçu du carreau', 'Télécharger ce carreau (PNG)', async () => {
+      if (!(await ensurePremiumAccess())) return;
+      await downloadPanelPng(false);
+      consumeExportCredit();
+    });
     statusMsg.textContent = '';
   }));
 
   const exportAllVoletsBtn = document.getElementById('exportAllVoletsBtn');
   exportAllVoletsBtn.addEventListener('click', () => withBusyButton(exportAllVoletsBtn, 'Génération…', async () => {
+    // Parcours inversé (monétisation 2026-08) : la commande boutique débloque les fichiers,
+    // plus l'inverse — le verrou remplace l'ancienne redirection systématique vers la boutique
+    // (elle vit désormais dans la modale du compte, pour qui n'a pas encore commandé).
+    if (!(await ensurePremiumAccess())) return;
     await downloadAllPanelsVoletsZip(false);
-    // Redirection vers la boutique juste après le téléchargement : le bouton devient le
-    // seul chemin d'export public (ux compose, télécharge, puis atterrit directement sur
-    // la boutique pour commander) — évite d'avoir deux boutons distincts qui créeraient
-    // une ambiguïté de parcours.
-    window.open(IONOS_SHOP_URL, '_blank');
+    consumeExportCredit();
   }));
 
-  // ---------- Export CSV ----------
-  function buildCsvString() {
-    let csv = 'carreau_ligne,carreau_colonne,ligne_locale,colonne_locale,ligne_globale,colonne_globale,type,valeur\n';
-    for (let pr = 0; pr < panelsRows; pr++) {
-      for (let pc = 0; pc < panelsCols; pc++) {
-        const data = panels[pr][pc];
-        for (let lr = 0; lr < PANEL_SIZE; lr++) {
-          for (let lc = 0; lc < PANEL_SIZE; lc++) {
-            const idx = lr * PANEL_SIZE + lc;
-            const d = data[idx];
-            const type = d ? d.type : '';
-            const value = d ? (d.type === 'color' ? d.value : 'photo') : '';
-            csv += `${pr + 1},${pc + 1},${lr + 1},${lc + 1},${pr * PANEL_SIZE + lr + 1},${pc * PANEL_SIZE + lc + 1},${type},${value}\n`;
-          }
-        }
-      }
-    }
-    return csv;
-  }
-
-  function downloadCsv(silent) {
-    const csvText = buildCsvString();
-    const blob = new Blob([csvText], { type: 'text/csv' });
-    const blobUrl = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.download = 'quadreti-donnees.csv';
-    link.href = blobUrl;
-    link.click();
-    if (!silent) {
-      openFallbackModal(
-        'Vos données CSV sont prêtes',
-        'Le téléchargement s\'est peut-être lancé automatiquement. S\'il ne s\'est rien passé, ouvrez les données ici :',
-        [{ label: 'Ouvrir le CSV', onClick: () => openCsvWindow(csvText) }]
-      );
-    }
-    return csvText;
-  }
+  // Audit monétisation 2026-08-20 : export CSV (buildCsvString/downloadCsv) supprimé,
+  // plus appelé depuis aucun bouton.
 
   // ---------- Mes fichiers (production) ----------
   // Le bouton "Télécharger fichiers (ZIP)" (checkoutBtn) a été retiré : il faisait doublon
@@ -6103,12 +7066,42 @@ document.addEventListener('DOMContentLoaded', function(){
       document.getElementById('profileRow').style.display = 'none';
     }
 
-    // Options génériques (registre) : chaque entrée cible un bloc du DOM par son id
+    // Options génériques (registre) : chaque entrée cible un bloc du DOM par son id.
+    // Trois états : masquée par l'app (?variant) -> cachée ; autorisée par l'app mais
+    // pas par le FORFAIT du client -> visible, grisée + cadenas (le clic invite à passer
+    // au forfait supérieur — voir l'écouteur .forfait-verrou) ; autorisée -> normale.
+    // Administrateur connecté : jamais restreint — tout reste utilisable, marqué d'un
+    // liseré terracotta quand les clients ne le voient pas ou l'ont verrouillé.
+    const confForfait = (!isAdminUser && forfaitsConfig) ? forfaitsConfig[forfaitCourant()] : null;
     FEATURE_REGISTRY.forEach(f => {
       const el = document.getElementById(f.el);
       if (!el) return;
-      const enabled = variant.features ? variant.features[f.id] !== false : true;
-      el.style.display = enabled ? '' : 'none';
+      const parApp = variant.features ? variant.features[f.id] !== false : true;
+      const parForfait = confForfait ? confForfait[f.id] !== false : true;
+      el.classList.remove('forfait-verrou');
+      el.style.outline = '';
+      el.style.outlineOffset = '';
+      if (el.dataset.marqueAdmin) { el.title = ''; delete el.dataset.marqueAdmin; }
+      if (isAdminUser) {
+        el.style.display = '';
+        const confAdmin = forfaitsConfig ? forfaitsConfig[forfaitCourant()] : null;
+        const verrouClients = !parApp || (confAdmin && confAdmin[f.id] === false);
+        if (verrouClients) {
+          el.style.outline = '2px dashed var(--terracotta, #E2725B)';
+          el.style.outlineOffset = '2px';
+          el.title = !parApp
+            ? 'Option masquée pour les clients (panneau de contrôle, par app)'
+            : 'Option verrouillée pour votre forfait côté clients (panneau, par forfait)';
+          el.dataset.marqueAdmin = '1';
+        }
+      } else if (!parApp) {
+        el.style.display = 'none';
+      } else if (!parForfait) {
+        el.style.display = '';
+        el.classList.add('forfait-verrou');
+      } else {
+        el.style.display = '';
+      }
     });
 
     // Thème : couleurs surchargées pour cette app (variables CSS), le reste garde la charte par défaut
@@ -6189,11 +7182,83 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
 
+  // ---------- Options par forfait (grille du panneau, 2026-08-21) ----------
+  const FORFAITS_NOMS = [
+    { id: 'gratuit', label: 'Gratuit' },
+    { id: 'essai', label: 'Essai' },
+    { id: 'premium', label: 'Premium' },
+  ];
+  let forfaitsEdition = null; // copie de travail éditée dans le panneau
+
+  function renderAdminForfaits() {
+    const grid = document.getElementById('adminForfaitsGrid');
+    const msg = document.getElementById('adminForfaitsMsg');
+    grid.innerHTML = '';
+    msg.textContent = '';
+    if (!forfaitsConfig) {
+      msg.textContent = 'Forfaits injoignables (connexion internet requise) — réouvrez le panneau dans un instant.';
+      fetchForfaitsConfig().then(() => { if (forfaitsConfig) renderAdminForfaits(); });
+      return;
+    }
+    forfaitsEdition = JSON.parse(JSON.stringify(forfaitsConfig));
+    const table = document.createElement('div');
+    table.style.cssText = 'display:grid; grid-template-columns:1fr repeat(3, 70px); gap:4px 8px; align-items:center; font-size:12.5px;';
+    table.appendChild(document.createElement('div'));
+    FORFAITS_NOMS.forEach(fo => {
+      const h = document.createElement('div');
+      h.textContent = fo.label;
+      h.style.cssText = 'text-align:center; font-weight:600; color:var(--title);';
+      table.appendChild(h);
+    });
+    FEATURE_REGISTRY.forEach(f => {
+      const lab = document.createElement('div');
+      lab.textContent = f.label;
+      lab.style.color = 'var(--title)';
+      table.appendChild(lab);
+      FORFAITS_NOMS.forEach(fo => {
+        const cell = document.createElement('div');
+        cell.style.textAlign = 'center';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        if (!forfaitsEdition[fo.id]) forfaitsEdition[fo.id] = {};
+        cb.checked = forfaitsEdition[fo.id][f.id] !== false;
+        cb.addEventListener('change', () => { forfaitsEdition[fo.id][f.id] = cb.checked; });
+        cell.appendChild(cb);
+        table.appendChild(cell);
+      });
+    });
+    grid.appendChild(table);
+  }
+
+  document.getElementById('adminForfaitsSaveBtn').addEventListener('click', e => withBusyButton(e.target, 'Enregistrement…', async () => {
+    const msg = document.getElementById('adminForfaitsMsg');
+    if (!forfaitsEdition) return;
+    try {
+      const s = await ensureFreshSession();
+      if (!s) { msg.textContent = 'Connectez-vous avec votre compte administrateur d\'abord.'; return; }
+      for (const fo of FORFAITS_NOMS) {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/forfaits?nom=eq.${fo.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY, Authorization: `Bearer ${s.access_token}`, Prefer: 'return=minimal' },
+          body: JSON.stringify({ options: forfaitsEdition[fo.id], date_modif: new Date().toISOString() }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      }
+      await fetchForfaitsConfig();
+      dernierForfaitApplique = null;
+      applyForfaitSiChange();
+      msg.textContent = 'Forfaits enregistrés ✓ — appliqués à tous les clients à leur prochaine ouverture de l\'appli.';
+    } catch (err) {
+      msg.textContent = 'Échec de l\'enregistrement — vérifiez votre connexion et que vous êtes bien connecté en administrateur.';
+    }
+  }));
+
   function openAdminPanel() {
     document.getElementById('adminPanelOverlay').style.display = 'flex';
     renderAdminAppTabs();
     renderAdminFeatureList();
     renderAdminThemeList();
+    renderAdminForfaits();
   }
 
   document.getElementById('adminPanelClose').addEventListener('click', () => {
@@ -6228,38 +7293,46 @@ document.addEventListener('DOMContentLoaded', function(){
     statusMsg.textContent = 'Configuration générée ci-dessous — copie-la et remplace le bloc APP_VARIANTS dans le fichier ✓';
   });
 
-  // ---------- Verrou du panneau de contrôle (?admin=1 uniquement) ----------
-  // Ne protège QUE l'accès au panneau interne — jamais l'app publique elle-même, qui doit
-  // toujours rester librement accessible à ux, quelle que soit l'app (Couleur, Pixel...).
-  // Le mot de passe n'est jamais stocké en clair dans ce fichier : seul son hash SHA-256
-  // l'est, comparé côté client à ce que la personne tape. Une protection légère, pensée
-  // pour dissuader un accès accidentel — pas un vrai coffre-fort face à un attaquant motivé.
-  const ADMIN_PASSWORD_HASH = '43cf2999beaf12904465c1b983a086573f9fd42f8f23fc7ba4b343e50413d8bb';
-
-  async function sha256Hex(text) {
-    const enc = new TextEncoder().encode(text);
-    const digest = await crypto.subtle.digest('SHA-256', enc);
-    return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
-  }
-
-  async function promptAdminPassword() {
-    const entered = window.prompt('Panneau de contrôle — mot de passe :');
-    if (entered === null) return false; // annulé
-    const hash = await sha256Hex(entered);
-    if (hash === ADMIN_PASSWORD_HASH) return true;
-    alert('Mot de passe incorrect.');
-    return false;
-  }
-
-  if (new URLSearchParams(window.location.search).get('admin') === '1' && currentAppVariant() === 'default') {
-    const adminBtn = document.createElement('button');
-    adminBtn.textContent = '⚙ Panneau de contrôle';
-    adminBtn.style.cssText = 'position:fixed; bottom:16px; right:16px; z-index:999; background:var(--title); color:#fff; border:none; border-radius:10px; padding:12px 18px; font-family:var(--font-main); font-weight:600; font-size:13px; cursor:pointer; box-shadow:0 4px 14px #00000055;';
-    adminBtn.addEventListener('click', async () => {
-      const ok = await promptAdminPassword();
-      if (ok) openAdminPanel();
+  // ---------- Accès administrateur au panneau de contrôle (2026-08-21) ----------
+  // L'ancien accès (?admin=1 + mot de passe SHA-256 via window.prompt) est remplacé :
+  // window.prompt est bloqué quand l'app tourne dans le site (iframe), et le mot de
+  // passe s'oubliait. Désormais, c'est le compte Supabase qui fait foi : si l'email
+  // connecté figure dans la table `admins`, le bouton ⚙ apparaît automatiquement,
+  // sur n'importe quel appareil, sans rien à retenir.
+  // Clic sur une option verrouillée par le forfait : on intercepte AVANT le bouton
+  // (phase de capture) et on invite, au lieu de laisser l'option agir.
+  document.addEventListener('click', e => {
+    const bloc = e.target.closest ? e.target.closest('.forfait-verrou') : null;
+    if (!bloc) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const connecte = !!compteSession;
+    infoModal('Option des forfaits Essai et Premium',
+      '<p>Cette option fait partie des forfaits <b>Essai</b> et <b>Premium</b>. ' +
+      (connecte
+        ? 'Commandez votre kit sur la boutique, ou activez un code d\'activation dans votre compte pour la débloquer.</p>'
+        : 'Connectez-vous puis activez votre code (fourni avec le kit, ou code d\'essai) pour la débloquer.</p>') +
+      '<button id="forfaitInviteBtn" class="modal-link-btn" style="width:100%; margin-top:8px;">' +
+      (connecte ? 'Ouvrir mon compte' : 'Se connecter') + '</button>');
+    const btn = document.getElementById('forfaitInviteBtn');
+    if (btn) btn.addEventListener('click', () => {
+      document.getElementById('infoModalOverlay').style.display = 'none';
+      openCompteModal();
     });
-    document.body.appendChild(adminBtn);
+  }, true);
+
+  function updateAdminGearBtn() {
+    let btn = document.getElementById('adminGearBtn');
+    if (isAdminUser && !btn) {
+      btn = document.createElement('button');
+      btn.id = 'adminGearBtn';
+      btn.textContent = '⚙ Panneau de contrôle';
+      btn.style.cssText = 'position:fixed; bottom:16px; right:16px; z-index:999; background:var(--title); color:#fff; border:none; border-radius:10px; padding:12px 18px; font-family:var(--font-main); font-weight:600; font-size:13px; cursor:pointer; box-shadow:0 4px 14px #00000055;';
+      btn.addEventListener('click', openAdminPanel);
+      document.body.appendChild(btn);
+    } else if (!isAdminUser && btn) {
+      btn.remove();
+    }
   }
 
   mosaicUploadZone.addEventListener('click', () => mosaicImgInput.click());
@@ -7173,42 +8246,12 @@ document.addEventListener('DOMContentLoaded', function(){
 <div class="appticker" aria-hidden="true">
   <div class="appticker-track" id="appTickerTrack"></div>
 </div>
-
-<!-- ============ RÉSEAUX SOCIAUX + FOOTER LÉGAL (harmonisation 20/08/2026) ============ -->
-<div class="section-reseaux">
-  <p class="accroche">Nos réseaux, à leur tour clipsés</p>
-  <p class="sub">Facebook · Snapchat · TikTok · YouTube · WhatsApp</p>
-  <div class="grid">
-    <a href="#" aria-label="Facebook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.5 9.9v-7H8v-2.9h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6v1.9H16l-.4 2.9h-2.1v7A10 10 0 0 0 22 12z"/></svg></a>
-    <a href="#" aria-label="Snapchat" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12.03.002c-.947 0-4.298.259-5.977 3.583-.783 1.55-.632 4.315-.51 6.532.006.104.011.204.011.3-.114.058-.319.129-.665.129-.386-.007-.848-.096-1.361-.267a1.06 1.06 0 0 0-.336-.058c-.361 0-.653.214-.756.535-.09.286-.048.828.652 1.28.13.083.32.184.55.293.6.283 1.397.652 1.397 1.3 0 .12-.024.31-.146.61-.02.05-.048.11-.08.174-.08.166-.17.35-.24.548-.16.44-.164.87.106 1.24.35.483 1.06.727 2.11.727.176 0 .366-.011.567-.031.036.316.12.665.31.976.393.638 1.14.958 2.216.958.176 0 .35-.008.51-.024.056.106.116.212.18.316.554.9 1.507 1.393 2.68 1.393h.007c1.173 0 2.126-.493 2.68-1.393.064-.104.124-.21.18-.316.16.016.334.024.51.024 1.077 0 1.823-.244 2.216-.958.19-.311.274-.66.31-.976.201.02.391.031.567.031 1.05 0 1.76-.244 2.11-.727.27-.37.266-.8.106-1.24-.07-.198-.16-.382-.24-.548-.032-.064-.06-.124-.08-.174-.122-.3-.146-.49-.146-.61 0-.648.797-1.017 1.397-1.3.23-.109.42-.21.55-.293.7-.452.742-.994.652-1.28-.103-.321-.395-.535-.756-.535a1.06 1.06 0 0 0-.336.058c-.513.171-.975.26-1.361.267-.346 0-.551-.071-.665-.129 0-.096.005-.196.011-.3.122-2.217.273-4.982-.51-6.532C16.298.261 12.978.002 12.031.002z"/></svg></a>
-    <a href="#" aria-label="TikTok" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M16.6 5.82c-.9-.98-1.45-2.24-1.5-3.62h-3.2v13.63c0 1.7-1.38 3.08-3.08 3.08a3.08 3.08 0 0 1-1.15-5.94A3.08 3.08 0 0 1 9 12.7V9.44c-.3-.04-.6-.06-.9-.06-3.5 0-6.34 2.84-6.34 6.34S4.6 22.06 8.1 22.06s6.34-2.84 6.34-6.34V8.85a8.3 8.3 0 0 0 4.85 1.55V7.2a5.28 5.28 0 0 1-2.69-1.38z"/></svg></a>
-    <a href="#" aria-label="YouTube" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M23.5 6.19a2.97 2.97 0 0 0-2.09-2.09C19.65 3.5 12 3.5 12 3.5s-7.65 0-9.41.6A2.97 2.97 0 0 0 .5 6.19 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.81 2.97 2.97 0 0 0 2.09 2.09c1.76.6 9.41.6 9.41.6s7.65 0 9.41-.6a2.97 2.97 0 0 0 2.09-2.09A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.81zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg></a>
-    <a href="https://wa.me/" aria-label="WhatsApp" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.44-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.42-.07-.12-.27-.2-.57-.35z M12.05 0C5.49 0 .16 5.34.15 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.9-11.89A11.82 11.82 0 0 0 20.53 3.47 11.82 11.82 0 0 0 12.05 0z"/></svg></a>
-  </div>
-</div>
-
-<div class="foot-legal">
-  <div class="wrap">
-    <a href="https://quadreti.fr/mentions-legales.html"><svg viewBox="0 0 24 24"><path d="M12 2 3 6v6c0 5 3.8 8.4 9 10 5.2-1.6 9-5 9-10V6l-9-4z"/></svg>Mentions légales</a>
-    <a href="https://quadreti.fr/cgv.html"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5M9 13h6M9 17h6"/></svg>CGV</a>
-    <a href="https://quadreti.fr/cgu.html"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h5"/></svg>CGU / RGPD</a>
-    <a href="https://quadreti.fr/#livraison"><svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="18" cy="18" r="1.6"/></svg>Livraison &amp; paiement</a>
-    <a href="mailto:contact@quadreti.fr"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg>Contact</a>
-  </div>
-</div>
-
 <footer class="appfoot">
   <div class="appfoot-inner">
-    <a class="appfoot-logo-row" href="https://quadreti.fr" target="_blank" rel="noopener" aria-label="Quadreti — aller au site">
-      <span class="appnav-logo" aria-hidden="true">
-        <i></i><i></i><i></i><i class="empty"></i>
-        <i></i><i class="empty"></i><i></i><i class="empty"></i>
-        <i></i><i class="empty"></i><i></i><i class="empty"></i>
-        <i></i><i></i><i></i><i class="tail"></i>
-      </span>
-      <span class="appfoot-brand">Quadret<span class="i-dot">ı<i class="accent-dot"></i></span></span>
-    </a>
-    <div class="appfoot-tag">Composez, imprimez, clipsez, changez à volonté.</div>
+    <div>
+      <div class="appfoot-brand">Quadreti</div>
+      <div class="appfoot-tag">Composez, imprimez, clipsez, changez à volonté.</div>
+    </div>
     <nav class="appfoot-links">
       <a href="https://quadreti.fr" target="_blank" rel="noopener">Site</a>
       <a href="quadreti-guide-interactif.html" target="_blank" rel="noopener">Guide</a>
@@ -7216,24 +8259,6 @@ document.addEventListener('DOMContentLoaded', function(){
     </nav>
   </div>
 </footer>
-
-<button class="to-top" id="toTop" aria-label="Retour en haut">
-  <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-</button>
-
-<script>
-(function(){
-  var toTop = document.getElementById('toTop');
-  if (!toTop) return;
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  window.addEventListener('scroll', function(){
-    toTop.classList.toggle('show', window.scrollY > 600);
-  }, { passive: true });
-  toTop.addEventListener('click', function(){
-    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
-  });
-})();
-</script>
 
 
 
