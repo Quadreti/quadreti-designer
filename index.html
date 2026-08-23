@@ -454,7 +454,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     display:flex; flex-direction:column; align-items:center; width:100%; max-width: 280px; margin-bottom: 8px;
   }
   /* V131 — les 3 cartouches de configuration côte à côte */
-  .config-bar{ display:flex; gap:12px; justify-content:space-between; align-items:stretch; flex-wrap:wrap; width:100%; max-width:900px; margin-bottom:26px; }
+  .config-bar, .v143-format-bar{ display:flex; gap:12px; justify-content:space-between; align-items:stretch; flex-wrap:wrap; width:100%; max-width:900px; margin-bottom:26px; }
   .config-bar .cartouche-row{ flex:1 1 260px; max-width:290px; margin-bottom:0; }
   /* V134 — mobile : cartouches empilées et centrées (elles restaient calées à gauche) */
   @media (max-width:760px){
@@ -1145,15 +1145,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
     /* contenu deplace dans la page Outils : mise en page pleine largeur, plus de
        colonne laterale figee */
-    .v143-page-tools .config-bar{ background:none; border:none; padding:0; max-width:none !important; }
+    .v143-page-tools .config-bar, .v143-page-tools .v143-format-bar{ background:none; border:none; padding:0; max-width:none !important; }
     .v143-page-tools .cartouche-row{ max-width:none; margin:0 0 14px; }
     .v143-page-tools #toolsCol, .v143-page-tools #actionsCol{ position:static; width:auto;
       transform:none; box-shadow:none; border:none; background:none; padding:0;
       max-height:none; overflow:visible; margin-top:10px; }
     .v143-page-tools .panel{ width:100%; max-width:none; }
-    /* ambiance Kraft/Magazine en tete de la page Outils (deplacee du bandeau) */
-    .v143-page-tools .dkthemewrap{ display:flex; align-items:center; justify-content:center;
-      padding:0 0 16px; margin-bottom:16px; border-bottom:1px solid var(--border); }
     /* accordéon des cartouches (Dimension tesselle / Nombre de carreau / Mode) :
        chacune se replie une fois utilisée (auto, cf script) ou sur tap manuel. */
     .v143-page-tools .cartouche-row > h2{ cursor:pointer; user-select:none; position:relative;
@@ -1179,9 +1176,6 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       display:flex; align-items:center; gap:8px; background:var(--surface-2); color:var(--text);
       border:1px solid var(--border); border-radius:10px; padding:12px 14px; font-family:var(--font-main);
       font-weight:700; font-size:13.5px; cursor:pointer; }
-    .v143-help-link{ display:block; text-align:center; margin-top:22px; font-family:var(--font-main);
-      font-weight:700; font-size:12.5px; color:var(--teal); text-decoration:none; }
-
     #v140Toast{ display:block; position:fixed; left:12px; right:12px; bottom:50px; max-width:none;
       background:#2b353e; color:#F2EEDF; border-radius:12px; padding:12px 16px;
       font-size:13px; font-family:var(--font-main); z-index:496; opacity:0;
@@ -1194,7 +1188,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      Paysage tablette (>=1024) recoit le B+ bureau, deja bon au doigt. ---- */
   @media (min-width: 768px) and (max-width: 1023px){
     .v143-page-tools{ max-width:640px; margin:0 auto; padding-left:24px; padding-right:24px; }
-    .v143-page-tools .config-bar{ display:grid; grid-template-columns:1fr 1fr; gap:0 20px; }
+    .v143-page-tools .config-bar, .v143-page-tools .v143-format-bar{ display:grid; grid-template-columns:1fr 1fr; gap:0 20px; }
     .v143-page-tools .config-bar .cartouche-row:has(#modeViewport){ grid-column:1 / -1; }
     #v140Toast{ left:auto; right:16px; max-width:380px; }
   }
@@ -1255,6 +1249,22 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     .appnav-links.open{ opacity:1; transform:translateY(0); pointer-events:auto; }
     .appnav-links a{ padding:10px 0; width:100%; opacity:1; }
     .appnav-burger{ display:flex; }
+  }
+  /* V144 — le menu ☰ sert de popup pour sauter directement à une page (mobile
+     uniquement) : liste des 4 pages + ambiance Kraft/Magazine, au-dessus des
+     liens du site existants. */
+  .v143-menu-pages{ display:none; }
+  @media (max-width:1023px){
+    .v143-menu-pages{ display:flex; flex-direction:column; gap:2px; width:100%;
+      padding-bottom:10px; margin-bottom:10px; border-bottom:1px solid var(--border-light); }
+    .v143-menu-pages .theme-sw{ margin-bottom:8px; }
+    .v143-menu-jump{ display:flex; align-items:center; gap:10px; width:100%; text-align:left;
+      background:none; border:none; padding:9px 0; font-family:var(--font-main); font-weight:600;
+      font-size:14px; color:var(--title); cursor:pointer; }
+    .v143-menu-jump .v143-menu-dot{ width:7px; height:7px; border-radius:50%;
+      background:var(--border); flex-shrink:0; }
+    .v143-menu-jump.on{ color:var(--terracotta); font-weight:700; }
+    .v143-menu-jump.on .v143-menu-dot{ background:var(--terracotta); }
   }
 
   .appfoot{ width:100%; margin-top:56px; background:#2b353e; color:#c9c3b2; }
@@ -1465,6 +1475,10 @@ document.addEventListener('DOMContentLoaded', function(){
       </span>
     </a>
     <nav class="appnav-links" id="appnavLinks">
+      <!-- V144 — sur mobile, le menu ☰ sert aussi de popup pour sauter directement
+           à une page (au lieu de swiper une par une), avec l'ambiance Kraft/Magazine
+           en tête — elle n'appartient à aucune page en particulier. Peuplé par script. -->
+      <div class="v143-menu-pages" id="v143MenuPages"></div>
       <!-- V136 — adresse officielle unique : quadreti.fr (sans www — c'est ce que dit le fichier CNAME du depot). Le lien "Pro" est retiré tant
            que la page n'existe pas (elle renvoie une erreur 404 aujourd'hui) : mieux vaut pas
            de lien qu'un lien mort sur la page qui vend. À remettre le jour où elle existe. -->
@@ -1556,20 +1570,21 @@ document.addEventListener('DOMContentLoaded', function(){
   <button id="v140MinusClear" type="button"><svg class="v140-icon"><use href="#i-eraser"/></svg>Effacer ce carreau</button>
   <button id="v140MinusWall" type="button"><svg class="v140-icon"><use href="#i-trash"/></svg>Effacer tout le mur</button>
 </div>
-<!-- V143 — Navigation mobile « Pages qui basculent » (remplace le pont d'outils
-     V142, jugé pas assez ergonomique en usage réel malgré le style : tiroir qui
-     se refermait par surprise, geste vertical parfois capté par erreur).
-     Deux pages plein écran cote a cote : Mur (page 1) et Outils (page 2), un
-     swipe horizontal natif (scroll-snap CSS, pas de logique tactile maison —
-     c'est justement les mecanismes maison qui ont pose probleme jusqu'ici) fait
-     basculer de l'une a l'autre. Points de progression en bas. -->
-<div id="v143Pager" aria-label="Navigation Mur / Outils">
+<!-- V144 — 4 pages coherentes (au lieu d'une page Outils unique qui defilait
+     beaucoup) : Mur / Format / Création / Fichiers, swipe horizontal natif
+     (scroll-snap CSS). Le menu ☰ du bandeau devient aussi une popup pour sauter
+     directement a une page loin dans la liste, sans swiper une par une. -->
+<div id="v143Pager" aria-label="Navigation entre les pages">
   <section class="v143-page v143-page-wall" id="v143PageWall" aria-label="Mur"></section>
-  <section class="v143-page v143-page-tools" id="v143PageTools" aria-label="Outils"></section>
+  <section class="v143-page v143-page-tools" id="v143PageFormat" aria-label="Format"></section>
+  <section class="v143-page v143-page-tools" id="v143PageCreation" aria-label="Création"></section>
+  <section class="v143-page v143-page-tools" id="v143PageFichiers" aria-label="Fichiers"></section>
 </div>
 <nav class="v143-dots" id="v143Dots" aria-label="Page affichée">
   <button type="button" data-page="0" aria-label="Aller au mur" class="on"></button>
-  <button type="button" data-page="1" aria-label="Aller aux outils"></button>
+  <button type="button" data-page="1" aria-label="Aller au format"></button>
+  <button type="button" data-page="2" aria-label="Aller à la création"></button>
+  <button type="button" data-page="3" aria-label="Aller aux fichiers"></button>
 </nav>
 <div id="v140Toast" role="status" aria-live="polite"></div>
 <script>
@@ -1578,87 +1593,132 @@ document.addEventListener('DOMContentLoaded', function(){
   var body = document.body;
   var stored = {};
   function pageWall(){ return document.getElementById('v143PageWall'); }
-  function pageTools(){ return document.getElementById('v143PageTools'); }
+  function pageFormat(){ return document.getElementById('v143PageFormat'); }
+  function pageCreation(){ return document.getElementById('v143PageCreation'); }
+  function pageFichiers(){ return document.getElementById('v143PageFichiers'); }
+  function gotoPage(idx){
+    var pager = document.getElementById('v143Pager');
+    if (pager) pager.scrollTo({ left: idx * pager.clientWidth, behavior:'smooth' });
+  }
   function toPager(){
-    var wall = pageWall(), tools = pageTools();
-    if (!wall || !tools) return;
+    var wall = pageWall(), format = pageFormat(), creation = pageCreation(), fichiers = pageFichiers();
+    if (!wall || !format || !creation || !fichiers) return;
     body.classList.add('v142-m');
     var atelier = document.getElementById('atelierCol');
-    var bar = document.querySelector('.config-bar');
     var toolsCol = document.getElementById('toolsCol');
     var actions = document.getElementById('actionsCol');
+    var inspiBar = document.getElementById('inspiBar');
     if (!stored.studio) stored.studio = document.querySelector('.studio');
+    /* on ne capture la vraie .config-bar qu'une fois : au tout premier passage il
+       n'en existe qu'une dans le document, avant qu'on en cree une seconde (Format) */
+    if (!stored.bar) stored.bar = document.querySelector('.config-bar');
+    var bar = stored.bar;
     if (atelier && atelier.parentElement !== wall) wall.appendChild(atelier);
-    if (bar && bar.parentElement !== tools) tools.insertBefore(bar, tools.firstChild);
-    if (toolsCol && toolsCol.parentElement !== tools) tools.appendChild(toolsCol);
-    if (actions && actions.parentElement !== tools) tools.appendChild(actions);
-    /* ambiance Kraft/Magazine et lien Aide en tete de la page Outils */
-    var themeWrap = tools.querySelector('.dkthemewrap');
-    if (!themeWrap){
-      themeWrap = document.createElement('div');
-      themeWrap.className = 'dkthemewrap';
-      tools.insertBefore(themeWrap, tools.firstChild);
+
+    /* page Format : dimension tesselle + nombre de carreaux, dans leur propre
+       rangée de cartouches (garde la même mise en page que la config-bar d'origine) */
+    var profileRow = document.getElementById('profileRow');
+    var sizeRow = document.getElementById('sizeRow');
+    var formatBar = format.querySelector('.v143-format-bar');
+    if (!formatBar){
+      formatBar = document.createElement('div');
+      /* PAS la classe .config-bar : le script V137 (colonne ordinateur) cherche ".config-bar"
+         sans distinction — lui donner ce nom lui ferait attraper ce bloc au lieu du vrai. */
+      formatBar.className = 'v143-format-bar';
+      format.appendChild(formatBar);
     }
-    var themeSwitch = document.getElementById('themeSwitch');
-    if (themeSwitch && themeSwitch.parentElement !== themeWrap) themeWrap.appendChild(themeSwitch);
-    if (!tools.querySelector('.v143-help-link')){
-      var helpLink = document.createElement('a');
-      helpLink.className = 'v143-help-link';
-      helpLink.href = 'quadreti-guide-interactif.html';
-      helpLink.target = '_blank';
-      helpLink.rel = 'noopener';
-      helpLink.textContent = 'Ouvrir le guide d’utilisation';
-      tools.insertBefore(helpLink, themeWrap.nextSibling);
+    if (profileRow && profileRow.parentElement !== formatBar) formatBar.appendChild(profileRow);
+    if (sizeRow && sizeRow.parentElement !== formatBar) formatBar.appendChild(sizeRow);
+
+    /* page Création : le Mode (pilote quel panneau d'outil s'affiche), le panneau
+       d'outils lui-même, et la galerie d'inspirations */
+    if (bar && bar.parentElement !== creation) creation.insertBefore(bar, creation.firstChild);
+    if (toolsCol && toolsCol.parentElement !== creation) creation.appendChild(toolsCol);
+    if (inspiBar && inspiBar.parentElement !== creation) creation.appendChild(inspiBar);
+
+    /* page Fichiers : garder / exporter / mes créations / effacer */
+    /* toujours en tete, meme apres plusieurs allers-retours desktop/mobile : sinon, une fois
+       les blocs Garder/Effacer crees, actionsCol se retrouverait rajoute apres eux */
+    if (actions && (actions.parentElement !== fichiers || fichiers.firstElementChild !== actions)){
+      fichiers.insertBefore(actions, fichiers.firstChild);
     }
-    /* les menus des pastilles ＋/− deviennent deux sections normales en bas */
     var fabMenu = document.getElementById('v140FabMenu');
     var fabMenuMinus = document.getElementById('v140FabMenuMinus');
-    if (fabMenu && !tools.querySelector('.v143-actions-plus')){
+    if (fabMenu && !fichiers.querySelector('.v143-actions-plus')){
       var wrapPlus = document.createElement('div');
       wrapPlus.className = 'v143-actions-plus';
       var titlePlus = document.createElement('div');
       titlePlus.className = 'v143-actions-title';
       titlePlus.textContent = 'Garder / exporter';
       wrapPlus.appendChild(titlePlus);
-      tools.appendChild(wrapPlus);
+      fichiers.appendChild(wrapPlus);
     }
-    if (fabMenu && fabMenu.parentElement !== tools.querySelector('.v143-actions-plus')){
-      tools.querySelector('.v143-actions-plus').appendChild(fabMenu);
+    if (fabMenu && fabMenu.parentElement !== fichiers.querySelector('.v143-actions-plus')){
+      fichiers.querySelector('.v143-actions-plus').appendChild(fabMenu);
     }
-    if (fabMenuMinus && !tools.querySelector('.v143-actions-minus')){
+    if (fabMenuMinus && !fichiers.querySelector('.v143-actions-minus')){
       var wrapMinus = document.createElement('div');
       wrapMinus.className = 'v143-actions-minus';
       var titleMinus = document.createElement('div');
       titleMinus.className = 'v143-actions-title';
       titleMinus.textContent = 'Effacer';
       wrapMinus.appendChild(titleMinus);
-      tools.appendChild(wrapMinus);
+      fichiers.appendChild(wrapMinus);
     }
-    if (fabMenuMinus && fabMenuMinus.parentElement !== tools.querySelector('.v143-actions-minus')){
-      tools.querySelector('.v143-actions-minus').appendChild(fabMenuMinus);
+    if (fabMenuMinus && fabMenuMinus.parentElement !== fichiers.querySelector('.v143-actions-minus')){
+      fichiers.querySelector('.v143-actions-minus').appendChild(fabMenuMinus);
+    }
+
+    /* ambiance Kraft/Magazine : dans la popup du menu ☰, pas dans une page en particulier */
+    var menuPages = document.getElementById('v143MenuPages');
+    var themeSwitch = document.getElementById('themeSwitch');
+    if (menuPages && themeSwitch && themeSwitch.parentElement !== menuPages){
+      menuPages.insertBefore(themeSwitch, menuPages.firstChild);
     }
   }
   function fromPager(){
     body.classList.remove('v142-m');
     var studio = stored.studio || document.querySelector('.studio');
     if (!studio) return;
-    var wall = pageWall(), tools = pageTools();
+    var format = pageFormat(), creation = pageCreation(), fichiers = pageFichiers();
+    var wall = pageWall();
     var atelier = document.getElementById('atelierCol');
     var toolsCol = document.getElementById('toolsCol');
     var actions = document.getElementById('actionsCol');
-    var bar = document.querySelector('.config-bar');
+    var inspiBar = document.getElementById('inspiBar');
+    var bar = stored.bar || document.querySelector('.config-bar');
     if (atelier && wall && atelier.parentElement === wall) studio.insertBefore(atelier, studio.firstChild);
-    if (toolsCol && tools && toolsCol.parentElement === tools) studio.insertBefore(toolsCol, studio.firstChild);
-    if (actions && tools && actions.parentElement === tools) studio.appendChild(actions);
+
+    /* réassemble Format + Mode dans l'ordre d'origine à l'intérieur de la vraie
+       .config-bar avant de la rendre au flux ; la rangée créée pour Format est jetée */
+    var profileRow = document.getElementById('profileRow');
+    var sizeRow = document.getElementById('sizeRow');
+    if (bar){
+      /* firstElementChild/lastElementChild, pas firstChild/lastChild : la mise en page
+         d'origine laisse des nœuds de texte (indentation) entre les cartouches, qui
+         auraient decale l'ordre si on s'etait repere sur le premier/dernier NŒUD. */
+      if (profileRow && profileRow.parentElement !== bar) bar.insertBefore(profileRow, bar.firstElementChild);
+      if (sizeRow && sizeRow.parentElement !== bar) bar.insertBefore(sizeRow, bar.lastElementChild);
+    }
+    var formatBar = format && format.querySelector('.v143-format-bar');
+    if (formatBar && formatBar.parentElement) formatBar.parentElement.removeChild(formatBar);
+
+    if (toolsCol && creation && toolsCol.parentElement === creation) studio.insertBefore(toolsCol, studio.firstChild);
+    if (actions && fichiers && actions.parentElement === fichiers) studio.appendChild(actions);
+    if (inspiBar && creation && inspiBar.parentElement === creation && toolsCol && toolsCol.parentElement){
+      toolsCol.parentElement.after(inspiBar);
+    }
     /* la config-bar est rendue au flux ; le script V137 la re-rangera dans la colonne */
-    if (bar && tools && bar.parentElement === tools && studio.parentElement) studio.parentElement.insertBefore(bar, studio);
+    if (bar && creation && bar.parentElement === creation && studio.parentElement) studio.parentElement.insertBefore(bar, studio);
+
     var fabMenu = document.getElementById('v140FabMenu');
     var fabMenuMinus = document.getElementById('v140FabMenuMinus');
     if (fabMenu && fabMenu.closest('.v143-actions-plus')) document.body.appendChild(fabMenu);
     if (fabMenuMinus && fabMenuMinus.closest('.v143-actions-minus')) document.body.appendChild(fabMenuMinus);
     var themeSwitch = document.getElementById('themeSwitch');
     var navInner = document.querySelector('.appnav-inner');
-    if (themeSwitch && themeSwitch.closest('.dkthemewrap') && navInner){
+    var menuPages = document.getElementById('v143MenuPages');
+    if (themeSwitch && menuPages && themeSwitch.parentElement === menuPages && navInner){
       navInner.insertBefore(themeSwitch, navInner.querySelector('#appnavBurger'));
     }
     /* revient au point 0 pour la prochaine ouverture mobile */
@@ -1680,21 +1740,46 @@ document.addEventListener('DOMContentLoaded', function(){
     }, 60);
   }
   document.addEventListener('DOMContentLoaded', function(){
-    /* points de progression : cliquer y va, le scroll met a jour le point actif */
+    /* popup du menu ☰ : liste des 4 pages pour y sauter directement, sans swiper
+       une par une — construite une seule fois, elle ne bouge plus ensuite */
+    var menuPages = document.getElementById('v143MenuPages');
+    var jumpLabels = ['Mur', 'Format', 'Création', 'Fichiers'];
+    if (menuPages && !menuPages.querySelector('.v143-menu-jump')){
+      jumpLabels.forEach(function(label, i){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'v143-menu-jump';
+        var dot = document.createElement('span');
+        dot.className = 'v143-menu-dot';
+        b.appendChild(dot);
+        b.appendChild(document.createTextNode(label));
+        b.addEventListener('click', function(){
+          gotoPage(i);
+          var menu = document.getElementById('appnavLinks');
+          var burger = document.getElementById('appnavBurger');
+          if (menu) menu.classList.remove('open');
+          if (burger) burger.setAttribute('aria-expanded', 'false');
+        });
+        menuPages.appendChild(b);
+      });
+    }
+    /* points de progression : cliquer y va, le scroll met a jour le point (et le popup) actif */
     var pager = document.getElementById('v143Pager');
     var dots = document.querySelectorAll('.v143-dots button');
+    var jumpBtns = document.querySelectorAll('.v143-menu-jump');
+    function setActivePage(idx){
+      dots.forEach(function(d, i){ d.classList.toggle('on', i === idx); });
+      jumpBtns.forEach(function(b, i){ b.classList.toggle('on', i === idx); });
+    }
     if (pager && dots.length){
       dots.forEach(function(d){
-        d.addEventListener('click', function(){
-          pager.scrollTo({ left: Number(d.getAttribute('data-page')) * pager.clientWidth, behavior:'smooth' });
-        });
+        d.addEventListener('click', function(){ gotoPage(Number(d.getAttribute('data-page'))); });
       });
       var scrollTimer = null;
       pager.addEventListener('scroll', function(){
         clearTimeout(scrollTimer);
         scrollTimer = setTimeout(function(){
-          var idx = Math.round(pager.scrollLeft / Math.max(1, pager.clientWidth));
-          dots.forEach(function(d, i){ d.classList.toggle('on', i === idx); });
+          setActivePage(Math.round(pager.scrollLeft / Math.max(1, pager.clientWidth)));
         }, 60);
       });
     }
@@ -1733,8 +1818,20 @@ document.addEventListener('DOMContentLoaded', function(){
   });
   if (mqDesk.addEventListener) mqDesk.addEventListener('change', v142Place);
   else if (mqDesk.addListener) mqDesk.addListener(v142Place);
+  /* V144 — le place() de V137 (colonne ordinateur) redispatche resize en boucle a chaque
+     fois qu'il tourne, en continu tant que la page vit. Un debounce classique (on repart a
+     zero a chaque resize) ne se declenche donc jamais : la remise a zero arrive toujours
+     avant l'echeance. On ignore ici tout resize qui n'apporte rien de neuf par rapport au
+     dernier mode REELLEMENT applique (lastMode, mis a jour seulement une fois toPager/
+     fromPager execute) — jamais par rapport a un simple changement programme mais pas
+     encore joue, sinon deux resize rapprochés pourraient s'annuler l'un l'autre. */
   var att = null;
-  window.addEventListener('resize', function(){ clearTimeout(att); att = setTimeout(v142Place, 280); });
+  window.addEventListener('resize', function(){
+    var mode = mqDesk.matches ? 'desk' : 'deck';
+    if (mode === lastMode) return;
+    clearTimeout(att);
+    att = setTimeout(v142Place, 60);
+  });
 })();
 </script>
 <script>
