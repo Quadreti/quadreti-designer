@@ -6910,7 +6910,12 @@ document.addEventListener('DOMContentLoaded', function(){
     // inutilisable en tirage poster (~7cm à 300 DPI). La qualité d'impression réelle vit
     // uniquement dans les fichiers de production par carreau (gabarit tesselle A4), qui
     // ne sont pas filigranés et ne changent pas.
-    const MAX_WALL_DIMENSION_PX = 800;
+    // 12/09 (fondateur) : le compte connecte change la regle -- administrateur : pleine resolution (plafond 4000 px) et sans
+    // filigrane ; premium actif : sans filigrane, plafond 800 px conserve ; visiteur gratuit : inchange (800 px + filigrane).
+    if (compteSession) { try { await fetchPremiumStatus(); } catch (e) {} }
+    const exportAdmin = !!isAdminUser;
+    const sansFiligrane = exportAdmin || isPremiumActive(premiumStatus);
+    const MAX_WALL_DIMENSION_PX = exportAdmin ? 4000 : 800;
     const fullResMaxDim = Math.max(totalW, totalH) * cellPx + (Math.max(totalW, totalH) - 1) * gap;
     let scaledDown = false;
     let effectiveDpi = EXPORT_DPI;
@@ -6924,7 +6929,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     await drawComposite(ctx, cellPx, gap, 0);
-    drawQuadretiWatermark(ctx, canvas.width, canvas.height); // V134 — filigrane central
+    if (!sansFiligrane) drawQuadretiWatermark(ctx, canvas.width, canvas.height); // V134 — filigrane central (12/09 : pas pour admin / premium)
     const rawBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
     const blob = await injectPngDpi(rawBlob, effectiveDpi);
     const dataUrl = URL.createObjectURL(blob);
@@ -6934,7 +6939,7 @@ document.addEventListener('DOMContentLoaded', function(){
     link.href = dataUrl;
     link.click();
     if (!silent) showPngFallback(dataUrl);
-    statusMsg.textContent = `Aperçu du mur téléchargé ✓ (${canvas.width}×${canvas.height}px) — image de partage. Pour l'impression, utilisez « Télécharger pour commander » (échelle réelle ${CELL_MM}mm/tesselle).`;
+    statusMsg.textContent = sansFiligrane ? `Aperçu du mur téléchargé ✓ (${canvas.width}×${canvas.height}px, sans filigrane${exportAdmin ? ', pleine résolution' : ''}).` : `Aperçu du mur téléchargé ✓ (${canvas.width}×${canvas.height}px) — image de partage. Pour l'impression, utilisez « Télécharger pour commander » (échelle réelle ${CELL_MM}mm/tesselle).`;
     return dataUrl;
   }
 
