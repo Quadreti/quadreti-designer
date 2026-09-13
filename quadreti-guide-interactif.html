@@ -7,52 +7,57 @@
 <meta name="description" content="Le guide interactif Quadreti : survolez chaque zone de l'app pour comprendre, puis suivez la visite guidée jusqu'au mur.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  /* 13/09 : la page suit l identite du site et de l app -- navy, gris du site, orange de marque, police Jura. Avant cette date elle
+     vivait encore dans le monde kraft et serait restee beige derriere une app devenue grise et navy.
+     Les jetons portent desormais leur ROLE et non une couleur : c est ce qui permet de rechanger la palette sans relire la page. */
   :root{
-    --terracotta:#E2725B;
-    --terracotta-soft:#F6DED8;
-    --olive:#556B2F;
-    --olive-soft:#E9EDDD;
-    --kraft:#CBBD93;
-    --kraft-soft:#F1ECDD;
-    --charbon:#2b353e;
-    --fond:#F5F5F5;
-    --blanc:#FFFFFF;
-    --border:#E3E0DA;
+    --accent:#d96c2f;        /* orange de marque : ce qu on peut toucher, ce qui est choisi */
+    --accent-fonce:#c15f28;  /* le meme, au survol */
+    --accent-doux:#f7e2d5;
+    --second:#1e2b35;        /* navy : le second reperage, celui qui distingue les zones de l app */
+    --second-doux:#e6e9ec;
+    --gris:#dedede;          /* le gris du site : tesselles neutres, etui, jetons */
+    --gris-doux:#f2f2f2;
+    --encre:#1e2b35;         /* le texte */
+    --encre-douce:#5a6672;   /* les mentions secondaires */
+    --fond:#dedede;          /* le fond de page, celui de l app */
+    --blanc:#ffffff;
+    --bord:#1e2b3526;
+    --bord-marque:#b4b4b4;   /* le filet autour des jetons ronds */
+    --vu:#9aa3ab;            /* une pastille deja visitee */
+    --encre-sur-accent:#10181f; /* le texte pose SUR l orange : le blanc n y donne que 3,42 de contraste, l encre 8,9 */
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
   body{
-    font-family:'Quicksand', sans-serif;
-    background:var(--fond); color:var(--charbon);
+    font-family:'Jura', sans-serif;
+    background:var(--fond); color:var(--encre);
     font-size:15px; line-height:1.55;
   }
   button{ font-family:inherit; cursor:pointer; }
 
   /* ===== En-tête ===== */
   header{ text-align:center; padding:30px 16px 18px; }
+  /* 13/09 : le Q actuel de la marque -- quatre colonnes, quatre rangees, la queue orange INTEGREE a la lettre (avant, une tesselle
+     posee a l exterieur du bloc, du temps ou le Q tenait sur trois colonnes). Meme dessin que la barre du site et des apps. */
   .brand-logo{
-    position:relative; margin:0 auto 14px; width:44px; height:58px;
-    display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(4,1fr); gap:6%;
+    position:relative; margin:0 auto 14px; width:58px; height:58px;
+    display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(4,1fr); gap:6%;
   }
-  .brand-logo i{ border-radius:22%; background:var(--charbon); opacity:0; transform:scale(.3); animation:brandTileIn .5s cubic-bezier(.34,1.56,.64,1) forwards; }
+  .brand-logo i{ border-radius:22%; background:var(--encre); opacity:0; transform:scale(.3); animation:brandTileIn .5s cubic-bezier(.34,1.56,.64,1) forwards; }
   .brand-logo i.empty{ background:transparent; animation:none; }
-  .brand-logo .tail{
-    position:absolute; bottom:0; right:calc(-1 * ((100% - 12%) / 3) - 6%);
-    width:calc((100% - 12%) / 3); height:calc((100% - 18%) / 4);
-    border-radius:22%; background:var(--terracotta);
-    opacity:0; transform:scale(.3); animation:brandTileIn .5s cubic-bezier(.34,1.56,.64,1) forwards; animation-delay:.34s;
-  }
+  .brand-logo i.tail{ background:var(--accent); }
   @keyframes brandTileIn{ 0%{ opacity:0; transform:scale(.3); } 60%{ opacity:1; transform:scale(1.18); } 100%{ opacity:1; transform:scale(1); } }
   header h1{ font-size:clamp(21px,4.5vw,30px); font-weight:700; margin:8px 0 6px; }
-  header p{ color:#5a636b; max-width:520px; margin:0 auto; font-size:15px; }
+  header p{ color:var(--encre-douce); max-width:520px; margin:0 auto; font-size:15px; }
   @media (prefers-reduced-motion: reduce){ .brand-logo i{ animation:none !important; opacity:1 !important; transform:none !important; } }
 
   /* ---------- Footer permanent (distinct de la finale, affichée uniquement en fin de visite guidée) ---------- */
   footer.guide-foot{ text-align:center; padding:34px 16px 40px; }
-  footer.guide-foot .sig{ font-weight:700; font-size:15px; color:var(--charbon); margin:0; }
-  footer.guide-foot .sig span{ color:var(--terracotta); }
-  header p b{ color:var(--charbon); }
+  footer.guide-foot .sig{ font-weight:700; font-size:15px; color:var(--encre); margin:0; }
+  footer.guide-foot .sig span{ color:var(--accent); }
+  header p b{ color:var(--encre); }
 
   /* ===== Barre de contrôle ===== */
   .ctrl{
@@ -60,19 +65,19 @@
     flex-wrap:wrap; padding:14px 16px 8px;
   }
   .tour-btn{
-    background:var(--terracotta); color:#fff; border:none;
+    background:var(--accent); color:var(--encre-sur-accent); border:none;
     font-weight:700; font-size:15px; border-radius:99px;
     padding:10px 22px;
     box-shadow:0 4px 14px rgba(226,114,91,.35);
     transition:transform .15s;
   }
   .tour-btn:hover{ transform:translateY(-2px); }
-  .scene-tabs{ display:flex; gap:6px; background:var(--blanc); border:1px solid var(--border); border-radius:99px; padding:4px; }
+  .scene-tabs{ display:flex; gap:6px; background:var(--blanc); border:1px solid var(--bord); border-radius:99px; padding:4px; }
   .scene-tabs button{
     border:none; background:transparent; font-weight:700; font-size:13.5px;
     color:#6a727b; border-radius:99px; padding:7px 16px;
   }
-  .scene-tabs button.on{ background:var(--charbon); color:#fff; }
+  .scene-tabs button.on{ background:var(--encre); color:#fff; }
 
   /* ===== Scènes ===== */
   .stage{ max-width:960px; margin:10px auto 0; padding:0 14px 130px; position:relative; }
@@ -81,7 +86,7 @@
 
   /* ===== Maquette app ===== */
   .mock{
-    background:var(--blanc); border:1px solid var(--border);
+    background:var(--blanc); border:1px solid var(--bord);
     border-radius:16px; padding:14px;
     display:grid; gap:12px;
     grid-template-columns:200px 1fr 200px;
@@ -91,12 +96,12 @@
     .mock{ grid-template-columns:1fr; grid-template-areas:"outils" "atelier" "actions"; }
   }
   .panel{
-    background:var(--fond); border:1px solid var(--border);
+    background:var(--fond); border:1px solid var(--bord);
     border-radius:12px; padding:12px; position:relative;
   }
   .panel h2{
     font-size:11px; font-weight:700; text-transform:uppercase;
-    letter-spacing:.12em; color:#8a9099; margin-bottom:9px;
+    letter-spacing:.12em; color:var(--encre-douce); margin-bottom:9px;
   }
   .p-outils{ grid-area:outils; display:flex; flex-direction:column; gap:12px; }
   .p-atelier{ grid-area:atelier; }
@@ -104,13 +109,13 @@
 
   .mockbtn{
     display:block; width:100%;
-    background:var(--blanc); border:1px solid var(--border);
+    background:var(--blanc); border:1px solid var(--bord);
     border-radius:8px; font-weight:600; font-size:12.5px;
-    color:var(--charbon); padding:7px 8px; margin:4px 0;
+    color:var(--encre); padding:7px 8px; margin:4px 0;
     text-align:center; pointer-events:none;
   }
-  .mockbtn.primary{ background:var(--terracotta); color:#fff; border-color:var(--terracotta); }
-  .mockbtn.mode-on{ background:var(--olive); color:#fff; border-color:var(--olive); }
+  .mockbtn.primary{ background:var(--accent); color:var(--encre-sur-accent); border-color:var(--accent); }
+  .mockbtn.mode-on{ background:var(--accent); color:#10181f; border-color:var(--accent); } /* 13/09 : un bouton choisi est orange, comme dans l app ; encre #10181f dessus, seule couleur lisible sur l orange */
 
   .swatches{ display:grid; grid-template-columns:repeat(5,1fr); gap:5px; }
   .swatches i{ display:block; aspect-ratio:1; border-radius:5px; border:1px solid rgba(0,0,0,.08); }
@@ -122,27 +127,27 @@
   }
   .tilenav .cell{
     width:30px; height:24px; border-radius:5px;
-    background:var(--blanc); border:1px solid var(--border);
+    background:var(--blanc); border:1px solid var(--bord);
     display:flex; align-items:center; justify-content:center;
-    font-size:11px; color:#8a9099;
+    font-size:11px; color:var(--encre-douce);
   }
-  .tilenav .cell.on{ background:var(--charbon); color:#fff; border-color:var(--charbon); }
+  .tilenav .cell.on{ background:var(--encre); color:#fff; border-color:var(--encre); }
 
   /* Grille 7×7 */
   .grid7{
     display:grid; grid-template-columns:repeat(7,1fr); gap:4px;
-    background:var(--charbon); padding:8px; border-radius:10px;
+    background:var(--encre); padding:8px; border-radius:10px;
     max-width:330px; margin:0 auto;
   }
   .grid7 i{ display:block; aspect-ratio:1; border-radius:4px; background:var(--fond); }
-  .grid7 i.t{ background:var(--terracotta); }
-  .grid7 i.k{ background:var(--kraft); }
+  .grid7 i.t{ background:var(--accent); }
+  .grid7 i.k{ background:var(--gris); }
   .atelier-tools{ display:flex; gap:6px; justify-content:center; margin-top:10px; flex-wrap:wrap; }
   .atelier-tools .mockbtn{ width:auto; padding:6px 10px; margin:0; }
 
   /* ===== Scène maison ===== */
   .maison{
-    background:var(--blanc); border:1px solid var(--border); border-radius:16px;
+    background:var(--blanc); border:1px solid var(--bord); border-radius:16px;
     padding:26px 14px 30px;
     display:grid; gap:26px;
     grid-template-columns:repeat(auto-fit, minmax(190px, 1fr));
@@ -155,54 +160,54 @@
   /* feuille prédécoupée */
   .feuille{
     width:120px; height:150px; margin:0 auto;
-    background:var(--blanc); border:2px solid var(--charbon); border-radius:6px;
+    background:var(--blanc); border:2px solid var(--encre); border-radius:6px;
     display:grid; grid-template-columns:repeat(3,1fr); gap:6px; padding:10px;
   }
-  .feuille i{ border:1.6px dashed var(--terracotta); border-radius:3px; aspect-ratio:1; }
+  .feuille i{ border:1.6px dashed var(--accent); border-radius:3px; aspect-ratio:1; }
   /* étui */
   .etui{
     width:130px; height:110px; margin:20px auto 0;
     background:linear-gradient(160deg, #eef3f5, #dde7ea);
-    border:2px solid var(--charbon); border-radius:8px; position:relative;
+    border:2px solid var(--encre); border-radius:8px; position:relative;
   }
   .etui::before{ /* visuel qui glisse */
     content:""; position:absolute; inset:12px 14px 26px;
-    background:var(--terracotta); border-radius:4px; opacity:.85;
+    background:var(--accent); border-radius:4px; opacity:.85;
   }
   .etui::after{ /* volets rabattus */
     content:"volets"; position:absolute; left:50%; bottom:-12px; transform:translateX(-50%);
-    background:var(--kraft); color:#5c5133; border-radius:0 0 8px 8px;
+    background:var(--gris); color:var(--encre); border-radius:0 0 8px 8px;
     font-size:10px; font-weight:700; padding:3px 14px; letter-spacing:.06em;
   }
   /* grille murale */
   .murgrille{
     width:150px; height:150px; margin:0 auto;
-    background:var(--charbon); border-radius:10px; padding:8px;
+    background:var(--encre); border-radius:10px; padding:8px;
     display:grid; grid-template-columns:repeat(4,1fr); gap:5px; position:relative;
   }
   .murgrille i{ background:var(--fond); border-radius:4px; }
   .murgrille i.pin{ position:relative; }
   .murgrille i.pin::after{
     content:""; position:absolute; inset:30%;
-    border-radius:50%; background:var(--kraft); border:2px solid #9d8f63;
+    border-radius:50%; background:var(--gris); border:2px solid var(--bord-marque);
   }
-  .murgrille i.done{ background:var(--terracotta); }
+  .murgrille i.done{ background:var(--accent); }
   /* main qui change */
   .swap{
     width:150px; height:150px; margin:0 auto; position:relative;
-    background:var(--olive-soft); border-radius:10px;
+    background:var(--second-doux); border-radius:10px;
     display:flex; align-items:center; justify-content:center; gap:10px;
   }
   .swap i{ width:44px; height:44px; border-radius:6px; }
-  .swap i:first-child{ background:var(--terracotta); }
-  .swap .fleche{ font-size:22px; font-weight:700; color:var(--olive); }
-  .swap i:last-child{ background:var(--kraft); }
+  .swap i:first-child{ background:var(--accent); }
+  .swap .fleche{ font-size:22px; font-weight:700; color:var(--second); }
+  .swap i:last-child{ background:var(--gris); }
 
   /* ===== Hotspots ===== */
   .hot{
     position:absolute; z-index:5;
     width:30px; height:30px; border-radius:50%;
-    background:var(--terracotta); color:#fff;
+    background:var(--accent); color:var(--encre-sur-accent);
     border:2.5px solid #fff;
     font-weight:700; font-size:13px;
     display:flex; align-items:center; justify-content:center;
@@ -210,7 +215,7 @@
   }
   .hot::before{
     content:""; position:absolute; inset:-7px; border-radius:50%;
-    border:2px solid var(--terracotta); opacity:.55;
+    border:2px solid var(--accent); opacity:.55;
     animation:pulse 1.8s ease-out infinite;
   }
   @keyframes pulse{
@@ -218,22 +223,22 @@
     100%{ transform:scale(1.25); opacity:0; }
   }
   @media (prefers-reduced-motion: reduce){ .hot::before{ animation:none; } }
-  .hot.olive{ background:var(--olive); box-shadow:0 3px 10px rgba(85,107,47,.45); }
-  .hot.olive::before{ border-color:var(--olive); }
-  .hot.seen{ background:#aab2ab; box-shadow:none; }
+  .hot.second{ background:var(--second); box-shadow:0 3px 10px rgba(30,43,53,.45); }
+  .hot.second::before{ border-color:var(--second); }
+  .hot.seen{ background:var(--vu); box-shadow:none; }
   .hot.seen::before{ display:none; }
   .hot.active{ transform:scale(1.18); }
-  .hot:focus-visible{ outline:3px solid var(--charbon); outline-offset:2px; }
+  .hot:focus-visible{ outline:3px solid var(--encre); outline-offset:2px; }
 
   /* halo sur l'élément expliqué */
-  .lit{ box-shadow:0 0 0 3px var(--terracotta), 0 0 0 8px rgba(226,114,91,.18) !important; border-radius:12px; }
+  .lit{ box-shadow:0 0 0 3px var(--accent), 0 0 0 8px rgba(226,114,91,.18) !important; border-radius:12px; }
 
   /* ===== Popup ===== */
   .pop{
     position:fixed; z-index:60;
     left:50%; bottom:14px; transform:translateX(-50%);
     width:min(480px, calc(100vw - 24px));
-    background:var(--blanc); border:1px solid var(--border);
+    background:var(--blanc); border:1px solid var(--bord);
     border-radius:16px;
     box-shadow:0 14px 40px rgba(43,53,62,.22);
     padding:18px 20px 14px;
@@ -244,30 +249,30 @@
   @media (prefers-reduced-motion: reduce){ .pop.on{ animation:none; } }
   .pop .pop-step{
     font-size:11.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
-    color:var(--terracotta); margin-bottom:4px;
+    color:var(--accent); margin-bottom:4px;
   }
   .pop h3{ font-size:17.5px; font-weight:700; margin-bottom:6px; }
   .pop p{ font-size:14px; color:#3d4650; }
   .pop p + p{ margin-top:6px; }
   .pop .ui{
     display:inline-block; font-weight:600; font-size:.92em;
-    background:var(--olive-soft); color:var(--olive);
-    border:1px solid #cfd8b8; border-radius:5px; padding:0 7px 1px; white-space:nowrap;
+    background:var(--second-doux); color:var(--second);
+    border:1px solid var(--bord); border-radius:5px; padding:0 7px 1px; white-space:nowrap;
   }
   .pop-nav{
     display:flex; align-items:center; justify-content:space-between;
     margin-top:14px; gap:10px;
   }
-  .pop-nav .dots{ font-size:12.5px; font-weight:700; color:#8a9099; }
+  .pop-nav .dots{ font-size:12.5px; font-weight:700; color:var(--encre-douce); }
   .pop-nav button{
-    border:1px solid var(--border); background:var(--blanc);
+    border:1px solid var(--bord); background:var(--blanc);
     font-weight:700; font-size:13.5px; border-radius:99px; padding:7px 16px;
-    color:var(--charbon);
+    color:var(--encre);
   }
-  .pop-nav button.next{ background:var(--charbon); color:#fff; border-color:var(--charbon); }
+  .pop-nav button.next{ background:var(--encre); color:#fff; border-color:var(--encre); }
   .pop-close{
     position:absolute; top:10px; right:12px;
-    border:none; background:transparent; font-size:17px; color:#8a9099;
+    border:none; background:transparent; font-size:17px; color:var(--encre-douce);
     padding:4px;
   }
 
@@ -278,11 +283,11 @@
     display:none; align-items:center; justify-content:center; text-align:center; padding:20px;
   }
   .finale.on{ display:flex; }
-  .finale .clic{ font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:#8a9099; margin-bottom:12px; }
+  .finale .clic{ font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--encre-douce); margin-bottom:12px; }
   .finale p.phrase{ font-size:clamp(22px,5vw,34px); font-weight:700; }
-  .finale p.phrase span{ color:var(--terracotta); }
+  .finale p.phrase span{ color:var(--accent); }
   .finale button{
-    margin-top:26px; background:var(--terracotta); color:#fff; border:none;
+    margin-top:26px; background:var(--accent); color:var(--encre-sur-accent); border:none;
     font-weight:700; font-size:15px; border-radius:99px; padding:11px 26px;
   }
 
@@ -293,22 +298,22 @@
     position:sticky; top:0; z-index:60;
     display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
     padding:13px 22px; background:rgba(255,255,255,.94); backdrop-filter:blur(6px);
-    border-bottom:1px solid var(--border);
+    border-bottom:1px solid var(--bord);
   }
-  .gnav-brand{ display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--charbon); }
+  .gnav-brand{ display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--encre); }
   .gnav-logo{ display:grid; grid-template-columns:repeat(4,7px); grid-auto-rows:7px; gap:2px; }
-  .gnav-logo i{ display:block; border-radius:1.5px; background:var(--charbon); }
+  .gnav-logo i{ display:block; border-radius:1.5px; background:var(--encre); }
   .gnav-logo i.empty{ visibility:hidden; }
-  .gnav-logo i.tail{ background:var(--terracotta); }
+  .gnav-logo i.tail{ background:var(--accent); }
   .gnav-name{ font-weight:700; font-size:18px; }
   .gnav-links{ display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
-  .gnav-links a{ color:var(--charbon); text-decoration:none; font-weight:600; font-size:14.5px; }
-  .gnav-links a:hover{ color:var(--terracotta); }
+  .gnav-links a{ color:var(--encre); text-decoration:none; font-weight:600; font-size:14.5px; }
+  .gnav-links a:hover{ color:var(--accent); }
   .gnav-cta{
-    background:var(--terracotta); color:var(--blanc) !important; font-weight:700;
+    background:var(--accent); color:var(--blanc) !important; font-weight:700;
     border-radius:99px; padding:9px 20px;
   }
-  .gnav-cta:hover{ background:#cf6450; color:var(--blanc) !important; }
+  .gnav-cta:hover{ background:var(--accent-fonce); color:var(--blanc) !important; }
   @media (max-width:560px){
     .gnav{ padding:11px 14px; gap:10px; }
     .gnav-links{ gap:14px; width:100%; justify-content:center; }
@@ -337,11 +342,10 @@
 
 <header>
   <div class="brand-logo" aria-hidden="true">
-    <i style="animation-delay:.10s"></i><i style="animation-delay:.16s"></i><i style="animation-delay:.22s"></i>
-    <i style="animation-delay:.08s"></i><i class="empty"></i><i style="animation-delay:.26s"></i>
-    <i style="animation-delay:.06s"></i><i class="empty"></i><i style="animation-delay:.30s"></i>
-    <i style="animation-delay:.04s"></i><i style="animation-delay:.02s"></i><i style="animation-delay:0s"></i>
-    <i class="tail"></i>
+    <i style="animation-delay:.10s"></i><i style="animation-delay:.16s"></i><i style="animation-delay:.22s"></i><i class="empty"></i>
+    <i style="animation-delay:.08s"></i><i class="empty"></i><i style="animation-delay:.26s"></i><i class="empty"></i>
+    <i style="animation-delay:.06s"></i><i class="empty"></i><i style="animation-delay:.30s"></i><i class="empty"></i>
+    <i style="animation-delay:.04s"></i><i style="animation-delay:.02s"></i><i style="animation-delay:0s"></i><i class="tail" style="animation-delay:.34s"></i>
   </div>
   <h1>Découvrez l'app… en la touchant</h1>
   <p>Chaque pastille cache une explication : <b>touchez-les librement</b>, ou lancez la visite guidée pour suivre le parcours complet, de l'écran jusqu'au mur.</p>
@@ -371,7 +375,7 @@
         <div id="z-palette">
           <h2>Palette</h2>
           <div class="swatches">
-            <i style="background:#E2725B"></i><i style="background:#556B2F"></i><i style="background:#CBBD93"></i><i style="background:#2b353e"></i><i style="background:#7A9CC6"></i>
+            <i style="background:#d96c2f"></i><i style="background:#556B2F"></i><i style="background:#dedede"></i><i style="background:#1e2b35"></i><i style="background:#7A9CC6"></i>
             <i style="background:#C65B7A"></i><i style="background:#E0B34C"></i><i style="background:#6BAA8E"></i><i style="background:#8A6FB1"></i><i style="background:#F5F5F5"></i>
           </div>
           <span class="mockbtn" style="margin-top:8px;">Réinitialiser la palette</span>
@@ -550,7 +554,7 @@
   STEPS.forEach((s, i) => {
     const anchor = document.getElementById(s.anchor);
     const b = document.createElement('button');
-    b.className = 'hot' + (s.scene === 'app' ? ' olive' : '');
+    b.className = 'hot' + (s.scene === 'app' ? ' second' : '');
     b.textContent = s.num;
     b.setAttribute('aria-label', 'Étape ' + s.num + ' : ' + s.title.replace(/&amp;/g,'&'));
     b.addEventListener('click', (e) => { e.stopPropagation(); openStep(i, false); });
