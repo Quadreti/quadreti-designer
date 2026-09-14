@@ -1602,7 +1602,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       <span id="appnavStaticLinks">
         <a href="https://quadreti.fr/index.html" target="_blank" rel="noopener">Accueil</a>
         <a href="https://quadreti.fr/boutique/" target="_blank" rel="noopener">Boutique</a>
-        <a href="https://quadreti.fr/outils.html" target="_blank" rel="noopener">Nos outils</a>
+        <!-- 14/09 : « Nos outils » est devenu « Studio » le 13/09 ; ce repli ne l avait pas suivi. -->
+        <a href="https://quadreti.fr/outils.html" target="_blank" rel="noopener">Studio</a>
         <a href="https://quadreti.fr/contact.html" target="_blank" rel="noopener">Contact</a>
       </span>
     </nav>
@@ -1637,6 +1638,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   }).then(function(r){ return r.ok ? r.json() : null; }).then(function(rows){
     var liens = rows && rows[0] && rows[0].valeur;
     if (!liens || !liens.length) return; // repli statique garde tel quel
+    /* 14/09 : une entree de menu peut desormais porter une adresse complete (les apps qui vivent sur leur propre
+       sous-domaine). On ne prefixe donc que ce qui est un chemin du site, jamais une URL deja entiere. */
+    var adresse = function(lien){ return /^[a-z]+:|^\/\//i.test(lien) ? lien : 'https://quadreti.fr' + lien; };
     var frag = document.createDocumentFragment();
     liens.forEach(function(item){
       if (item.sousMenu && item.sousMenu.length){
@@ -1649,14 +1653,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         sub.className = 'appnav-sublist';
         item.sousMenu.forEach(function(s){
           var a = document.createElement('a');
-          a.href = 'https://quadreti.fr' + s.lien; a.target = '_blank'; a.rel = 'noopener';
+          a.href = adresse(s.lien); a.target = '_blank'; a.rel = 'noopener';
           a.textContent = s.texte; sub.appendChild(a);
         });
         btn2.addEventListener('click', function(){ span.classList.toggle('open'); });
         span.appendChild(btn2); span.appendChild(sub); frag.appendChild(span);
       } else {
         var a2 = document.createElement('a');
-        a2.href = 'https://quadreti.fr' + item.lien; a2.target = '_blank'; a2.rel = 'noopener';
+        a2.href = adresse(item.lien); a2.target = '_blank'; a2.rel = 'noopener';
         a2.textContent = item.texte; frag.appendChild(a2);
       }
     });
