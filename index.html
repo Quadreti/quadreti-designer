@@ -1311,6 +1311,26 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .appnav-hassub.open .appnav-sublist{ display:flex; }
   .appnav-sublist a{ color:#fff!important; text-transform:none; font-size:13px; padding:9px 16px; opacity:1; border-radius:0; }
   .appnav-sublist a:hover{ color:#1e2b35!important; }
+  /* 14/09 (Site & Boutique) -- « Mon Espace ». Couleurs nommees par leur role, comme l exige CLAUDE.md : texte gris sur la
+     barre navy (10,75), trait orange au survol (4,22 sur le navy, au-dessus du 3:1 des objets graphiques). */
+  .appnav-inner{ --appnav-espace-texte:#dedede; --appnav-espace-trait:var(--terracotta,#d96c2f); }
+  /* Le menu se cale a droite pour que le bouton vienne apres lui, et non entre le logo et lui. */
+  @media (min-width:901px){ .appnav-links{ margin-left:auto; } }
+  .appnav-espace{ display:inline-flex; align-items:center; gap:8px; flex-shrink:0;
+    padding:7px 12px; min-height:34px; box-sizing:border-box;
+    border:1px solid color-mix(in srgb,var(--appnav-espace-texte) 45%,transparent); border-radius:999px;
+    color:var(--appnav-espace-texte); text-decoration:none; white-space:nowrap;
+    font-family:'Jura',sans-serif; font-weight:700; font-size:12.5px; letter-spacing:.06em; text-transform:uppercase; }
+  .appnav-espace:hover, .appnav-espace:focus-visible{ border-color:var(--appnav-espace-trait); }
+  /* Le mini pele-mele : quatre tesselles, une orange. L unite du produit, pas un pictogramme emprunte. */
+  .appnav-espace-plaque{ display:grid; grid-template-columns:repeat(2,5px); grid-template-rows:repeat(2,5px); gap:1.5px; flex-shrink:0; }
+  .appnav-espace-plaque i{ background:var(--appnav-espace-texte); border-radius:1px; }
+  .appnav-espace-plaque i.o{ background:var(--appnav-espace-trait); }
+  /* Tres petit ecran : le mot s efface, la plaque reste. Le nom accessible est porte par aria-label. */
+  @media (max-width:560px){
+    .appnav-espace-mot{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+    .appnav-espace{ padding:7px 9px; min-width:34px; justify-content:center; }
+  }
   .appnav-burger{ display:none; background:none; border:none; cursor:pointer; padding:6px; flex-direction:column; gap:4px; }
   .appnav-burger span{ display:block; width:20px; height:2px; background:#dedede; }
   /* 13/09 (Site & Boutique) -- bascule au burger a 900 px et non 720, comme le site : entre 721 et 1023 px les six rubriques
@@ -1608,6 +1628,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       </span>
     </nav>
     <!-- 13/09 -- "Se connecter" vit desormais dans la barre laterale (#toolsCol), plus ici. -->
+    <!-- 14/09 (Site & Boutique) -- le chemin inverse : l app savait renvoyer vers le Studio, rien ne ramenait le client a SES
+         fichiers. Lien absolu : on quitte le sous-domaine pour le site. -->
+    <a class="appnav-espace" href="https://quadreti.fr/mon-espace/" target="_blank" rel="noopener" aria-label="Mon Espace Client">
+      <span class="appnav-espace-plaque" aria-hidden="true"><i></i><i></i><i></i><i class="o"></i></span>
+      <span class="appnav-espace-mot">Mon Espace</span>
+    </a>
     <button class="appnav-burger" id="appnavBurger" aria-label="Menu" aria-expanded="false" type="button">
       <span></span><span></span><span></span>
     </button>
