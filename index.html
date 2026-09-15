@@ -1311,25 +1311,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .appnav-hassub.open .appnav-sublist{ display:flex; }
   .appnav-sublist a{ color:#fff!important; text-transform:none; font-size:13px; padding:9px 16px; opacity:1; border-radius:0; }
   .appnav-sublist a:hover{ color:#1e2b35!important; }
-  /* 14/09 (Site & Boutique) -- « Mon Espace ». Couleurs nommees par leur role, comme l exige CLAUDE.md : texte gris sur la
-     barre navy (10,75), trait orange au survol (4,22 sur le navy, au-dessus du 3:1 des objets graphiques). */
-  .appnav-inner{ --appnav-espace-texte:#dedede; --appnav-espace-trait:var(--terracotta,#d96c2f); }
-  /* Le menu se cale a droite pour que le bouton vienne apres lui, et non entre le logo et lui. */
-  @media (min-width:901px){ .appnav-links{ margin-left:auto; } }
-  .appnav-espace{ display:inline-flex; align-items:center; gap:8px; flex-shrink:0;
-    padding:7px 12px; min-height:34px; box-sizing:border-box;
-    border:1px solid color-mix(in srgb,var(--appnav-espace-texte) 45%,transparent); border-radius:999px;
-    color:var(--appnav-espace-texte); text-decoration:none; white-space:nowrap;
-    font-family:'Jura',sans-serif; font-weight:700; font-size:12.5px; letter-spacing:.06em; text-transform:uppercase; }
-  .appnav-espace:hover, .appnav-espace:focus-visible{ border-color:var(--appnav-espace-trait); }
-  /* Le mini pele-mele : quatre tesselles, une orange. L unite du produit, pas un pictogramme emprunte. */
-  .appnav-espace-plaque{ display:grid; grid-template-columns:repeat(2,5px); grid-template-rows:repeat(2,5px); gap:1.5px; flex-shrink:0; }
-  .appnav-espace-plaque i{ background:var(--appnav-espace-texte); border-radius:1px; }
-  .appnav-espace-plaque i.o{ background:var(--appnav-espace-trait); }
-  /* Tres petit ecran : le mot s efface, la plaque reste. Le nom accessible est porte par aria-label. */
-  @media (max-width:560px){
-    .appnav-espace-mot{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
-    .appnav-espace{ padding:7px 9px; min-width:34px; justify-content:center; }
+  /* ---- 15/09 (Site & Boutique) : « Mon Espace » dans la barre ----
+     Le bouton pose en dur le 14 a ete retire (doublon avec la rubrique du menu). La rubrique prend son role et son aspect.
+     LA REGLE, dite par le fondateur : « bouton bleu sur arriere-plan gris, bouton gris sur arriere-plan bleu ». Cette barre
+     est navy : pastille grise, texte navy — 10,75 dans les deux sens. Le survol prend l orange-texte (4,77 sur le gris) ;
+     l orange de marque n y passerait pas (2,54). */
+  @media (min-width:901px){
+    #appnavStaticLinks a[href*="/mon-espace/"]{
+      background:#dedede;border-radius:999px;padding:6px 14px;margin-left:10px;color:#1e2b35!important;opacity:1
+    }
+    #appnavStaticLinks a[href*="/mon-espace/"]:hover,
+    #appnavStaticLinks a[href*="/mon-espace/"]:focus-visible{color:#9c4514!important}
   }
   .appnav-burger{ display:none; background:none; border:none; cursor:pointer; padding:6px; flex-direction:column; gap:4px; }
   .appnav-burger span{ display:block; width:20px; height:2px; background:#dedede; }
@@ -1628,12 +1620,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       </span>
     </nav>
     <!-- 13/09 -- "Se connecter" vit desormais dans la barre laterale (#toolsCol), plus ici. -->
-    <!-- 14/09 (Site & Boutique) -- le chemin inverse : l app savait renvoyer vers le Studio, rien ne ramenait le client a SES
-         fichiers. Lien absolu : on quitte le sous-domaine pour le site. -->
-    <a class="appnav-espace" href="https://quadreti.fr/mon-espace/" target="_blank" rel="noopener" aria-label="Mon Espace Client">
-      <span class="appnav-espace-plaque" aria-hidden="true"><i></i><i></i><i></i><i class="o"></i></span>
-      <span class="appnav-espace-mot">Mon Espace</span>
-    </a>
+    <!-- 15/09 (Site & Boutique) -- le bouton « Mon Espace » pose ici le 14 est RETIRE : « Mon Espace » est devenu une
+         rubrique du menu du site, que cette app reconstruit depuis la base — il y en avait donc deux cote a cote.
+         Un objet, une definition : la rubrique du menu, qui s inverse selon la barre qui la porte. -->
     <button class="appnav-burger" id="appnavBurger" aria-label="Menu" aria-expanded="false" type="button">
       <span></span><span></span><span></span>
     </button>
