@@ -463,7 +463,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .profile-btn-row{ display:flex; gap:8px; background: var(--surface-2); border:1px solid var(--border); border-radius: 10px; padding: 4px; width:100%; max-width:280px; }
   .profile-btn{
     font-family: var(--font-main); font-weight:600; font-size:12.5px; background:none; border:none;
-    color: var(--panel-ink); padding: 9px 10px; border-radius: 7px; cursor:pointer; flex:1;
+    /* 18/09 : ce bouton a DEUX etats sur DEUX fonds — au repos le gris du rang (navy 2 eclairci), une fois choisi
+       l orange. Les deux valeurs sont ecrites, aucune n est laissee a l heritage. */
+    color:#dedede; padding: 9px 10px; border-radius: 7px; cursor:pointer; flex:1;
   }
   .profile-btn.active{ background: var(--teal); color: var(--accent-ink); }
 
@@ -546,7 +548,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   }
   .hexval-input{
     font-size: 13px; font-family: var(--font-main); font-weight:600; letter-spacing:.03em;
-    color: var(--title); background: #F5F5F5; border: 1px solid var(--border-light);
+    /* 18/09 : le champ garde son fond CLAIR (on y ecrit une valeur hexadecimale, il doit se lire comme une
+       surface ou l on tape). Son encre est donc ecrite ici : --title a bascule en clair avec le panneau. */
+    color:#10181f; background: #F5F5F5; border: 1px solid var(--border-light);
     border-radius: 6px; padding: 7px 10px; width: 100px; text-transform: uppercase;
   }
   .hexval-input:focus{ outline: none; border-color: var(--teal); }
@@ -578,11 +582,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
   .add-color-row{ display:flex; gap:6px; margin-top: 10px; }
   #addColorBtn{
-    flex:1; background: #F5F5F5; color: var(--title); border:1px solid var(--border-light);
+    flex:1; background: #F5F5F5; color:#10181f; border:1px solid var(--border-light);   /* 18/09 : meme raison que le champ hexadecimal ci-dessus */
     border-radius:7px; font-size:12.5px; font-weight:600; cursor:pointer;
   }
   .reset-palette-btn{
-    width:100%; margin-top: 10px; background: #e2725b; color: var(--panel-ink);
+    /* 18/09 : #E2725B etait la TERRACOTTA de l identite abandonnee, ecrite en dur — le passage du 13/09 l avait
+       manquee parce qu elle ne passait par aucun jeton. Orange de marque, encre dessus : 5,23. */
+    width:100%; margin-top: 10px; background:#d96c2f; color:#10181f;
     border: none; border-radius:7px; font-size:11.5px; font-weight:600;
     padding: 7px; cursor:pointer;
   }
