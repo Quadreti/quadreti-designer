@@ -170,6 +170,36 @@
     .grid-stage.intro-reveal{ animation:none; }
   }
 
+  /* ================= 18/09 : LE PASSAGE AU NAVY : CE QUI RESTE A RELEVER — a retirer en bloc =================
+     1. LES SURFACES CLAIRES redefinissent les trois jetons de texte. Elles sont blanches ; les jetons, eux,
+        ont ete calcules pour le fond de page devenu navy. Redefinir les VARIABLES sur ces conteneurs corrige
+        d un coup tous leurs descendants, y compris ceux que je n ai pas vus — plus sur qu une liste de classes
+        qu il faudrait tenir a jour. Liste etablie a la mesure : .center-col, .studio et .actions sont
+        TRANSPARENTS et laissent voir le navy, ils n y sont pas. */
+  .panel, .side-col, .cartouche-row{
+    --title:#1e2b35;        /* 10,75 sur le blanc */
+    --text:#1e2b35;
+    --text-muted:#5a6672;   /* 5,87 sur le blanc */
+  }
+
+  /* 2. TROIS COMMANDES qui portent leur PROPRE fond clair, hors de tout panneau : elles ne peuvent pas suivre
+        les conteneurs ci-dessus. Valeurs ecrites en clair. */
+  button.act-secondary{ color:#1e2b35; }                  /* bouton gris clair : 10,75 */
+  .undo-btn{ color:#1e2b35; }
+  #v140Recap button{ color:#1e2b35; }                     /* la pastille « 1 carreau (7x7) », fond blanc */
+
+  /* 3. TROIS BOUTONS ORANGE gardaient un blanc ECRIT EN DUR, hors du jeton --accent-ink corrige plus haut :
+        3,42, sous le seuil. Le dernier porte son blanc dans un attribut style, d ou le !important — c est le
+        seul endroit de ce bloc qui en a besoin, et c est pour cela qu une couleur n a rien a faire dans un
+        attribut de balise. */
+  #exportAllVoletsBtn, #pinterestBtn{ color:#10181f; }    /* l encre sur l orange : 5,23 */
+  #perforatriceGabaritLink{ color:#10181f !important; }
+
+  /* 4. LA BASELINE DE LA BARRE. Le Designer a sa PROPRE copie de l en-tete commune : le correctif pose ce soir
+        dans entete-app.css, qui sert les autres apps, ne l atteint pas. L orange de marque n y vaut que 4,23 ;
+        sa forme ecrite sur fond sombre, meme teinte saturee a 100 %, y donne 6,47. */
+  .appnav-base .ln, .appnav-base{ color:#ff9147; }
+  /* ================= fin du bloc ================= */
 </style>
 <script>
 /*!
@@ -6528,41 +6558,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       'img{max-width:100%;display:block;margin:0 auto;}' +
       '.hint{text-align:center;margin-bottom:16px;font-size:14px;color:#D9C8A4;}' +
       'pre{white-space:pre-wrap;word-break:break-word;background:#1E3F4D;padding:16px;border-radius:8px;font-size:12px;}' +
-      '
-  /* NB 18/09 : ce bloc est pose a la fin de la DERNIERE feuille de la page, pas de la premiere.
-     Le fichier en compte 3. Pose apres la premiere, mes regles arrivaient AVANT celles qu elles corrigent et
-     perdaient a egalite de precision. Deplacer un bloc coute moins cher que de le rendre insistant. */
-  /* ================= 18/09 : LE PASSAGE AU NAVY : CE QUI RESTE A RELEVER — a retirer en bloc =================
-     1. LES SURFACES CLAIRES redefinissent les trois jetons de texte. Elles sont blanches ; les jetons, eux,
-        ont ete calcules pour le fond de page devenu navy. Redefinir les VARIABLES sur ces conteneurs corrige
-        d un coup tous leurs descendants, y compris ceux que je n ai pas vus — plus sur qu une liste de classes
-        qu il faudrait tenir a jour. Liste etablie a la mesure : .center-col, .studio et .actions sont
-        TRANSPARENTS et laissent voir le navy, ils n y sont pas. */
-  .panel, .side-col, .cartouche-row{
-    --title:#1e2b35;        /* 10,75 sur le blanc */
-    --text:#1e2b35;
-    --text-muted:#5a6672;   /* 5,87 sur le blanc */
-  }
-
-  /* 2. TROIS COMMANDES qui portent leur PROPRE fond clair, hors de tout panneau : elles ne peuvent pas suivre
-        les conteneurs ci-dessus. Valeurs ecrites en clair. */
-  button.act-secondary{ color:#1e2b35; }                  /* bouton gris clair : 10,75 */
-  .undo-btn{ color:#1e2b35; }
-  #v140Recap button{ color:#1e2b35; }                     /* la pastille « 1 carreau (7x7) », fond blanc */
-
-  /* 3. TROIS BOUTONS ORANGE gardaient un blanc ECRIT EN DUR, hors du jeton --accent-ink corrige plus haut :
-        3,42, sous le seuil. Le dernier porte son blanc dans un attribut style, d ou le !important — c est le
-        seul endroit de ce bloc qui en a besoin, et c est pour cela qu une couleur n a rien a faire dans un
-        attribut de balise. */
-  #exportAllVoletsBtn, #pinterestBtn{ color:#10181f; }    /* l encre sur l orange : 5,23 */
-  #perforatriceGabaritLink{ color:#10181f !important; }
-
-  /* 4. LA BASELINE DE LA BARRE. Le Designer a sa PROPRE copie de l en-tete commune : le correctif pose ce soir
-        dans entete-app.css, qui sert les autres apps, ne l atteint pas. L orange de marque n y vaut que 4,23 ;
-        sa forme ecrite sur fond sombre, meme teinte saturee a 100 %, y donne 6,47. */
-  .appnav-base .ln, .appnav-base{ color:#ff9147; }
-  /* ================= fin du bloc ================= */
-</style></head><body>' + bodyHtml + '</body></html>'
+      '</style></head><body>' + bodyHtml + '</body></html>'
     );
     win.document.close();
     return true;
