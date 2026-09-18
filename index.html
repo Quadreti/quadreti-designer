@@ -196,14 +196,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
        orange / blanc, alignee sur le systeme du site (SITE\DESIGN SYSTEME\ENTETE-PIED-COMMUNS-POUR-LES-APPS.md).
        Un seul theme desormais -- Kraft/Magazine retires. Le mur (grille) garde son cadre
        charbon -- c'est le produit, independant de l'habillage de l'app. */
-    --bg: #dedede;            /* fond gris de marque */
+    --bg: #1e2b35;            /* 18/09 : LE FOND DE PAGE passe au navy, comme les 37 pages du site. Le MUR (--grid-bg) et ses tesselles ne bougent pas : c est le produit, pas l habillage. */
     --surface: #ffffff;       /* surfaces claires (selects, sous-blocs) */
     --surface-2: #f2f2f2;
     --grout: #ffffff;         /* fond des panneaux et cartouches */
     --grid-bg: #1f272e;       /* le mur reste charbon — c'est le produit */
-    --title: #1e2b35;         /* navy de marque */
-    --text: #1e2b35;
-    --text-muted: #5a6672;    /* navy eclairci, assez fonce pour rester lisible en petit corps */
+    --title: #dedede;         /* 18/09 : meme raison que --text. Le navy de marque reste disponible sous --panel-ink et --terracotta-texte pour ce qui est pose sur du clair. */
+    --text: #dedede;          /* 18/09 : le texte COURANT est pose sur le fond de page, devenu navy — 10,75. Celui des panneaux clairs a son propre jeton, --panel-ink, qui lui reste navy. */
+    --text-muted: #b6c0c8;    /* 18/09 : ce gris etait pense pour un fond CLAIR (il y valait 5,87). Sur le navy il tombait a 2,41 ; le gris froid du site y donne 7,83. */
     --text-strong: #10181f;   /* encre -- texte sur fond orange (voir doc de reference) */
     --teal: #d96c2f;          /* orange de marque -- boutons actifs (reste sur les FONDS) */
     --teal-hover: #c15f28;
@@ -217,8 +217,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     --dot-bg-hover: #1e2b3566;
     --terracotta: #d96c2f;
     --terracotta-texte: #9c4514; /* orange TEXTE sur fond clair (contraste 4,8 mesure par le site) -- jamais l'orange de marque en texte */
-    --accent-ink: #ffffff;    /* texte sur les boutons orange (fond) */
-    --ink-on-dark: #f2eedf;   /* texte sur les zones qui restent charbon (mur, galerie) */
+    /* 18/09 : ce jeton valait du BLANC. Or le fichier declare dix lignes plus haut --text-strong:#10181f avec
+       exactement le meme role — « texte sur fond orange ». Deux jetons pour un role, valeurs contraires, et ce
+       sont les quatorze regles de boutons qui utilisaient le faux : blanc sur l orange de marque = 3,42, sous
+       le seuil. L encre y donne 5,23. C est la paire des sept boutons de l accueil. */
+    --accent-ink: #10181f;    /* texte sur les boutons orange (fond) */
+    --ink-on-dark: #dedede;   /* 18/09 : #F2EEDF etait le creme de l identite KRAFT abandonnee. Le gris du site tient le meme role. */
     --nav-bg: #1e2b35ee;      /* 13/09 -- barre app en navy translucide (correction Site&Boutique : barre navy pour les apps, barre grise reservee au site, repere visuel immediat) */
 
     /* --- Polices --- */
@@ -1188,7 +1192,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .appnav-onglet{ position:absolute; left:0; top:0; width:100%; height:98px; z-index:0; display:block; overflow:visible; pointer-events:none; }
   /* 13/09 (Site & Boutique) -- la forme, qui peint le navy de la barre et cree la marche ; puis le trait, sur le bord libre. */
   .appnav-onglet-fond{ fill:#1e2b35; }
-  .appnav-onglet-trait{ fill:none; stroke:#d96c2f; stroke-width:3px; vector-effect:non-scaling-stroke; stroke-linejoin:round; stroke-linecap:round; }
+  /* 18/09 : le lisere etait reste orange a 3 px, la mesure d avant. Le site entier est passe au gris a 2 px. */
+  .appnav-onglet-trait{ fill:none; stroke:#dedede; stroke-width:2px; vector-effect:non-scaling-stroke; stroke-linejoin:round; stroke-linecap:round; }
   /* 13/09 (Site & Boutique) -- mesures du site : barre 58 px, bloc logo a 16 px du haut, lettre 66 px, ecart 14 px avec le nom.
      La lettre descend donc jusqu a 82 px, dans l onglet, exactement comme sur le site -- c est a ca que sert le debordement.
      Le reste de la barre (menu, Se connecter, burger) reste centre sur les 58 px. */
@@ -1266,7 +1271,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      memorise dans localStorage). Deux segments, le thème actif est plein. */
   .theme-sw{ display:inline-flex; border:1.5px solid var(--title); border-radius:999px; overflow:hidden; cursor:pointer; font-family:var(--font-main); font-weight:700; font-size:11.5px; flex-shrink:0; background:none; padding:0; }
   .theme-sw span{ padding:6px 12px; color:var(--title); transition:background .2s, color .2s; }
-  .theme-sw span.on{ background:var(--title); color:var(--bg); }
+  .theme-sw span.on{ background:var(--title); color:#dedede; }   /* 18/09 : c etait var(--bg) — mais --bg devient le fond de page, qui passe au navy. Ici le gris est une couleur de TEXTE sur une pastille navy : 10,75. Ecrit en clair pour ne pas suivre le fond. */
   .theme-sw:focus-visible{ outline:2px solid var(--terracotta); outline-offset:2px; }
   /* V140.3 — pictos en traits fins, monochromes (prennent la couleur du texte)
      à la place des emoji système : couleur et style variaient d'un ordinateur
@@ -1368,7 +1373,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      Deux ecarts assumes : la colonne identite porte la lettre D et « Designer Quadreti » (pas le Q de la marque avec naming, accroche et
      categorie : « aucune baseline ni categorie pour les outils », et la police proprietaire vient d etre retiree du fichier) ; pas de
      bouton « Retour en haut », l app a deja ses boutons flottants. */
-  .appfoot{ --pied-navy:#1e2b35; --pied-barre:#dedede; --pied-titre:#dedede; --pied-lisere:var(--terracotta,#d96c2f); --pied-lisere-ep:3px; --pied-decroche:22px;
+  .appfoot{ --pied-navy:#1e2b35; --pied-barre:#dedede; --pied-titre:#dedede; --pied-lisere:#dedede; --pied-lisere-ep:2px;   /* 18/09 : meme lisere qu en haut et que sur tout le site */ --pied-decroche:22px;
     width:100%; margin-top:56px; background:transparent;
     /* 13/09 -- demande fondateur : le panneau lateral (#toolsCol/#actionsCol, z-index 498)
        reste toujours en arriere-plan du pied, jamais l inverse -- le pied doit se voir
