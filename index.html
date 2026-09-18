@@ -1503,15 +1503,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         d un coup tous leurs descendants, y compris ceux que je n ai pas vus — plus sur qu une liste de classes
         qu il faudrait tenir a jour. Liste etablie a la mesure : .center-col, .studio et .actions sont
         TRANSPARENTS et laissent voir le navy, ils n y sont pas. */
-  .panel, .side-col, .cartouche-row{
-    --title:#1e2b35;        /* 10,75 sur le blanc */
-    --text:#1e2b35;
-    --text-muted:#5a6672;   /* 5,87 sur le blanc */
-  }
+  /* 18/09, plus tard le meme soir : ces trois jetons etaient remis au SOMBRE ici, parce que les panneaux
+     etaient blancs. Le fondateur les a passes en navy 2 (voir plus bas) : la regle est devenue fausse et
+     elle est retiree, pas contredite par une autre. Une couleur se decide a un seul endroit. */
 
   /* 2. TROIS COMMANDES qui portent leur PROPRE fond clair, hors de tout panneau : elles ne peuvent pas suivre
         les conteneurs ci-dessus. Valeurs ecrites en clair. */
-  button.act-secondary{ color:#1e2b35; }                  /* bouton gris clair : 10,75 */
+  /* (la regle sur .act-secondary est retiree ici : son fond suit desormais le panneau navy 2.) */
   .undo-btn{ color:#1e2b35; }
   #v140Recap button{ color:#1e2b35; }                     /* la pastille « 1 carreau (7x7) », fond blanc */
 
@@ -1526,6 +1524,82 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         dans entete-app.css, qui sert les autres apps, ne l atteint pas. L orange de marque n y vaut que 4,23 ;
         sa forme ecrite sur fond sombre, meme teinte saturee a 100 %, y donne 6,47. */
   .appnav-base .ln, .appnav-base{ color:#ff9147; }
+  /* ================= fin du bloc ================= */
+
+  /* ================= 18/09, demande du fondateur : burger, volets navy 2, pied navy =================
+
+     1. LE MENU EN BURGER A TOUTES LES LARGEURS, comme l accueil.
+     Le bouton existait deja, mais ne sortait que sous 900 px. Les valeurs ci-dessous sont RELEVEES sur le
+     tiroir de l accueil en ligne, pas devinees : meme panneau, memes coins, meme ombre, memes liens.
+     Le tiroir ouvre par `display`, jamais par une hauteur devinee : une hauteur figee coupe un menu plus long
+     le jour ou une rubrique s ajoute. Meme choix que sur le site, et pour la meme raison. */
+  .appnav-inner{ position:relative; }
+  .appnav-burger{
+    display:flex !important; align-items:center; justify-content:center; gap:4px;
+    width:42px; height:42px; border-radius:22%; background:#1e2b35; border:none; cursor:pointer; padding:0;
+    flex:none; margin-left:12px;
+  }
+  .appnav-burger span{ display:block; width:18px; height:2px; background:#dedede; border-radius:2px; }
+  .appnav-links{
+    position:absolute; top:calc(100% + 6px); right:0; left:auto; bottom:auto;
+    width:320px; max-width:calc(100vw - 32px);
+    background:#1e2b35; border:none; border-radius:0 0 4px 4px; box-shadow:0 12px 30px rgba(0,0,0,.35);
+    flex-direction:column; align-items:stretch; gap:0; padding:10px 0; margin:0;
+    transform:none; opacity:1; pointer-events:auto; transition:none;
+    display:none; z-index:600;
+  }
+  .appnav-links.open{ display:flex; }
+  .appnav-links a, .appnav-subtoggle{
+    color:#ff9147; font-size:13.5px; padding:10px 18px; width:100%; text-align:left; opacity:1;
+  }
+  .appnav-links a:hover, .appnav-subtoggle:hover{ color:#ffa366; }
+  #appnavStaticLinks{ display:flex; flex-direction:column; width:100%; }
+  .appnav-hassub{ width:100%; }
+  .appnav-sublist{ position:static; background:none !important; border:none; box-shadow:none; padding:0 0 0 14px; }
+  .appnav-sublist a{ color:#dedede !important; }
+  .appnav-sublist a:hover{ color:#ffa366 !important; }
+
+  /* « Mon Espace » reste DANS LA BARRE, a cote du burger : c est une porte, pas une rubrique. Le script plus bas
+     la sort du tiroir ; ici son allure, relevee sur l accueil. Un seul objet : la rubrique est deplacee, jamais
+     dupliquee — un bouton pose en double avait deja ete retire le 15/09 pour cette raison. */
+  .appnav-inner > a.appnav-espace{
+    font-family:'Jura',sans-serif; font-weight:700; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em;
+    line-height:1.2; text-decoration:none; white-space:nowrap; flex:none; align-self:center;
+    background:#dedede; color:#10181f !important; border-radius:4px; padding:7px 15px; margin-left:auto; opacity:1;
+  }
+  .appnav-inner > a.appnav-espace:hover,
+  .appnav-inner > a.appnav-espace:focus-visible{ background:#ffffff; color:#10181f !important; }
+  @media (max-width:640px){ .appnav-inner > a.appnav-espace{ display:none; } }
+
+     /* 2. LES DEUX VOLETS LATERAUX EN NAVY 2.
+     Les panneaux prennent leur fond de --grout : un seul jeton redefini SUR les deux colonnes suffit, et tout
+     ce qu elles contiennent suit. Les jetons de TEXTE basculent avec eux — sinon on repeint un fond en laissant
+     dessus une encre pensee pour du blanc, ce qui a fait la moitie des defauts de la journee.
+     LES CHAMPS DE SAISIE ET LES SELECTEURS RESTENT CLAIRS (--surface intact) : un champ est fait pour etre
+     rempli, il doit se lire comme une surface ou l on ecrit. Meme arbitrage que sur Contact et le mot de passe. */
+  #toolsCol, #actionsCol{
+    --grout:#33434f;          /* le fond des panneaux : navy 2, 1,42 contre le fond de page */
+    --surface-2:#3e5060;      /* un cran plus clair : les boutons secondaires restent des objets */
+    --panel-ink:#dedede;      /* 7,59 sur navy 2 */
+    --title:#dedede;
+    --text:#dedede;
+    --text-muted:#b6c0c8;     /* 5,53 sur navy 2 */
+    --border:#dedede26;
+    --border-light:#dedede33;
+    --dot-bg:#dedede40;
+    --dot-bg-hover:#dedede70;
+  }
+  /* Ce qui garde un fond CLAIR a l interieur du volet ancre son encre : un champ, un selecteur, une pastille. */
+  #toolsCol input, #toolsCol select, #toolsCol textarea,
+  #actionsCol input, #actionsCol select, #actionsCol textarea{ color:#10181f; }
+
+     /* 3. LE PIED : navy 1, et plus de decroche en bas.
+     La barre du bas et le decroche inferieur partageaient le meme jeton --pied-barre : le passer au navy les
+     emmene tous les deux, et le decroche disparait ensuite d une seule ligne. Le copyright, lui, ne bouge pas —
+     seule sa couleur suit son fond. */
+  .appfoot{ --pied-barre:#1e2b35; background:#1e2b35; }
+  .appfoot-bord-bas{ display:none; }   /* demande du fondateur : plus de marche en bas de page */
+  .appfoot-copy{ color:#b6c0c8; }      /* 7,83 sur le navy ; l encre y valait 1,3 */
   /* ================= fin du bloc ================= */
 </style>
 </head>
@@ -1681,6 +1755,27 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   var btn = document.getElementById('appnavBurger');
   var menu = document.getElementById('appnavLinks');
   if (!btn || !menu) return;
+  /* 18/09 : « Mon Espace » sort du tiroir pour rester dans la barre. Impossible en CSS — le tiroir est en
+     display:none quand il est ferme, et aucun enfant d un element masque ne peut etre reaffiche.
+     PIEGE A CONNAITRE : le menu est reconstruit depuis Supabase (appliquerMenuAppNav plus bas). Un lien deplace
+     une fois reviendrait donc dans le tiroir a la reconstruction, et on en aurait deux. L extraction se REJOUE
+     a chaque changement de la liste, par un observateur, et supprime les doublons. Meme mecanique que sur le
+     site (commun-bandeau.js) — et meme raison de la preferer a un second bouton pose en dur. */
+  function sortirMonEspace(){
+    var barre = btn.parentElement; if (!barre) return;
+    var dehors = barre.querySelector(":scope > a.appnav-espace");
+    var dedans = menu.querySelectorAll('a[href*="/mon-espace/"]');
+    for (var i = 0; i < dedans.length; i++){
+      var a = dedans[i];
+      if (dehors) { a.remove(); continue; }          /* deja sorti : on retire le doublon */
+      a.className = (a.className ? a.className + " " : "") + "appnav-espace";
+      barre.insertBefore(a, btn);
+      dehors = a;
+    }
+  }
+  sortirMonEspace();
+  if (window.MutationObserver) new MutationObserver(sortirMonEspace).observe(menu, { childList:true, subtree:true });
+
   btn.addEventListener('click', function(){
     var open = menu.classList.toggle('open');
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
