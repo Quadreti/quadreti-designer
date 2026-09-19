@@ -3173,7 +3173,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   ];
 
   const APP_VARIANTS = {
-    default:  { label: 'Designer complet', modes: ['colors','images','mosaic','draw'], mosaicSubmodes: ['color','tiles','library'], allowProfileChoice: true,
+    default:  { label: 'Designer complet', modes: ['colors','images','mosaic'], mosaicSubmodes: ['color','tiles','library'], allowProfileChoice: true,
                 features: Object.fromEntries(FEATURE_REGISTRY.map(f => [f.id, true])), theme: {} },
     couleur:  { label: 'App Couleur',       modes: ['colors'],                  mosaicSubmodes: [],                          allowProfileChoice: false,
                 features: Object.fromEntries(FEATURE_REGISTRY.map(f => [f.id, false])), theme: {} },
@@ -3521,11 +3521,15 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   });
 
   // ---------- Mode (carrousel) ----------
+  // 19/09, fondateur : « retire le mode dessin ». C est ICI que cela se decide — buildModeCarousel
+  // filtre cette liste, donc une entree absente d ici est inatteignable quelle que soit la config
+  // (APP_VARIANTS, ou un `quadretiAppConfigOverride` deja enregistre dans un navigateur).
+  // Pour le remettre : rajouter la ligne 'draw' ci-dessous ET dans APP_VARIANTS.default.modes.
+  // Le panneau #drawPanel et le code de dessin sont laisses en place, inertes.
   const MODE_OPTIONS_ALL = [
     { value: 'colors', label: 'Pixel' },
     { value: 'images', label: 'Photo' },
     { value: 'mosaic', label: 'Mosaïque' },
-    { value: 'draw',   label: 'Dessin' },
   ];
 
   function applyModeVisibility(mode) {
