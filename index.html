@@ -1046,12 +1046,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     #actionsCol{ right:0; border-left:1px solid var(--border); transform:translateX(110%); }
     body.v140-tools #toolsCol{ transform:none; }
     body.v140-files #actionsCol{ transform:none; }
-    #v140Fab{ display:grid; position:fixed; right:22px; bottom:22px; width:54px; height:54px;
-      border-radius:50%; background:var(--teal); color:var(--accent-ink); border:none;
+    /* 19/09, fondateur : « bouton + et - en couleur navy 2 et texte dedede ». Ils etaient sur l accent.
+       Navy 2 avec le gris dessus : 7,59, largement au-dessus du seuil. */
+    #v140Fab{ display:grid; position:fixed; right:22px; bottom:22px; width:54px; height:54px;
+      border-radius:50%; background:#33434f; color:#dedede; border:none;
       place-items:center; font-size:24px; cursor:pointer; z-index:497;
       box-shadow:0 6px 18px rgba(0,0,0,.25); }
     #v140Fab:focus-visible{ outline:2px solid var(--terracotta); outline-offset:2px; }
-    body.v140-fab #v140Fab{ background:#2b353e; color:#F2EEDF; }
+    /* 19/09 : l etat OUVERT portait #2b353e (l ancien navy, abandonne) et #F2EEDF (le creme de l identite
+       KRAFT, abandonnee elle aussi). Il descend au navy de marque : le bouton s enfonce quand son menu s ouvre,
+       la difference reste lisible sans sortir de la charte. Gris dessus : 10,75. */
+    body.v140-fab #v140Fab{ background:#1e2b35; color:#dedede; }
     #v140FabMenu{ display:flex; position:fixed; right:22px; bottom:86px;
       flex-direction:column; gap:8px; z-index:497; pointer-events:none; align-items:flex-end; }
     #v140FabMenu button, #v140FabMenuMinus button{ opacity:0; pointer-events:none; transform:translateY(8px);
@@ -1063,12 +1068,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     /* Pastille − : le pendant du + — même logique de couleur (kraft ou terracotta selon
        le sélecteur d'ambiance), harmonisée plutôt qu'une couleur "danger" à part. Le contenu
        du menu (Effacer) suffit à en indiquer la nature, pas besoin d'une couleur alarmante. */
-    #v140FabMinus{ display:grid; position:fixed; right:86px; bottom:22px; width:54px; height:54px;
-      border-radius:50%; background:var(--teal); color:var(--accent-ink); border:none;
+    #v140FabMinus{ display:grid; position:fixed; right:86px; bottom:22px; width:54px; height:54px;
+      border-radius:50%; background:#33434f; color:#dedede; border:none;
       place-items:center; font-size:26px; cursor:pointer; z-index:497;
       box-shadow:0 6px 18px rgba(0,0,0,.25); }
     #v140FabMinus:focus-visible{ outline:2px solid var(--terracotta); outline-offset:2px; }
-    body.v140-fabminus #v140FabMinus{ background:#2b353e; color:#F2EEDF; }
+    body.v140-fabminus #v140FabMinus{ background:#1e2b35; color:#dedede; }
     #v140FabMenuMinus{ display:flex; position:fixed; right:86px; bottom:86px;
       flex-direction:column; gap:8px; z-index:497; pointer-events:none; align-items:flex-end; }
     body.v140-fabminus #v140FabMenuMinus button{ opacity:1; pointer-events:auto; transform:none; }
