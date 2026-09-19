@@ -1343,7 +1343,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      `space-between` et le menu de liens est masque (le burger est partout) : l espace libre se repartissait
      ENTRE les elements et laissait le bouton isole au milieu. Cette marge automatique absorbe tout l espace
      d un coup — les trois se collent a droite, quelle que soit la largeur et que le menu soit affiche ou non. */
-  .appnav-inner #connectBtn{ margin-left:auto; }
+  /* 19/09, fondateur : « l icone sur la meme ligne, et la hauteur egale au bouton Mon espace ».
+     Mesure avant : 44,4 px contre 27,8, icone au-dessus du texte. C etait un oubli de ma part — en
+     sortant les styles EN LIGNE du bouton je n avais pas rendu `display:flex; align-items:center`, et
+     `.v140-icon` est en `display:block` : sans conteneur en flex elle force un retour a la ligne.
+     Pour la hauteur, on ne vise pas un chiffre a l oeil : on reprend LA RECETTE de Mon espace — meme
+     corps, meme interligne, meme marge interieure. L icone descend a 12 px pour rester sous la ligne de
+     texte (13,8 px), sinon c est elle qui dicterait la hauteur. 13,8 + 14 = 27,8, la meme valeur. */
+  .appnav-inner #connectBtn{
+    margin-left:auto;
+    display:inline-flex; align-items:center; justify-content:center; gap:5px;
+    font-size:11.5px; line-height:1.2; padding:7px 15px; }
+  .appnav-inner #connectBtn .v140-icon{ width:12px; height:12px; margin:0; }
   /* Il ne peut y avoir QU UNE marge automatique : « Mon espace » en a une depuis le 18/09, et deux marges
      automatiques dans le meme conteneur se PARTAGENT l espace libre a parts egales — mesure, 435,9 px
      chacune, d ou deux trous symetriques et un bouton reste au milieu. On neutralise celle de Mon espace,
@@ -1365,8 +1376,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      d etre lu par les lecteurs d ecran : une taille nulle ne le retire pas de l arbre d accessibilite.
      Le `!important` n est pas un caprice : il faut passer devant celui de la regle 1023 px ci-dessus. */
   @media (max-width:560px){
-    .connect-btn{ font-size:0; padding:8px; border-radius:999px; }
-    .connect-btn svg.v140-icon{ width:16px !important; height:16px !important; margin-right:0 !important; }
+    /* 19/09 : meme specificite que la regle ci-dessus, qui porte un id — sinon elle la battrait et le
+       bouton reprendrait son texte sur un ecran etroit, ce qui repoussait le burger hors de l ecran. */
+    .appnav-inner #connectBtn{ font-size:0; padding:8px; border-radius:999px; gap:0; }
+    .appnav-inner #connectBtn .v140-icon{ width:16px; height:16px; margin:0; }
   }
   /* V137, annule le 13/09 (Site & Boutique) : le nom s'ecrit desormais « Designer Quadreti » d'un seul tenant, meme graisse, meme
      couleur -- il n'y a plus deux moities a distinguer. Regle laissee pour memoire, plus aucun element ne la porte. */
