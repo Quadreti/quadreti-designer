@@ -3868,14 +3868,36 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     // pouces (souvent 650-750px de hauteur utile). On ne devine plus la place occupee
     // au-dessus par une constante : on mesure ou commence reellement la zone du mur, et on
     // laisse de quoi respirer en dessous. Ce qui est gagne en haut devient de la tesselle.
+    // 19/09, fondateur : « le carreau a designer ainsi que apercu, annuler, dupliquer doivent etre visibles sans
+    // barre de defilement ». Mesure a 1366x768 : le plateau finissait a 756 et la barre d actions a 816, pour un
+    // ecran de 768 — 48 px dehors. DEUX OUBLIS dans le calcul, qui s additionnaient a exactement ces 48 px :
+    //   1. la reserve de 48 px sous le mur etait plus petite que ce qui s y trouve : la barre fait 36 px, plus
+    //      24 px d ecart avec le plateau, soit 60 ;
+    //   2. `hautDispo / PANEL_SIZE` traitait le budget comme s il n y avait que des cases, alors qu il doit aussi
+    //      loger les six gouttieres (18 px) et le remplissage du plateau (20 px).
+    // Le commentaire ci-dessus dit « on ne devine plus la place occupee AU-DESSUS : on mesure ». Le dessous, lui,
+    // etait reste devine. On le mesure aussi — et la barre peut desormais grandir (quand « Dupliquer » apparait,
+    // ou si elle passe a deux lignes) sans que le mur deborde : le budget suit.
     let hautDispo = 0;
     const stage = document.getElementById('gridStage');
+    let padStage = 0;
     if (stage){
       const t = stage.getBoundingClientRect().top + window.scrollY;
-      if (t > 0) hautDispo = window.innerHeight - t - 48; // 48 : marge sous le mur
+      const cs = getComputedStyle(stage);
+      padStage = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
+      // ce qui vit SOUS le plateau, mesure : la barre d actions, l ecart qui l en separe, et 12 px pour respirer
+      let sous = 48;
+      const outils = document.getElementById('v140WallTools');
+      if (outils){
+        const ro = outils.getBoundingClientRect(), rs = stage.getBoundingClientRect();
+        const ecart = ro.top - rs.bottom;
+        if (ro.height > 0 && ecart >= 0 && ecart < 200) sous = Math.round(ro.height + ecart + 12);
+      }
+      if (t > 0) hautDispo = window.innerHeight - t - sous;
     }
     if (!(hautDispo > 0)) hautDispo = window.innerHeight - 300; // repli avant le 1er rendu
-    const parHauteur = Math.floor(hautDispo / PANEL_SIZE);
+    // le budget doit loger les cases ET ce qui les separe ET le remplissage du plateau
+    const parHauteur = Math.floor((hautDispo - gap * (PANEL_SIZE - 1) - padStage) / PANEL_SIZE);
     const maxCell = Math.min(CELL_PX_MAX_DESKTOP, Math.max(CELL_PX_MIN, parHauteur));
     const cellPx = Math.floor((available - gap * (PANEL_SIZE - 1)) / PANEL_SIZE);
     return Math.max(CELL_PX_MIN, Math.min(maxCell, cellPx));
