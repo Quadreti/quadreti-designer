@@ -1046,10 +1046,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     #actionsCol{ right:0; border-left:1px solid var(--border); transform:translateX(110%); }
     body.v140-tools #toolsCol{ transform:none; }
     body.v140-files #actionsCol{ transform:none; }
-    /* 19/09, fondateur : « bouton + et - en couleur navy 2 et texte dedede ». Ils etaient sur l accent.
-       Navy 2 avec le gris dessus : 7,59, largement au-dessus du seuil. */
+    /* 19/09 : les deux boutons ronds GARDENT leur orange. Je les avais passes au navy en lisant trop vite la
+       demande du fondateur — c est de leurs SOUS-FONCTIONS qu il parlait, les pastilles du menu deploye. */
     #v140Fab{ display:grid; position:fixed; right:22px; bottom:22px; width:54px; height:54px;
-      border-radius:50%; background:#33434f; color:#dedede; border:none;
+      border-radius:50%; background:var(--teal); color:var(--accent-ink); border:none;
       place-items:center; font-size:24px; cursor:pointer; z-index:497;
       box-shadow:0 6px 18px rgba(0,0,0,.25); }
     #v140Fab:focus-visible{ outline:2px solid var(--terracotta); outline-offset:2px; }
@@ -1061,15 +1061,25 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       flex-direction:column; gap:8px; z-index:497; pointer-events:none; align-items:flex-end; }
     #v140FabMenu button, #v140FabMenuMinus button{ opacity:0; pointer-events:none; transform:translateY(8px);
       transition:transform .22s ease, opacity .22s ease; display:flex; align-items:center; gap:8px;
-      background:var(--grout); color:var(--text); border:1px solid var(--border);
+      /* 19/09, fondateur : « les sous-fonctions que portent ces boutons, en navy 2 et texte dedede ».
+         Elles etaient claires — une rangee de pastilles blanches devant le plan de travail sombre, qui tirait
+         l oeil plus fort que le mur lui-meme. Navy 2 avec le gris dessus : 7,59.
+         Le filet passe au gris a 20 % : sur un fond sombre, c est lui qui detache la pastille du plan de
+         travail, le navy 2 seul n y valant que 1,42. */
+      background:#33434f; color:#dedede; border:1px solid #dedede33;
       border-radius:999px; padding:10px 16px; font-family:var(--font-main);
       font-weight:700; font-size:13px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.15); }
-    body.v140-fab #v140FabMenu button{ opacity:1; pointer-events:auto; transform:none; }
+    body.v140-fab #v140FabMenu button{ opacity:1; pointer-events:auto; transform:none; }
+    /* Une pastille indisponible (le cloud tant qu on n est pas connecte) doit se distinguer d une pastille
+       active SANS devenir illisible : son texte descend au gris froid — 5,53 sur le navy 2, encore confortable —
+       et c est son filet qui s efface. La difference se lit sur le CONTOUR, pas sur la lisibilite du mot. */
+    #v140FabMenu button:disabled, #v140FabMenuMinus button:disabled{
+      color:#b6c0c8; border-color:#dedede14; cursor:not-allowed; }
     /* Pastille − : le pendant du + — même logique de couleur (kraft ou terracotta selon
        le sélecteur d'ambiance), harmonisée plutôt qu'une couleur "danger" à part. Le contenu
        du menu (Effacer) suffit à en indiquer la nature, pas besoin d'une couleur alarmante. */
     #v140FabMinus{ display:grid; position:fixed; right:86px; bottom:22px; width:54px; height:54px;
-      border-radius:50%; background:#33434f; color:#dedede; border:none;
+      border-radius:50%; background:var(--teal); color:var(--accent-ink); border:none;
       place-items:center; font-size:26px; cursor:pointer; z-index:497;
       box-shadow:0 6px 18px rgba(0,0,0,.25); }
     #v140FabMinus:focus-visible{ outline:2px solid var(--terracotta); outline-offset:2px; }
