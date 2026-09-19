@@ -1666,6 +1666,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   #featureBlock_texture_pixel,
   #featureBlock_quadrisaiq,
   #featureBlock_stickers{ display:none; }
+  /* 19/09, fondateur : « retire cette fonction » — le Texturo du mode MOSAIQUE (sous-mode Pixel couleur),
+     distinct de celui des Options avancees ci-dessus. Deux ecrivains en ligne ont ete neutralises pour que
+     cette regle soit la seule a decider : la ligne de `setMosaicSubMode` et l entree `mosaic_color_tex` du
+     registre. La liste reste sur « Aplat uni », sa valeur par defaut : le rendu ne change pas. */
+  #mosaicColorTextureRow{ display:none; }
   /* ================= fin du bloc ================= */
 </style>
 </head>
@@ -3207,7 +3212,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     { id: 'text_sticker',       label: 'Ajouter un texte',             category: 'Pixel',    el: 'featureBlock_text_sticker' },
     { id: 'eyedropper',         label: 'Pipette couleur',              category: 'Pixel',    el: 'eyedropperBtn' },
     { id: 'photo_style',        label: 'Style photo (filtres)',        category: 'Photo',    el: 'featureBlock_photo_style_mode_photo' },
-    { id: 'mosaic_color_tex',   label: 'Texturo Pixel couleur',        category: 'Mosaïque', el: 'mosaicColorTextureRow' },
+    /* 19/09 : `mosaic_color_tex` (Texturo du mode Mosaique) retire — voir la regle CSS qui masque
+       #mosaicColorTextureRow. Le laisser ici suffirait a le faire revenir pour un administrateur :
+       la boucle plus bas ecrit un `display` en ligne, qui bat une regle CSS. */
     { id: 'mosaic_style',       label: 'Style photo (Pixel Photo/Mosaïque)', category: 'Mosaïque', el: 'mosaicStyleRow' },
     { id: 'double_lecture',     label: 'Filtre double lecture',        category: 'Mosaïque', el: 'featureBlock_double_lecture' },
     { id: 'harmonize',          label: 'Harmonisation des tons',       category: 'Mosaïque', el: 'featureBlock_harmonize' },
@@ -7689,7 +7696,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     submodeColorBtn.classList.toggle('active', mode === 'color');
     submodeTilesBtn.classList.toggle('active', mode === 'tiles');
     submodeLibraryBtn.classList.toggle('active', mode === 'library');
-    document.getElementById('mosaicColorTextureRow').style.display = mode === 'color' ? '' : 'none';
+    /* 19/09, fondateur : « retire cette fonction ». Cette ligne posait l affichage de Texturo EN LIGNE a
+       chaque changement de sous-mode, et un style en ligne bat la regle CSS qui le masque desormais :
+       la laisser aurait fait revenir la commande au premier clic sur « Pixel couleur ».
+       Pour la remettre : rendre cette ligne, l entree `mosaic_color_tex` au registre, et retirer la regle
+       `#mosaicColorTextureRow{ display:none }` de la feuille de style. Les trois, sinon rien. */
     document.getElementById('mosaicColorResolutionRow').style.display = mode === 'color' ? '' : 'none';
     document.getElementById('mosaicStyleRow').style.display = mode === 'color' ? 'none' : '';
     libraryBlock.style.display = mode === 'library' ? 'block' : 'none';
