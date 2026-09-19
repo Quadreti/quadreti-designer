@@ -1322,6 +1322,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     .connect-btn{ font-size:11px; padding:6px 11px; }
     .connect-btn svg.v140-icon{ width:12px !important; height:12px !important; margin-right:4px !important; }
   }
+  /* 19/09 : sur telephone, le bouton entier POUSSAIT LE BURGER HORS DE L ECRAN — mesure a 390 px, le
+     burger allait de 397 a 439 pour une barre qui finit a 390, donc un menu inatteignable. C est le
+     probleme que le deplacement du 13/09 avait contourne en sortant le bouton de la barre.
+     Il ne reste ici que l icone, dans une pastille ronde : toujours visible, mais il ne prend plus la
+     place du menu. `font-size:0` est le seul moyen de masquer le libelle — c est un noeud de texte NU,
+     et il doit le rester (la mise a jour du libelle teste lastChild.nodeType === 3). Le texte continue
+     d etre lu par les lecteurs d ecran : une taille nulle ne le retire pas de l arbre d accessibilite.
+     Le `!important` n est pas un caprice : il faut passer devant celui de la regle 1023 px ci-dessus. */
+  @media (max-width:560px){
+    .connect-btn{ font-size:0; padding:8px; border-radius:999px; }
+    .connect-btn svg.v140-icon{ width:16px !important; height:16px !important; margin-right:0 !important; }
+  }
   /* V137, annule le 13/09 (Site & Boutique) : le nom s'ecrit desormais « Designer Quadreti » d'un seul tenant, meme graisse, meme
      couleur -- il n'y a plus deux moities a distinguer. Regle laissee pour memoire, plus aucun element ne la porte. */
   .appnav-word-app{ font-weight:400; color:#b7bfc6; }
