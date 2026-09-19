@@ -8986,7 +8986,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     intro.classList.add('fade-out');
     stage.classList.remove('intro-hidden');
     stage.classList.add('intro-reveal');
-    setTimeout(function(){ if (intro.parentElement) intro.remove(); }, 600);
+    setTimeout(function(){
+      if (intro.parentElement) intro.remove();
+      // 19/09 : LE MUR EST REDIMENSIONNE ICI, et c est le coeur de la correction. computeCellPx() mesure ou
+      // commence le plateau pour en deduire la taille des cases ; or il tournait PENDANT l intro, quand le
+      // plateau etait encore masque et place ailleurs. Il calculait juste, sur une page qui n existait plus une
+      // seconde plus tard — et ne recommencait jamais. D ou une barre d actions 6 px sous la ligne de flottaison,
+      // que corrigeait le moindre redimensionnement de fenetre : c est ce qui rendait le defaut si deroutant.
+      // On previent donc la page que sa mise en page a change. Le gestionnaire de redimensionnement existe deja
+      // et fait exactement ce travail : on ne reecrit pas le calcul, on le redeclenche au bon moment.
+      window.dispatchEvent(new Event('resize'));
+    }, 600);
   }
 
   var passer = document.getElementById('introSkip');
