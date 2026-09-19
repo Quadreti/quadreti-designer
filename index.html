@@ -522,7 +522,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .side-col{ display:flex; flex-direction:column; gap: 16px; }
 
   .sv-square{
-    width:70%; aspect-ratio:1; border-radius:10px; position:relative; cursor:crosshair;
+    /* 19/09, fondateur : « ajuste sa taille a l espace disponible ». Il occupait 70 % de la largeur du
+       panneau, avec du vide de chaque cote ; a 100 % il remplit la largeur et, restant carre, gagne
+       autant en hauteur — 160 px de cote avant, 229 apres, dans la carte flottante de 292 px.
+       Sans risque sur un petit ecran : la carte est plafonnee a la hauteur de la fenetre et defile a
+       l interieur. */
+    width:100%; aspect-ratio:1; border-radius:10px; position:relative; cursor:crosshair;
     touch-action:none; margin: 0 auto 12px;
   }
   .sv-handle{
@@ -1674,9 +1679,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      cette regle soit la seule a decider : la ligne de `setMosaicSubMode` et l entree `mosaic_color_tex` du
      registre. La liste reste sur « Aplat uni », sa valeur par defaut : le rendu ne change pas. */
   #mosaicColorTextureRow{ display:none; }
-  /* 19/09, fondateur : « retire couleur actuel qui n a pas d utilite » — le titre et le grand carre de
-     selection. Restent la pastille, l arc-en-ciel, la pipette, le champ hexadecimal et la palette. */
-  #titreCouleurActuelle, #svSquare{ display:none; }
+  /* 19/09 : le fondateur a d abord demande de retirer « Couleur actuelle », puis s est repris —
+     « le selecteur laisse-le ». **Seul le TITRE reste masque** : c est lui qui etait barre sur sa capture,
+     et la carte porte deja le nom COULEUR. Le grand carre est revenu, agrandi (voir `.sv-square`). */
+  #titreCouleurActuelle{ display:none; }
   /* Et « agrandit palette, caler largeur et hauteur » : les pastilles occupaient 80 % de leur case, ce
      qui laissait du vide entre elles ET les rendait plus petites que necessaire. A 100 % elles remplissent
      la case : la palette prend toute la largeur du panneau, et comme elles sont carrees elle gagne autant
