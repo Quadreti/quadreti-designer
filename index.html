@@ -556,8 +556,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .hexval-input:focus{ outline: none; border-color: var(--teal); }
   .hexval-input.invalid{ border-color: var(--danger); color: var(--danger); }
 
+  /* 19/09, fondateur : « titre Options avancees centre dans son bouton ». Il etait cale a gauche avec le
+     chevron rejete a droite (`space-between`). Centre avec son chevron a cote, il suit la meme grammaire
+     que « COULEUR ACTUELLE ▾ », « PALETTE ▾ » et « MODE CREATIF ▾ » — un titre centre, son chevron colle. */
   .adv-toggle{
-    width:100%; display:flex; align-items:center; justify-content:space-between;
+    width:100%; display:flex; align-items:center; justify-content:center; gap:8px;
     background: var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:10px 12px;
     color:var(--panel-ink); font-family: var(--font-main); font-weight:600; font-size:12.5px; cursor:pointer; margin-bottom: 4px;
   }
@@ -1671,6 +1674,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      cette regle soit la seule a decider : la ligne de `setMosaicSubMode` et l entree `mosaic_color_tex` du
      registre. La liste reste sur « Aplat uni », sa valeur par defaut : le rendu ne change pas. */
   #mosaicColorTextureRow{ display:none; }
+  /* 19/09, fondateur : « retire couleur actuel qui n a pas d utilite » — le titre et le grand carre de
+     selection. Restent la pastille, l arc-en-ciel, la pipette, le champ hexadecimal et la palette. */
+  #titreCouleurActuelle, #svSquare{ display:none; }
+  /* Et « agrandit palette, caler largeur et hauteur » : les pastilles occupaient 80 % de leur case, ce
+     qui laissait du vide entre elles ET les rendait plus petites que necessaire. A 100 % elles remplissent
+     la case : la palette prend toute la largeur du panneau, et comme elles sont carrees elle gagne autant
+     en hauteur. Limite a #paletteGrid : les palettes du texte et du dessin ne bougent pas. */
+  #paletteGrid .swatch{ width:100%; }
   /* ================= fin du bloc ================= */
 </style>
 </head>
@@ -2574,7 +2585,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
          d outils, en orange pleine largeur, au milieu de commandes de creation alors qu il ne sert pas a
          creer. Rien d autre n a change : c est le meme element, deplace. -->
     <div class="panel" id="colorsPanel">
-      <h2>Couleur actuelle</h2>
+      <!-- 19/09, fondateur : « retire couleur actuel qui n a pas d utilite ». Le titre et le grand carre
+           sont MASQUES par la feuille de style (#titreCouleurActuelle et #svSquare), pas supprimes : le
+           carre est cable sans garde et un balisage absent ferait lever une erreur qui tuerait le script.
+           Un id est pose sur le titre parce que le panneau contient un SECOND <h2> enfant direct
+           (« Palette ») : un selecteur sur h2 les aurait masques tous les deux. -->
+      <h2 id="titreCouleurActuelle">Couleur actuelle</h2>
       <div class="sv-square" id="svSquare">
         <div class="sv-handle" id="svHandle"></div>
       </div>
@@ -9158,28 +9174,47 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 <style>
   .carte-flottante{
     position:fixed; z-index:40; width:292px; padding:0 0 12px; border-radius:12px;
-    background:#1e2b35; border:1px solid #dedede26; box-shadow:0 18px 40px -12px #00000099;
+    /* 19/09, fondateur : « arriere plan navy 2 ; carte navy 1 ». Le fond de la carte passe donc au navy 2,
+       et le panneau qu elle contient au navy 1 — l inverse d avant. Le panneau prend sa couleur de
+       `--grout` : on redefinit le jeton ICI, une ligne, plutot que de repeindre chaque panneau. */
+    background:#33434f; border:1px solid #dedede26; box-shadow:0 18px 40px -12px #00000099;
+    --grout:#1e2b35;
   }
   /* La POIGNEE est la seule zone qui saisit la carte. Prendre la carte entiere aurait rendu les boutons qu elle
      contient impossibles a cliquer proprement : un clic sur « Agrandir le mur » aurait commence un deplacement. */
+  /* 19/09, fondateur : « tiroir haut orange ». L orange de MARQUE #d96c2f est ici a sa place — c est un
+     FOND, pas du texte. Tout ce qui s ecrit dessus prend donc l encre #10181f (5,23), jamais du blanc
+     (3,42) ni le gris froid d avant : c est la regle de la charte du 13/09, et c est exactement l erreur
+     corrigee sur quatorze boutons le 18/09. */
   .carte-flottante .cf-poignee{
     display:flex; align-items:center; gap:8px; padding:9px 12px; cursor:grab;
-    border-radius:12px 12px 0 0; background:#33434f; touch-action:none; user-select:none;
+    border-radius:12px 12px 0 0; background:#d96c2f; touch-action:none; user-select:none;
   }
   .carte-flottante.cf-saisie .cf-poignee{ cursor:grabbing; }
-  .carte-flottante .cf-poignee:focus-visible{ outline:2px solid #ff9147; outline-offset:-2px; }
+  .carte-flottante .cf-poignee:focus-visible{ outline:2px solid #10181f; outline-offset:-2px; }
   .carte-flottante .cf-titre{
     flex:1; font-family:'Jura',sans-serif; font-weight:700; font-size:11px; letter-spacing:.1em;
-    text-transform:uppercase; color:#b6c0c8;   /* 5,53 sur le navy 2 de la poignee */
+    text-transform:uppercase; color:#10181f;   /* 5,23 sur l orange de la poignee */
   }
   .carte-flottante .cf-grip{ display:flex; flex-direction:column; gap:2px; }
-  .carte-flottante .cf-grip i{ display:block; width:12px; height:2px; border-radius:1px; background:#b6c0c8; }
+  .carte-flottante .cf-grip i{ display:block; width:12px; height:2px; border-radius:1px; background:#10181f; }
   .carte-flottante .cf-replacer{
-    border:none; background:transparent; color:#b6c0c8; cursor:pointer; padding:2px 4px;
+    border:none; background:transparent; color:#10181f; cursor:pointer; padding:2px 4px;
     font-family:'Jura',sans-serif; font-weight:700; font-size:10.5px; letter-spacing:.06em; border-radius:4px;
   }
-  .carte-flottante .cf-replacer:hover, .carte-flottante .cf-replacer:focus-visible{ color:#dedede; background:#ffffff14; }
+  .carte-flottante .cf-replacer:hover, .carte-flottante .cf-replacer:focus-visible{ color:#10181f; background:#00000026; }
   .carte-flottante .cf-corps{ padding:10px 10px 0; }
+  /* 19/09, fondateur : « rends les boutons repliables ». Les trois barres de la poignee, qui n etaient
+     qu un decor indiquant la prise, deviennent le bouton qui replie la carte. Replie, il ne reste que le
+     bandeau : la carte se range sans se fermer, et sa position est conservee.
+     L etat est retenu par carte, sous sa propre cle, comme sa position. */
+  .carte-flottante .cf-plier{
+    display:flex; align-items:center; background:none; border:none; padding:3px 3px;
+    border-radius:4px; cursor:pointer; color:inherit; }
+  .carte-flottante .cf-plier:hover, .carte-flottante .cf-plier:focus-visible{ background:#00000026; }
+  .carte-flottante.cf-plie{ padding-bottom:0; }
+  .carte-flottante.cf-plie .cf-corps{ display:none; }
+  .carte-flottante.cf-plie .cf-poignee{ border-radius:12px; }
   /* les elements deplaces gardent leur mise en forme : on neutralise seulement les marges qu ils tenaient
      de la colonne, qui n a plus cours ici, et on les laisse occuper la largeur de la carte */
   /* 19/09 : ces marges valaient 0 depuis hier, pour annuler celles que les elements tenaient de la
@@ -9233,7 +9268,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     poignee.setAttribute('role', 'button');
     poignee.setAttribute('aria-label', 'Deplacer la carte ' + opt.titre +
       '. Fleches du clavier pour la deplacer, Entree pour la remettre a sa place.');
-    poignee.innerHTML = '<span class="cf-grip" aria-hidden="true"><i></i><i></i><i></i></span>' +
+    poignee.innerHTML =
+      '<button type="button" class="cf-plier" aria-expanded="true"><span class="cf-grip" aria-hidden="true">' +
+      '<i></i><i></i><i></i></span></button>' +
       '<span class="cf-titre"></span><button type="button" class="cf-replacer">Replacer</button>';
     poignee.querySelector('.cf-titre').textContent = opt.titre;
     var corps = document.createElement('div');
@@ -9298,7 +9335,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     /* ---- deplacement a la souris et au doigt : les evenements POINTER couvrent les deux d un coup ---- */
     var prise = null;
     poignee.addEventListener('pointerdown', function (e) {
-      if (e.target.closest('.cf-replacer')) return;   /* le bouton Replacer n est pas une prise */
+      if (e.target.closest('.cf-replacer') || e.target.closest('.cf-plier')) return;   /* ces deux boutons ne sont pas des prises */
       var r = carte.getBoundingClientRect();
       prise = { dx: e.clientX - r.left, dy: e.clientY - r.top };
       carte.classList.add('cf-saisie');
@@ -9336,6 +9373,24 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     });
 
     poignee.querySelector('.cf-replacer').addEventListener('click', function () { poserA(opt.defaut(), true); });
+
+    /* ---- replier / deplier ----
+       Replier change la HAUTEUR de la carte : il faut la reborner, sinon une carte posee en bas de l ecran
+       resterait a sa place haute au depliage et sortirait par le bas. */
+    var plier = poignee.querySelector('.cf-plier');
+    var CLE_PLI = opt.cle + 'Plie';
+    function appliquerPli(plie, enregistrer) {
+      carte.classList.toggle('cf-plie', plie);
+      plier.setAttribute('aria-expanded', plie ? 'false' : 'true');
+      plier.setAttribute('aria-label', (plie ? 'Deplier' : 'Replier') + ' la carte ' + opt.titre);
+      plier.title = plie ? 'Deplier' : 'Replier';
+      if (enregistrer) { try { localStorage.setItem(CLE_PLI, plie ? '1' : '0'); } catch (e) {} }
+      poserA(ou(), false);
+    }
+    plier.addEventListener('click', function () { appliquerPli(!carte.classList.contains('cf-plie'), true); });
+    var pliDepart = false;
+    try { pliDepart = localStorage.getItem(CLE_PLI) === '1'; } catch (e) {}
+    appliquerPli(pliDepart, false);
 
     window.addEventListener('resize', function () { if (LARGE.matches) poserA(ou(), false); });
     if (LARGE.addEventListener) LARGE.addEventListener('change', appliquerLargeur);
