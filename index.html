@@ -9059,4 +9059,146 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   if (!document.hidden) lancer(); else document.addEventListener('visibilitychange', lancer);
 })();
 </script>
+
+<!-- ================= 19/09, fondateur : LA CARTE CARREAUX DEVIENT FLOTTANTE ET DEPLACABLE =================
+     « je voudrais que cette fonctionnalite soit visible hors rail », puis « flottante et deplacable ».
+     Le navigateur de carreaux et « Agrandir le mur » etaient les deux premiers elements du rail de droite, et le
+     rail defile : ils disparaissaient des qu on descendait vers Mes fichiers.
+     Ce bloc DEPLACE les deux elements existants au demarrage au lieu de les recreer — leur contenu continue donc
+     d etre reconstruit par le reste de l application (la grille A/B se redessine quand le mur grandit) sans que
+     rien n ait a etre recable. Pour revenir en arriere : supprimer ce bloc, et les deux elements restent dans le
+     rail comme avant. ================= -->
+<style>
+  #carteFlottante{
+    position:fixed; z-index:40; width:292px; padding:0 0 12px; border-radius:12px;
+    background:#1e2b35; border:1px solid #dedede26; box-shadow:0 18px 40px -12px #00000099;
+  }
+  /* La POIGNEE est la seule zone qui saisit la carte. Prendre la carte entiere aurait rendu les boutons qu elle
+     contient impossibles a cliquer proprement : un clic sur « Agrandir le mur » aurait commence un deplacement. */
+  #carteFlottante .cf-poignee{
+    display:flex; align-items:center; gap:8px; padding:9px 12px; cursor:grab;
+    border-radius:12px 12px 0 0; background:#33434f; touch-action:none; user-select:none;
+  }
+  #carteFlottante.cf-saisie .cf-poignee{ cursor:grabbing; }
+  #carteFlottante .cf-poignee:focus-visible{ outline:2px solid #ff9147; outline-offset:-2px; }
+  #carteFlottante .cf-titre{
+    flex:1; font-family:'Jura',sans-serif; font-weight:700; font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; color:#b6c0c8;   /* 5,53 sur le navy 2 de la poignee */
+  }
+  #carteFlottante .cf-grip{ display:flex; flex-direction:column; gap:2px; }
+  #carteFlottante .cf-grip i{ display:block; width:12px; height:2px; border-radius:1px; background:#b6c0c8; }
+  #carteFlottante .cf-replacer{
+    border:none; background:transparent; color:#b6c0c8; cursor:pointer; padding:2px 4px;
+    font-family:'Jura',sans-serif; font-weight:700; font-size:10.5px; letter-spacing:.06em; border-radius:4px;
+  }
+  #carteFlottante .cf-replacer:hover, #carteFlottante .cf-replacer:focus-visible{ color:#dedede; background:#ffffff14; }
+  #carteFlottante .cf-corps{ padding:10px 10px 0; }
+  /* les deux elements deplaces gardent leur mise en forme : on neutralise seulement les marges qu ils tenaient
+     de la colonne, qui n a plus cours ici */
+  #carteFlottante > .cf-corps > *{ margin-left:0; margin-right:0; }
+  @media (prefers-reduced-motion:reduce){ #carteFlottante{ transition:none; } }
+  /* Sous 1100 px la mise en page de l app change de logique : la carte reste dans le rail, ou elle a sa place. */
+  @media (max-width:1099px){ #carteFlottante{ position:static; width:auto; box-shadow:none; border:none; background:transparent; }
+    #carteFlottante .cf-poignee{ display:none; } }
+</style>
+<script>
+(function () {
+  if (!window.matchMedia || !window.matchMedia('(min-width:1100px)').matches) return;
+  var rail = document.getElementById('actionsCol');
+  var nav  = document.getElementById('panelNavWrap');
+  var grow = document.getElementById('growWallBtn');
+  if (!rail || !nav || !grow) return;          /* rien ne bouge si l app a change de structure */
+  var CLE = 'quadretiCarteCarreauxPos';
+  var MARGE = 12;
+
+  var carte = document.createElement('div');
+  carte.id = 'carteFlottante';
+  carte.innerHTML =
+    '<div class="cf-poignee" id="cfPoignee" tabindex="0" role="button" ' +
+    'aria-label="Deplacer la carte des carreaux. Fleches du clavier pour la deplacer, Entree pour la remettre a sa place.">' +
+      '<span class="cf-grip" aria-hidden="true"><i></i><i></i><i></i></span>' +
+      '<span class="cf-titre">Carreaux</span>' +
+      '<button type="button" class="cf-replacer" id="cfReplacer">Replacer</button>' +
+    '</div><div class="cf-corps" id="cfCorps"></div>';
+  document.body.appendChild(carte);
+  var corps = document.getElementById('cfCorps');
+  corps.appendChild(nav);
+  corps.appendChild(grow);
+
+  /* position par defaut : la ou l oeil l attend, contre le bord gauche du rail et en haut */
+  function defaut() {
+    var r = rail.getBoundingClientRect();
+    var l = (r.width > 0 ? r.left : window.innerWidth - 320) - carte.offsetWidth - 16;
+    return { x: Math.max(MARGE, Math.round(l)), y: 96 };
+  }
+  /* Une carte flottante DOIT pouvoir etre rattrapee : sans bornage, un deplacement malheureux ou un ecran plus
+     petit au retour la met hors de vue, et il n y a plus aucun moyen de la reprendre. On borne au deplacement,
+     au chargement ET au redimensionnement — les trois moments ou elle peut sortir. */
+  function borner(p) {
+    var L = carte.offsetWidth, H = carte.offsetHeight;
+    return {
+      x: Math.min(Math.max(MARGE, p.x), Math.max(MARGE, window.innerWidth - L - MARGE)),
+      y: Math.min(Math.max(MARGE, p.y), Math.max(MARGE, window.innerHeight - H - MARGE))
+    };
+  }
+  function poser(p, enregistrer) {
+    var b = borner(p);
+    carte.style.left = b.x + 'px';
+    carte.style.top  = b.y + 'px';
+    if (enregistrer) { try { localStorage.setItem(CLE, JSON.stringify(b)); } catch (e) {} }
+    return b;
+  }
+  var depart = null;
+  try { var brut = localStorage.getItem(CLE); if (brut) depart = JSON.parse(brut); } catch (e) {}
+  if (!depart || typeof depart.x !== 'number' || typeof depart.y !== 'number') depart = defaut();
+  poser(depart, false);
+
+  /* ---- deplacement a la souris et au doigt : les evenements POINTER couvrent les deux d un coup ---- */
+  var poignee = document.getElementById('cfPoignee');
+  var prise = null;
+  poignee.addEventListener('pointerdown', function (e) {
+    if (e.target.closest('.cf-replacer')) return;   /* le bouton Replacer n est pas une prise */
+    var r = carte.getBoundingClientRect();
+    prise = { dx: e.clientX - r.left, dy: e.clientY - r.top };
+    carte.classList.add('cf-saisie');
+    poignee.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  poignee.addEventListener('pointermove', function (e) {
+    if (!prise) return;
+    poser({ x: e.clientX - prise.dx, y: e.clientY - prise.dy }, false);
+  });
+  function lacher(e) {
+    if (!prise) return;
+    prise = null;
+    carte.classList.remove('cf-saisie');
+    try { poignee.releasePointerCapture(e.pointerId); } catch (x) {}
+    poser({ x: parseInt(carte.style.left, 10), y: parseInt(carte.style.top, 10) }, true);
+  }
+  poignee.addEventListener('pointerup', lacher);
+  poignee.addEventListener('pointercancel', lacher);
+
+  /* ---- au CLAVIER. Le fondateur a pose la regle inverse en aout — toute fonction clavier doit avoir son bouton
+         souris — et elle vaut dans les deux sens : une fonction qui ne s atteint qu a la souris exclut. Fleches
+         pour deplacer par pas de 12 px, Maj pour 2 px au pixel pres, Entree pour tout remettre en place. ---- */
+  poignee.addEventListener('keydown', function (e) {
+    var pas = e.shiftKey ? 2 : 12, dx = 0, dy = 0;
+    if (e.key === 'ArrowLeft')  dx = -pas;
+    else if (e.key === 'ArrowRight') dx = pas;
+    else if (e.key === 'ArrowUp')    dy = -pas;
+    else if (e.key === 'ArrowDown')  dy = pas;
+    else if (e.key === 'Enter' || e.key === ' ') { poser(defaut(), true); e.preventDefault(); return; }
+    else return;
+    poser({ x: (parseInt(carte.style.left, 10) || 0) + dx, y: (parseInt(carte.style.top, 10) || 0) + dy }, true);
+    e.preventDefault();
+  });
+
+  document.getElementById('cfReplacer').addEventListener('click', function () { poser(defaut(), true); });
+
+  /* l ecran change de taille : on ramene la carte dans le cadre plutot que de la laisser dehors */
+  window.addEventListener('resize', function () {
+    poser({ x: parseInt(carte.style.left, 10) || 0, y: parseInt(carte.style.top, 10) || 0 }, false);
+  });
+})();
+</script>
 </body></html>
