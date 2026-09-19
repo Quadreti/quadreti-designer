@@ -9292,22 +9292,27 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
   /* ------------------------------------------------------------------ les deux cartes ---------------- */
   function el(id) { return document.getElementById(id); }
-  function bordGaucheDe(colonne, largeurCarte) {
-    var r = colonne ? colonne.getBoundingClientRect() : null;
-    return (r && r.width > 0) ? Math.round(r.left) : Math.max(MARGE, window.innerWidth - largeurCarte - 340);
+  var LARGEUR_CARTE = 292;
+  /* Les positions par defaut se prennent sur LA FENETRE, jamais sur les colonnes.
+     Mesure du 19/09 a 1280x720 : #toolsCol est a x = -284 et #actionsCol a x = 1297 — a cette largeur les
+     deux colonnes sont des TIROIRS hors ecran, pas des colonnes. Et pendant la sequence d intro elles sont
+     ailleurs encore. Une position derivee de la finissait au milieu du mur, les deux cartes l une sur l autre.
+     Le cadre de la fenetre, lui, ne bouge pas. */
+  function largeurRail() {
+    var rail = document.querySelector('.v140-rail');
+    var l = rail ? Math.round(rail.getBoundingClientRect().width) : 0;
+    return l > 0 ? l : 68;   /* repli : une valeur SURE, pas la derniere connue */
   }
 
   /* 1. CARREAUX — le navigateur A/B et « Agrandir le mur », a gauche du rail de droite.
         Meme cle qu au premier jet : la position deja choisie par le fondateur est conservee. */
-  var rail = el('actionsCol'), nav = el('panelNavWrap'), grandir = el('growWallBtn');
+  var rail = el('actionsCol'), nav = el('panelNavWrap'), grandir = el('growWallBtn');   /* `rail` : on verifie juste que la structure de l app est celle attendue */
   if (rail && nav && grandir) {
     creerCarte({
       id: 'carteFlottante', titre: 'Carreaux', cle: 'quadretiCarteCarreauxPos',
       elements: [nav, grandir],
-      defaut: function () {
-        var r = rail.getBoundingClientRect();
-        var l = (r.width > 0 ? r.left : window.innerWidth - 320) - 292 - 16;
-        return { x: Math.max(MARGE, Math.round(l)), y: 96 };
+      defaut: function () {   /* contre le bord DROIT de la fenetre */
+        return { x: Math.max(MARGE, window.innerWidth - LARGEUR_CARTE - MARGE), y: 96 };
       }
     });
   }
@@ -9321,7 +9326,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     creerCarte({
       id: 'carteCouleur', titre: 'Couleur', cle: 'quadretiCarteCouleurPos',
       elements: [couleurs], suivre: couleurs,
-      defaut: function () { return { x: Math.max(MARGE, bordGaucheDe(outils, 292)), y: 96 }; }
+      defaut: function () { return { x: largeurRail() + MARGE, y: 96 }; }   /* contre le rail d icones, a GAUCHE */
     });
   }
 })();
