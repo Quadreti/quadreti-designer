@@ -1312,6 +1312,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     padding:8px 16px; cursor:pointer; flex-shrink:0; transition:filter .15s ease; }
   .connect-btn:hover{ filter:brightness(1.07); }
   .connect-btn:focus-visible{ outline:2px solid var(--terracotta); outline-offset:2px; }
+  /* 19/09 : l icone portait ces trois valeurs en style EN LIGNE. Rendues ici a l identique — un style en
+     ligne bat toute regle, et c est ce qui empechait d habiller le bouton une fois deplace. La regle de
+     la ligne suivante (mobile/tablette) peut de nouveau faire son travail. */
+  .connect-btn .v140-icon{ width:14px; height:14px; margin-right:5px; }
   /* V142.9 — trop imposant sur mobile/tablette a cote du logo et du menu ☰ ; le PC
      (>=1024px, plus de place) garde la taille d'origine ci-dessus. */
   @media (max-width:1023px){
@@ -1785,7 +1789,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         <a href="https://quadreti.fr/contact.html" target="_blank" rel="noopener">Contact</a>
       </span>
     </nav>
-    <!-- 13/09 -- "Se connecter" vit desormais dans la barre laterale (#toolsCol), plus ici. -->
+    <!-- 19/09 -- "Se connecter" REVIENT ICI, sur demande du fondateur (il etait dans #toolsCol depuis le
+         13/09, au milieu des commandes de creation). « Mon espace » s insere par script juste avant le
+         burger : l ordre affiche est donc Se connecter · Mon espace · ☰. Les deux ne font pas la meme
+         chose — celui-ci ouvre la fenetre de compte de l app, l autre mene a la page du site.
+         Le TEXTE du bouton est un noeud de texte nu, volontairement : la mise a jour du libelle
+         (« Mon compte », « Mon compte ✓ ») teste `lastChild.nodeType === 3`. Ne pas l envelopper. -->
+    <button class="connect-btn" id="connectBtn" type="button"><svg class="v140-icon"><use href="#i-user"/></svg>Se connecter</button>
     <!-- 15/09 (Site & Boutique) -- le bouton « Mon Espace » pose ici le 14 est RETIRE : « Mon Espace » est devenu une
          rubrique du menu du site, que cette app reconstruit depuis la base — il y en avait donc deux cote a cote.
          Un objet, une definition : la rubrique du menu, qui s inverse selon la barre qui la porte. -->
@@ -2535,7 +2545,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     <!-- 13/09 -- "Se connecter" deplace du bandeau vers la barre laterale (demande fondateur).
          Meme #connectBtn, seul son emplacement DOM change -- le JS qui met a jour son libelle
          selon l'etat du compte (getElementById('connectBtn')) continue de fonctionner tel quel. -->
-    <button class="connect-btn" id="connectBtn" type="button" style="width:100%; margin-bottom:14px; justify-content:center; display:flex; align-items:center;"><svg class="v140-icon" style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:5px"><use href="#i-user"/></svg>Se connecter</button>
+    <!-- 19/09, fondateur : « trouve une autre place a Se connecter », puis « il ne doit pas etre cache dans
+         un rail ce bouton ». Le bouton est remonte DANS LA BARRE DU HAUT, a cote de « Mon espace » — voir
+         le balisage de .appnav-inner. Il etait ici depuis le 13/09, entre le cartouche MODE et le panneau
+         d outils, en orange pleine largeur, au milieu de commandes de creation alors qu il ne sert pas a
+         creer. Rien d autre n a change : c est le meme element, deplace. -->
     <div class="panel" id="colorsPanel">
       <h2>Couleur actuelle</h2>
       <div class="sv-square" id="svSquare">
