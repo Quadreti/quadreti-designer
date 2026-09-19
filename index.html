@@ -3886,12 +3886,16 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       const cs = getComputedStyle(stage);
       padStage = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
       // ce qui vit SOUS le plateau, mesure : la barre d actions, l ecart qui l en separe, et 12 px pour respirer
-      let sous = 48;
+      // Le REPLI vaut 72 et non 48. Premier essai a 48 : la barre restait 6 px dehors, parce que la mesure
+      // ci-dessous ne prend pas toujours — au tout premier rendu la barre n a pas encore de hauteur, et c est
+      // le repli qui sert. Un repli doit etre une valeur SURE, pas la valeur d avant : 36 de barre + 24 d ecart
+      // + 12 pour respirer. Mesure quand c est possible, valeur sure sinon — jamais l inverse.
+      let sous = 72;
       const outils = document.getElementById('v140WallTools');
       if (outils){
-        const ro = outils.getBoundingClientRect(), rs = stage.getBoundingClientRect();
-        const ecart = ro.top - rs.bottom;
-        if (ro.height > 0 && ecart >= 0 && ecart < 200) sous = Math.round(ro.height + ecart + 12);
+        const h = outils.offsetHeight;
+        const ecart = outils.getBoundingClientRect().top - stage.getBoundingClientRect().bottom;
+        if (h > 0) sous = Math.round(h + Math.min(Math.max(ecart, 0), 60) + 12);
       }
       if (t > 0) hautDispo = window.innerHeight - t - sous;
     }
