@@ -9490,8 +9490,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
    Tout le reste — couleurs, etat replie — est dans la feuille de style. Si ce script n aboutit pas, les
    blocs restent simplement toujours deplies : rien ne casse. */
 (function () {
-  var blocs = document.querySelectorAll(
-    '#toolsCol .panel, #toolsCol .cartouche-row, #actionsCol .panel, #actionsCol .cartouche-row');
+  var SEL = '#toolsCol .panel, #toolsCol .cartouche-row, #actionsCol .panel, #actionsCol .cartouche-row';
+
+  function poserBoutons() {
+  var blocs = document.querySelectorAll(SEL);
   Array.prototype.forEach.call(blocs, function (bloc) {
     var h2 = bloc.firstElementChild;
     /* on n habille que les blocs dont le titre est vraiment le premier element : c est la meme condition
@@ -9523,6 +9525,26 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     try { depart = localStorage.getItem(cle) === '1'; } catch (e) {}
     appliquer(depart, false);
   });
+  }
+
+  /* IL FAUT REJOUER. Mesure du 19/09 : 3 blocs sur 10 n avaient pas recu leur bouton — « Dimension
+     tesselle », « Nombre de carreau » et « Mode ». Ces trois-la vivent dans `.config-bar`, que la routine
+     des colonnes deplace DANS #toolsCol APRES le chargement : au premier passage ils n y etaient pas
+     encore. Meme piege qu avec la carte flottante hier, et meme parade que celle deja employee par l app
+     pour « Mon Espace » : un observateur qui rejoue.
+     La pose est idempotente — elle saute un bloc qui a deja son bouton — donc la rejouer ne coute rien. */
+  poserBoutons();
+  if (window.MutationObserver) {
+    var obs = new MutationObserver(function () { poserBoutons(); });
+    ['toolsCol', 'actionsCol'].forEach(function (id) {
+      var col = document.getElementById(id);
+      if (col) obs.observe(col, { childList: true, subtree: true });
+    });
+  }
+  /* filets : la fin de l intro previent la page par un `resize`, et certaines mises en page ne se posent
+     qu au `load`. Deux appels de plus qui ne font rien s il n y a rien a faire. */
+  window.addEventListener('load', poserBoutons);
+  window.addEventListener('resize', poserBoutons);
 })();
 </script>
 </body></html>
