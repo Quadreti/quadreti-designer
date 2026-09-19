@@ -247,6 +247,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   }
   #toolsCol{ grid-area: outils; }
   #atelierCol{ grid-area: atelier; justify-self: center; }
+  /* 19/09, fondateur : « peut-on remonter ? ». `#cellCountLabel` est VIDE tant que le mur n a qu un seul
+     carreau — il n est rempli que pour un mur multiple. Vide, il occupait quand meme sa place ET les deux
+     ecarts de la colonne qui l entourent : 20 px pour rien, juste au-dessus de la grille.
+     `:empty` fait disparaitre l element tant qu il n a rien a dire, et le laisse revenir de lui-meme des
+     qu on agrandit le mur. Aucune bascule a maintenir, aucun script. */
+  #cellCountLabel:empty{ display:none; }
   #actionsCol{ grid-area: actions; }
 
   * { box-sizing: border-box; }
@@ -954,7 +960,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     #growWallBtn.in-col{ width:100%; margin:0 0 16px; }
     /* V142 — marge haute du contenu resserree : 32px au-dessus du plan de travail, c'etait
        de l'espace perdu une fois le bloc de titre parti. */
-    .app-content{ padding-top:12px; }
+    /* 19/09, fondateur : « peut-on remonter ? ». Ces 12 px ne servaient a rien : juste au-dessus se
+       trouve le DECROCHE de l en-tete, qui descend jusqu a 98 px et tient deja lieu de respiration.
+       La bande 58..98 n est pas libre pour autant — c est lui, mesure — et on n y touche pas. */
+    .app-content{ padding-top:0; }
     #growWallBtn{ margin-bottom:4px; }
     header.in-col #headerHint{ max-width:620px; margin-left:auto; margin-right:auto; }
     .config-bar.in-col .cartouche-row{ max-width:none; flex:0 0 auto; width:100%; }
