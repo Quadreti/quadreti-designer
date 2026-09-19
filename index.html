@@ -1369,7 +1369,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      (>=1024px, plus de place) garde la taille d'origine ci-dessus. */
   @media (max-width:1023px){
     .connect-btn{ font-size:11px; padding:6px 11px; }
-    .connect-btn svg.v140-icon{ width:12px !important; height:12px !important; margin-right:4px !important; }
+    /* 19/09 : les `!important` sont retires. Ils etaient la pour passer devant le STYLE EN LIGNE de
+       l icone, supprime ce matin en remontant le bouton dans la barre. Sans style en ligne, la
+       specificite suffit — et la regle des petits ecrans, plus bas, peut de nouveau agrandir l icone. */
+    .connect-btn svg.v140-icon{ width:12px; height:12px; margin-right:4px; }
   }
   /* 19/09 : sur telephone, le bouton entier POUSSAIT LE BURGER HORS DE L ECRAN — mesure a 390 px, le
      burger allait de 397 a 439 pour une barre qui finit a 390, donc un menu inatteignable. C est le
