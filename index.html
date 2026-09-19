@@ -1632,6 +1632,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .appfoot{ --pied-barre:#1e2b35; background:#1e2b35; }
   .appfoot-bord-bas{ display:none; }   /* demande du fondateur : plus de marche en bas de page */
   .appfoot-copy{ color:#ff9147; }   /* 19/09, fondateur : le copyright passe a l orange Quadreti. Sur le navy, l orange de MARQUE #D96C2F ne vaut que 4,23 en 12 px — sous le seuil. C est donc sa forme ECRITE #FF9147, meme teinte 24 deg saturee a 100 %, qui y donne 6,47. La regle de la charte : l orange de marque pour les fonds et les traits, sa forme ecrite des qu il faut le LIRE. */
+  /* 19/09, fondateur : « retire ces options (elles n ont pas d utilite) » — Texturo, Formato (avec son
+     curseur de taille) et Sticker quittent le depliant Options avancees. Il n y reste que « Ajouter un texte ».
+     On MASQUE au lieu de supprimer le balisage : leurs commandes sont cablees sans garde
+     (`shapeUploadZone.addEventListener`, `stickerUploadZone.addEventListener`,
+     `getElementById('colorTextureSelect').value`) et un balisage absent ferait lever une erreur au
+     chargement, qui tuerait tout le script — donc l application entiere.
+     Leurs trois entrees ont ete retirees de FEATURE_REGISTRY en meme temps : sans cela la boucle du
+     registre remettrait un `display` INLINE pour un administrateur, et le style inline bat cette regle.
+     Pour les remettre : supprimer ces trois lignes ET rendre les trois entrees au registre. */
+  #featureBlock_texture_pixel,
+  #featureBlock_quadrisaiq,
+  #featureBlock_stickers{ display:none; }
   /* ================= fin du bloc ================= */
 </style>
 </head>
@@ -3156,9 +3168,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      Piloté par le panneau de contrôle (?admin=1 sur le Designer complet).
      ============================================================ */
   const FEATURE_REGISTRY = [
-    { id: 'texture_pixel',      label: 'Texturo (Rondato/Quadrato)',   category: 'Pixel',    el: 'featureBlock_texture_pixel' },
-    { id: 'quadrisaiq',         label: 'Formato (formes)',             category: 'Pixel',    el: 'featureBlock_quadrisaiq' },
-    { id: 'stickers',           label: 'Bibliothèque de stickers',     category: 'Pixel',    el: 'featureBlock_stickers' },
+    /* 19/09 : texture_pixel (Texturo), quadrisaiq (Formato) et stickers ont ete RETIRES du registre en
+       meme temps que la regle CSS qui masque leurs blocs, plus bas dans la feuille de style. Les laisser
+       ici suffirait a les faire revenir pour un administrateur : la boucle plus bas ecrit un `display`
+       inline, qui bat une regle CSS. Les rendre au registre est la moitie du retour en arriere. */
     { id: 'text_sticker',       label: 'Ajouter un texte',             category: 'Pixel',    el: 'featureBlock_text_sticker' },
     { id: 'eyedropper',         label: 'Pipette couleur',              category: 'Pixel',    el: 'eyedropperBtn' },
     { id: 'photo_style',        label: 'Style photo (filtres)',        category: 'Photo',    el: 'featureBlock_photo_style_mode_photo' },
