@@ -1604,7 +1604,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      dessus une encre pensee pour du blanc, ce qui a fait la moitie des defauts de la journee.
      LES CHAMPS DE SAISIE ET LES SELECTEURS RESTENT CLAIRS (--surface intact) : un champ est fait pour etre
      rempli, il doit se lire comme une surface ou l on ecrit. Meme arbitrage que sur Contact et le mot de passe. */
-  #toolsCol, #actionsCol{
+  /* 19/09 : `.carte-flottante` est ajoutee ICI et nulle part ailleurs. Une carte flottante vit dans
+     <body>, donc hors de #toolsCol/#actionsCol : sans cette ligne elle perdrait tout ce jeu de jetons et
+     retomberait sur les valeurs de page, qui sont INVERSEES (--grout y vaut du blanc, --panel-ink du navy).
+     Recopier les valeurs dans un bloc a part aurait cree la deuxieme source dont personne ne ressort. */
+  #toolsCol, #actionsCol, .carte-flottante{
     --grout:#33434f;          /* le fond des panneaux : navy 2, 1,42 contre le fond de page */
     --surface-2:#3e5060;      /* un cran plus clair : les boutons secondaires restent des objets */
     --panel-ink:#dedede;      /* 7,59 sur navy 2 */
@@ -1618,7 +1622,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   }
   /* Ce qui garde un fond CLAIR a l interieur du volet ancre son encre : un champ, un selecteur, une pastille. */
   #toolsCol input, #toolsCol select, #toolsCol textarea,
-  #actionsCol input, #actionsCol select, #actionsCol textarea{ color:#10181f; }
+  #actionsCol input, #actionsCol select, #actionsCol textarea,
+  .carte-flottante input, .carte-flottante select, .carte-flottante textarea{ color:#10181f; }
 
      /* 3. LE PIED : navy 1, et plus de decroche en bas.
      La barre du bas et le decroche inferieur partageaient le meme jeton --pied-barre : le passer au navy les
@@ -8904,7 +8909,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       //   colonnes laterales, et elle se redeclenche a chaque changement de mise en page. Sans cette garde, elle
       //   reprenait les deux elements a la carte flottante quelques millisecondes apres que celle-ci les a pris :
       //   la carte s affichait, vide. Ce qui est dans la carte n appartient plus aux colonnes.
-      if (nav && actions && nav.parentElement !== actions && !nav.closest('#carteFlottante')){
+      if (nav && actions && nav.parentElement !== actions && !nav.closest('.carte-flottante')){
         actions.insertBefore(nav, actions.firstChild);
         nav.classList.add('in-col');
       }
@@ -8912,7 +8917,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       // occupait 52px juste au-dessus du carreau. Il rejoint la colonne de droite, sous le
       // reperage, et rend cette hauteur au mur.
       var grandir = document.getElementById('growWallBtn');
-      if (grandir && actions && grandir.parentElement !== actions && !grandir.closest('#carteFlottante')){
+      if (grandir && actions && grandir.parentElement !== actions && !grandir.closest('.carte-flottante')){
         if (nav && nav.parentElement === actions) nav.insertAdjacentElement('afterend', grandir);
         else actions.insertBefore(grandir, actions.firstChild);
         grandir.classList.add('in-col');
@@ -9083,145 +9088,242 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 })();
 </script>
 
-<!-- ================= 19/09, fondateur : LA CARTE CARREAUX DEVIENT FLOTTANTE ET DEPLACABLE =================
-     « je voudrais que cette fonctionnalite soit visible hors rail », puis « flottante et deplacable ».
-     Le navigateur de carreaux et « Agrandir le mur » etaient les deux premiers elements du rail de droite, et le
-     rail defile : ils disparaissaient des qu on descendait vers Mes fichiers.
-     Ce bloc DEPLACE les deux elements existants au demarrage au lieu de les recreer — leur contenu continue donc
-     d etre reconstruit par le reste de l application (la grille A/B se redessine quand le mur grandit) sans que
-     rien n ait a etre recable. Pour revenir en arriere : supprimer ce bloc, et les deux elements restent dans le
-     rail comme avant. ================= -->
+<!-- ================= 19/09, fondateur : LES CARTES FLOTTANTES ET DEPLACABLES =================
+     Deux demandes successives du meme jour : « je voudrais que cette fonctionnalite soit visible hors rail »
+     (le navigateur de carreaux et « Agrandir le mur »), puis « la fonction palette couleur est toutes les
+     options qui y sont dans un bouton flottant deplacable comme carreau ».
+     Les deux cartes sortent de la MEME fabrique. Une seule logique de deplacement, de bornage, de memoire
+     de position et de clavier : une deuxieme copie aurait derive de la premiere des la premiere correction.
+
+     Les cartes DEPLACENT des elements existants, elles ne les recreent pas. Leur contenu continue donc d etre
+     reconstruit par le reste de l application — la grille A/B se redessine quand le mur grandit, la palette se
+     redessine quand on ajoute une couleur — sans que rien n ait a etre recable.
+     Retour en arriere : supprimer ce bloc. Les elements retrouvent leur place, marquee par une ancre. ================= -->
 <style>
-  #carteFlottante{
+  .carte-flottante{
     position:fixed; z-index:40; width:292px; padding:0 0 12px; border-radius:12px;
     background:#1e2b35; border:1px solid #dedede26; box-shadow:0 18px 40px -12px #00000099;
   }
   /* La POIGNEE est la seule zone qui saisit la carte. Prendre la carte entiere aurait rendu les boutons qu elle
      contient impossibles a cliquer proprement : un clic sur « Agrandir le mur » aurait commence un deplacement. */
-  #carteFlottante .cf-poignee{
+  .carte-flottante .cf-poignee{
     display:flex; align-items:center; gap:8px; padding:9px 12px; cursor:grab;
     border-radius:12px 12px 0 0; background:#33434f; touch-action:none; user-select:none;
   }
-  #carteFlottante.cf-saisie .cf-poignee{ cursor:grabbing; }
-  #carteFlottante .cf-poignee:focus-visible{ outline:2px solid #ff9147; outline-offset:-2px; }
-  #carteFlottante .cf-titre{
+  .carte-flottante.cf-saisie .cf-poignee{ cursor:grabbing; }
+  .carte-flottante .cf-poignee:focus-visible{ outline:2px solid #ff9147; outline-offset:-2px; }
+  .carte-flottante .cf-titre{
     flex:1; font-family:'Jura',sans-serif; font-weight:700; font-size:11px; letter-spacing:.1em;
     text-transform:uppercase; color:#b6c0c8;   /* 5,53 sur le navy 2 de la poignee */
   }
-  #carteFlottante .cf-grip{ display:flex; flex-direction:column; gap:2px; }
-  #carteFlottante .cf-grip i{ display:block; width:12px; height:2px; border-radius:1px; background:#b6c0c8; }
-  #carteFlottante .cf-replacer{
+  .carte-flottante .cf-grip{ display:flex; flex-direction:column; gap:2px; }
+  .carte-flottante .cf-grip i{ display:block; width:12px; height:2px; border-radius:1px; background:#b6c0c8; }
+  .carte-flottante .cf-replacer{
     border:none; background:transparent; color:#b6c0c8; cursor:pointer; padding:2px 4px;
     font-family:'Jura',sans-serif; font-weight:700; font-size:10.5px; letter-spacing:.06em; border-radius:4px;
   }
-  #carteFlottante .cf-replacer:hover, #carteFlottante .cf-replacer:focus-visible{ color:#dedede; background:#ffffff14; }
-  #carteFlottante .cf-corps{ padding:10px 10px 0; }
-  /* les deux elements deplaces gardent leur mise en forme : on neutralise seulement les marges qu ils tenaient
-     de la colonne, qui n a plus cours ici */
-  #carteFlottante > .cf-corps > *{ margin-left:0; margin-right:0; }
-  @media (prefers-reduced-motion:reduce){ #carteFlottante{ transition:none; } }
-  /* Sous 1100 px la mise en page de l app change de logique : la carte reste dans le rail, ou elle a sa place. */
-  @media (max-width:1099px){ #carteFlottante{ position:static; width:auto; box-shadow:none; border:none; background:transparent; }
-    #carteFlottante .cf-poignee{ display:none; } }
+  .carte-flottante .cf-replacer:hover, .carte-flottante .cf-replacer:focus-visible{ color:#dedede; background:#ffffff14; }
+  .carte-flottante .cf-corps{ padding:10px 10px 0; }
+  /* les elements deplaces gardent leur mise en forme : on neutralise seulement les marges qu ils tenaient
+     de la colonne, qui n a plus cours ici, et on les laisse occuper la largeur de la carte */
+  .carte-flottante > .cf-corps > *{ margin-left:0; margin-right:0; }
+  .carte-flottante > .cf-corps > .panel{ width:100%; box-sizing:border-box; }
+
+  /* La carte Couleur est BEAUCOUP plus haute que celle des Carreaux : le panneau porte le selecteur, le
+     depliant des options et la palette. On la plafonne a la hauteur de l ecran et on la laisse defiler a
+     l interieur, sinon son bas sort par le bas et le bornage n a plus rien a rattraper.
+     La barre de defilement est fine et discrete, mais VISIBLE : sur un contenu long, une barre cachee ne dit
+     pas qu il reste quelque chose en dessous. */
+  #carteCouleur .cf-corps{ max-height:calc(100vh - 140px); overflow-y:auto; overflow-x:hidden;
+    scrollbar-width:thin; scrollbar-color:#dedede40 transparent; }
+  #carteCouleur .cf-corps::-webkit-scrollbar{ width:8px; }
+  #carteCouleur .cf-corps::-webkit-scrollbar-thumb{ background:#dedede40; border-radius:4px; }
+
+  @media (prefers-reduced-motion:reduce){ .carte-flottante{ transition:none; } }
 </style>
 <script>
 (function () {
-  if (!window.matchMedia || !window.matchMedia('(min-width:1100px)').matches) return;
-  var rail = document.getElementById('actionsCol');
-  var nav  = document.getElementById('panelNavWrap');
-  var grow = document.getElementById('growWallBtn');
-  if (!rail || !nav || !grow) return;          /* rien ne bouge si l app a change de structure */
-  var CLE = 'quadretiCarteCarreauxPos';
+  var LARGE = window.matchMedia ? window.matchMedia('(min-width:1100px)') : null;
+  if (!LARGE) return;
   var MARGE = 12;
 
-  var carte = document.createElement('div');
-  carte.id = 'carteFlottante';
-  carte.innerHTML =
-    '<div class="cf-poignee" id="cfPoignee" tabindex="0" role="button" ' +
-    'aria-label="Deplacer la carte des carreaux. Fleches du clavier pour la deplacer, Entree pour la remettre a sa place.">' +
-      '<span class="cf-grip" aria-hidden="true"><i></i><i></i><i></i></span>' +
-      '<span class="cf-titre">Carreaux</span>' +
-      '<button type="button" class="cf-replacer" id="cfReplacer">Replacer</button>' +
-    '</div><div class="cf-corps" id="cfCorps"></div>';
-  document.body.appendChild(carte);
-  var corps = document.getElementById('cfCorps');
-  corps.appendChild(nav);
-  corps.appendChild(grow);
+  /* ------------------------------------------------------------------ la fabrique.
+     `elements` : les elements existants a loger dedans, dans l ordre.
+     `defaut()` : la position d origine, calculee a chaque fois plutot que figee — la fenetre a pu changer.
+     `suivre`   : optionnel, un element dont l affichage pilote celui de la carte. ------------------------ */
+  function creerCarte(opt) {
+    if (!opt.elements.length) return null;
 
-  /* position par defaut : la ou l oeil l attend, contre le bord gauche du rail et en haut */
-  function defaut() {
-    var r = rail.getBoundingClientRect();
-    var l = (r.width > 0 ? r.left : window.innerWidth - 320) - carte.offsetWidth - 16;
-    return { x: Math.max(MARGE, Math.round(l)), y: 96 };
+    /* Une ANCRE reste a la place exacte de chaque element : c est elle qui permet de tout remettre en ordre
+       sous 1100 px, ou si on retire ce bloc. Retenir « le parent et le voisin suivant » ne suffit pas — ce
+       voisin peut lui-meme avoir bouge entre-temps. */
+    opt.elements.forEach(function (el) {
+      var ancre = document.createComment(' place de #' + el.id + ' ');
+      el.parentNode.insertBefore(ancre, el);
+      el.__ancreCarte = ancre;
+    });
+
+    var carte = document.createElement('div');
+    carte.id = opt.id;
+    carte.className = 'carte-flottante';
+    var poignee = document.createElement('div');
+    poignee.className = 'cf-poignee';
+    poignee.tabIndex = 0;
+    poignee.setAttribute('role', 'button');
+    poignee.setAttribute('aria-label', 'Deplacer la carte ' + opt.titre +
+      '. Fleches du clavier pour la deplacer, Entree pour la remettre a sa place.');
+    poignee.innerHTML = '<span class="cf-grip" aria-hidden="true"><i></i><i></i><i></i></span>' +
+      '<span class="cf-titre"></span><button type="button" class="cf-replacer">Replacer</button>';
+    poignee.querySelector('.cf-titre').textContent = opt.titre;
+    var corps = document.createElement('div');
+    corps.className = 'cf-corps';
+    carte.appendChild(poignee);
+    carte.appendChild(corps);
+    document.body.appendChild(carte);
+
+    /* ---- position ---- */
+    /* Une carte flottante DOIT pouvoir etre rattrapee : sans bornage, un deplacement malheureux ou un ecran
+       plus petit au retour la met hors de vue, et il n y a plus aucun moyen de la reprendre. On borne au
+       deplacement, au chargement ET au redimensionnement — les trois moments ou elle peut sortir. */
+    function borner(p) {
+      var L = carte.offsetWidth, H = carte.offsetHeight;
+      return {
+        x: Math.min(Math.max(MARGE, p.x), Math.max(MARGE, window.innerWidth - L - MARGE)),
+        y: Math.min(Math.max(MARGE, p.y), Math.max(MARGE, window.innerHeight - H - MARGE))
+      };
+    }
+    function poserA(p, enregistrer) {
+      var b = borner(p);
+      carte.style.left = b.x + 'px';
+      carte.style.top  = b.y + 'px';
+      if (enregistrer) { try { localStorage.setItem(opt.cle, JSON.stringify(b)); } catch (e) {} }
+      return b;
+    }
+    function ou() { return { x: parseInt(carte.style.left, 10) || 0, y: parseInt(carte.style.top, 10) || 0 }; }
+
+    /* ---- entrer dans la carte / retourner a sa place ---- */
+    /* Sous 1100 px la mise en page de l application change de logique : les panneaux redeviennent des enfants
+       de leur colonne, et plusieurs regles CSS mobiles visent justement « #toolsCol > * ». Laisser les elements
+       dans <body> casserait ces regles — d ou le retour reel a leur place, et pas un simple position:static. */
+    function entrer() {
+      opt.elements.forEach(function (el) { if (el.parentNode !== corps) corps.appendChild(el); });
+      carte.hidden = false;
+    }
+    function sortir() {
+      opt.elements.forEach(function (el) {
+        var a = el.__ancreCarte;
+        if (a && a.parentNode && el.parentNode !== a.parentNode) a.parentNode.insertBefore(el, a);
+      });
+      carte.hidden = true;
+    }
+
+    function appliquerLargeur() {
+      if (LARGE.matches) { entrer(); poserA(depart(), false); refletSuivi(); }
+      else sortir();
+    }
+
+    /* la carte ne s affiche que si l element qu elle suit est lui-meme affiche (mode Pixel, ici) */
+    function refletSuivi() {
+      if (!opt.suivre || !LARGE.matches) return;
+      carte.hidden = (opt.suivre.style.display === 'none');
+    }
+
+    function depart() {
+      var brut = null;
+      try { brut = JSON.parse(localStorage.getItem(opt.cle)); } catch (e) {}
+      return (brut && typeof brut.x === 'number' && typeof brut.y === 'number') ? brut : opt.defaut();
+    }
+
+    /* ---- deplacement a la souris et au doigt : les evenements POINTER couvrent les deux d un coup ---- */
+    var prise = null;
+    poignee.addEventListener('pointerdown', function (e) {
+      if (e.target.closest('.cf-replacer')) return;   /* le bouton Replacer n est pas une prise */
+      var r = carte.getBoundingClientRect();
+      prise = { dx: e.clientX - r.left, dy: e.clientY - r.top };
+      carte.classList.add('cf-saisie');
+      poignee.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+    poignee.addEventListener('pointermove', function (e) {
+      if (!prise) return;
+      poserA({ x: e.clientX - prise.dx, y: e.clientY - prise.dy }, false);
+    });
+    function lacher(e) {
+      if (!prise) return;
+      prise = null;
+      carte.classList.remove('cf-saisie');
+      try { poignee.releasePointerCapture(e.pointerId); } catch (x) {}
+      poserA(ou(), true);
+    }
+    poignee.addEventListener('pointerup', lacher);
+    poignee.addEventListener('pointercancel', lacher);
+
+    /* ---- au CLAVIER. Le fondateur a pose la regle inverse en aout — toute fonction clavier doit avoir son
+           bouton souris — et elle vaut dans les deux sens : une fonction qui ne s atteint qu a la souris
+           exclut. Fleches pour deplacer par pas de 12 px, Maj pour 2 px, Entree pour tout remettre. ---- */
+    poignee.addEventListener('keydown', function (e) {
+      var pas = e.shiftKey ? 2 : 12, dx = 0, dy = 0;
+      if (e.key === 'ArrowLeft')  dx = -pas;
+      else if (e.key === 'ArrowRight') dx = pas;
+      else if (e.key === 'ArrowUp')    dy = -pas;
+      else if (e.key === 'ArrowDown')  dy = pas;
+      else if (e.key === 'Enter' || e.key === ' ') { poserA(opt.defaut(), true); e.preventDefault(); return; }
+      else return;
+      var p = ou();
+      poserA({ x: p.x + dx, y: p.y + dy }, true);
+      e.preventDefault();
+    });
+
+    poignee.querySelector('.cf-replacer').addEventListener('click', function () { poserA(opt.defaut(), true); });
+
+    window.addEventListener('resize', function () { if (LARGE.matches) poserA(ou(), false); });
+    if (LARGE.addEventListener) LARGE.addEventListener('change', appliquerLargeur);
+    else if (LARGE.addListener) LARGE.addListener(appliquerLargeur);
+
+    /* l element suivi est masque/affiche par applyModeVisibility, qui ecrit dans son attribut style :
+       on observe cet attribut plutot que de se brancher dans leur fonction. */
+    if (opt.suivre && window.MutationObserver) {
+      new MutationObserver(refletSuivi).observe(opt.suivre, { attributes: true, attributeFilter: ['style'] });
+    }
+
+    appliquerLargeur();
+    return carte;
   }
-  /* Une carte flottante DOIT pouvoir etre rattrapee : sans bornage, un deplacement malheureux ou un ecran plus
-     petit au retour la met hors de vue, et il n y a plus aucun moyen de la reprendre. On borne au deplacement,
-     au chargement ET au redimensionnement — les trois moments ou elle peut sortir. */
-  function borner(p) {
-    var L = carte.offsetWidth, H = carte.offsetHeight;
-    return {
-      x: Math.min(Math.max(MARGE, p.x), Math.max(MARGE, window.innerWidth - L - MARGE)),
-      y: Math.min(Math.max(MARGE, p.y), Math.max(MARGE, window.innerHeight - H - MARGE))
-    };
+
+  /* ------------------------------------------------------------------ les deux cartes ---------------- */
+  function el(id) { return document.getElementById(id); }
+  function bordGaucheDe(colonne, largeurCarte) {
+    var r = colonne ? colonne.getBoundingClientRect() : null;
+    return (r && r.width > 0) ? Math.round(r.left) : Math.max(MARGE, window.innerWidth - largeurCarte - 340);
   }
-  function poser(p, enregistrer) {
-    var b = borner(p);
-    carte.style.left = b.x + 'px';
-    carte.style.top  = b.y + 'px';
-    if (enregistrer) { try { localStorage.setItem(CLE, JSON.stringify(b)); } catch (e) {} }
-    return b;
+
+  /* 1. CARREAUX — le navigateur A/B et « Agrandir le mur », a gauche du rail de droite.
+        Meme cle qu au premier jet : la position deja choisie par le fondateur est conservee. */
+  var rail = el('actionsCol'), nav = el('panelNavWrap'), grandir = el('growWallBtn');
+  if (rail && nav && grandir) {
+    creerCarte({
+      id: 'carteFlottante', titre: 'Carreaux', cle: 'quadretiCarteCarreauxPos',
+      elements: [nav, grandir],
+      defaut: function () {
+        var r = rail.getBoundingClientRect();
+        var l = (r.width > 0 ? r.left : window.innerWidth - 320) - 292 - 16;
+        return { x: Math.max(MARGE, Math.round(l)), y: 96 };
+      }
+    });
   }
-  var depart = null;
-  try { var brut = localStorage.getItem(CLE); if (brut) depart = JSON.parse(brut); } catch (e) {}
-  if (!depart || typeof depart.x !== 'number' || typeof depart.y !== 'number') depart = defaut();
-  poser(depart, false);
 
-  /* ---- deplacement a la souris et au doigt : les evenements POINTER couvrent les deux d un coup ---- */
-  var poignee = document.getElementById('cfPoignee');
-  var prise = null;
-  poignee.addEventListener('pointerdown', function (e) {
-    if (e.target.closest('.cf-replacer')) return;   /* le bouton Replacer n est pas une prise */
-    var r = carte.getBoundingClientRect();
-    prise = { dx: e.clientX - r.left, dy: e.clientY - r.top };
-    carte.classList.add('cf-saisie');
-    poignee.setPointerCapture(e.pointerId);
-    e.preventDefault();
-  });
-  poignee.addEventListener('pointermove', function (e) {
-    if (!prise) return;
-    poser({ x: e.clientX - prise.dx, y: e.clientY - prise.dy }, false);
-  });
-  function lacher(e) {
-    if (!prise) return;
-    prise = null;
-    carte.classList.remove('cf-saisie');
-    try { poignee.releasePointerCapture(e.pointerId); } catch (x) {}
-    poser({ x: parseInt(carte.style.left, 10), y: parseInt(carte.style.top, 10) }, true);
+  /* 2. COULEUR — le panneau entier : selecteur, options avancees et palette.
+        Il n existe qu en mode Pixel : la carte suit son affichage.
+        Position par defaut : la ou le panneau se trouvait deja, contre la colonne de gauche — la carte
+        apparait sans que rien n ait saute de place. */
+  var outils = el('toolsCol'), couleurs = el('colorsPanel');
+  if (outils && couleurs) {
+    creerCarte({
+      id: 'carteCouleur', titre: 'Couleur', cle: 'quadretiCarteCouleurPos',
+      elements: [couleurs], suivre: couleurs,
+      defaut: function () { return { x: Math.max(MARGE, bordGaucheDe(outils, 292)), y: 96 }; }
+    });
   }
-  poignee.addEventListener('pointerup', lacher);
-  poignee.addEventListener('pointercancel', lacher);
-
-  /* ---- au CLAVIER. Le fondateur a pose la regle inverse en aout — toute fonction clavier doit avoir son bouton
-         souris — et elle vaut dans les deux sens : une fonction qui ne s atteint qu a la souris exclut. Fleches
-         pour deplacer par pas de 12 px, Maj pour 2 px au pixel pres, Entree pour tout remettre en place. ---- */
-  poignee.addEventListener('keydown', function (e) {
-    var pas = e.shiftKey ? 2 : 12, dx = 0, dy = 0;
-    if (e.key === 'ArrowLeft')  dx = -pas;
-    else if (e.key === 'ArrowRight') dx = pas;
-    else if (e.key === 'ArrowUp')    dy = -pas;
-    else if (e.key === 'ArrowDown')  dy = pas;
-    else if (e.key === 'Enter' || e.key === ' ') { poser(defaut(), true); e.preventDefault(); return; }
-    else return;
-    poser({ x: (parseInt(carte.style.left, 10) || 0) + dx, y: (parseInt(carte.style.top, 10) || 0) + dy }, true);
-    e.preventDefault();
-  });
-
-  document.getElementById('cfReplacer').addEventListener('click', function () { poser(defaut(), true); });
-
-  /* l ecran change de taille : on ramene la carte dans le cadre plutot que de la laisser dehors */
-  window.addEventListener('resize', function () {
-    poser({ x: parseInt(carte.style.left, 10) || 0, y: parseInt(carte.style.top, 10) || 0 }, false);
-  });
 })();
 </script>
 </body></html>
