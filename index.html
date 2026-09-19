@@ -1335,6 +1335,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      ENTRE les elements et laissait le bouton isole au milieu. Cette marge automatique absorbe tout l espace
      d un coup — les trois se collent a droite, quelle que soit la largeur et que le menu soit affiche ou non. */
   .appnav-inner #connectBtn{ margin-left:auto; }
+  /* Il ne peut y avoir QU UNE marge automatique : « Mon espace » en a une depuis le 18/09, et deux marges
+     automatiques dans le meme conteneur se PARTAGENT l espace libre a parts egales — mesure, 435,9 px
+     chacune, d ou deux trous symetriques et un bouton reste au milieu. On neutralise celle de Mon espace,
+     et SEULEMENT quand le bouton le precede : si le bouton quittait la barre un jour, Mon espace
+     retrouverait sa marge et resterait a droite tout seul, comme avant. */
+  .appnav-inner #connectBtn ~ a.appnav-espace{ margin-left:0; }
   /* V142.9 — trop imposant sur mobile/tablette a cote du logo et du menu ☰ ; le PC
      (>=1024px, plus de place) garde la taille d'origine ci-dessus. */
   @media (max-width:1023px){
