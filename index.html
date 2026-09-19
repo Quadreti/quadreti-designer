@@ -631,6 +631,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .panel-nav-wrap{
     background: var(--surface); border:1px solid var(--border); border-radius: 12px; padding: 14px;
     display:flex; flex-direction:column; align-items:center; width: 210px; box-sizing:border-box;
+    /* 19/09, fondateur : « couleur texte navy 1 ». Ce bloc a un fond BLANC (`--surface` ne vaut que
+       #ffffff dans tout le fichier) alors que `--panel-ink` vaut #dedede a l interieur des volets :
+       le titre et les reperes A-E / 1-5 etaient du gris clair sur du blanc, contraste 1,29, illisibles.
+       On redefinit le jeton ICI plutot que de repeindre chaque selecteur : une seule ligne, et tout ce
+       que ce bloc contient suit. Navy 1 sur blanc donne 14,0. */
+    --panel-ink:#1e2b35;
   }
   .panel-nav-wrap h2{
     font-family: var(--font-main); font-weight:600; font-size:12px; text-transform: uppercase;
@@ -9165,7 +9171,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .carte-flottante .cf-corps{ padding:10px 10px 0; }
   /* les elements deplaces gardent leur mise en forme : on neutralise seulement les marges qu ils tenaient
      de la colonne, qui n a plus cours ici, et on les laisse occuper la largeur de la carte */
-  .carte-flottante > .cf-corps > *{ margin-left:0; margin-right:0; }
+  /* 19/09 : ces marges valaient 0 depuis hier, pour annuler celles que les elements tenaient de la
+     colonne. C etait trop brutal : cela ecrasait aussi le `margin: 10px auto 0` d « Agrandir le mur »,
+     qui le centrait par construction, et laissait le bloc des carreaux (210 px de large dans 270 px
+     utiles) cale a gauche avec 60 px de vide a droite. `auto` fait le meme travail — annuler l heritage
+     de la colonne — ET centre, sans aucun effet sur un bloc qui occupe deja toute la largeur. */
+  .carte-flottante > .cf-corps > *{ margin-left:auto; margin-right:auto; }
   .carte-flottante > .cf-corps > .panel{ width:100%; box-sizing:border-box; }
 
   /* La carte Couleur est BEAUCOUP plus haute que celle des Carreaux : le panneau porte le selecteur, le
