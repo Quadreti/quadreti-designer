@@ -8881,7 +8881,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       // travail.
       var nav = document.getElementById('panelNavWrap');
       var actions = document.getElementById('actionsCol');
-      if (nav && actions && nav.parentElement !== actions){
+      // 19/09 : `&& !nav.closest(...)` — cette routine rassemble les elements marques `in-col` dans les
+      //   colonnes laterales, et elle se redeclenche a chaque changement de mise en page. Sans cette garde, elle
+      //   reprenait les deux elements a la carte flottante quelques millisecondes apres que celle-ci les a pris :
+      //   la carte s affichait, vide. Ce qui est dans la carte n appartient plus aux colonnes.
+      if (nav && actions && nav.parentElement !== actions && !nav.closest('#carteFlottante')){
         actions.insertBefore(nav, actions.firstChild);
         nav.classList.add('in-col');
       }
@@ -8889,7 +8893,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       // occupait 52px juste au-dessus du carreau. Il rejoint la colonne de droite, sous le
       // reperage, et rend cette hauteur au mur.
       var grandir = document.getElementById('growWallBtn');
-      if (grandir && actions && grandir.parentElement !== actions){
+      if (grandir && actions && grandir.parentElement !== actions && !grandir.closest('#carteFlottante')){
         if (nav && nav.parentElement === actions) nav.insertAdjacentElement('afterend', grandir);
         else actions.insertBefore(grandir, actions.firstChild);
         grandir.classList.add('in-col');
