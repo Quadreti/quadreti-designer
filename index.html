@@ -1687,7 +1687,38 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      qui laissait du vide entre elles ET les rendait plus petites que necessaire. A 100 % elles remplissent
      la case : la palette prend toute la largeur du panneau, et comme elles sont carrees elle gagne autant
      en hauteur. Limite a #paletteGrid : les palettes du texte et du dessin ne bougent pas. */
-  #paletteGrid .swatch{ width:100%; }
+  #paletteGrid .swatch{ width:100%; }
+
+  /* ============ 19/09, fondateur : « unifier les volets lateraux comme les boutons flottants, meme
+     grammaire », puis « bandeau orange pour le volet pas necessaire ». Les volets reprennent donc DEUX
+     traits des cartes sur trois : les couleurs et le repliage. Les titres gardent leur allure. ============ */
+
+  /* 1. LES COULEURS — volet navy 2, blocs navy 1, comme une carte et son panneau.
+     Piege : le volet lui-meme lit `var(--grout)` pour son fond, le MEME jeton que ses blocs. Redefinir le
+     jeton seul aurait repeint les deux de la meme couleur et supprime toute distinction. On ecrit donc
+     son fond en clair, et on redefinit le jeton pour ce qu il contient.
+     Cette regle vient APRES celle qui pose `background:var(--grout)` : a specificite egale, c est l ordre
+     qui tranche — une media query n ajoute pas de specificite. */
+  #toolsCol, #actionsCol{ background:#33434f; --grout:#1e2b35; }
+
+  /* 2. LE REPLIAGE — meme geste que sur les cartes : les trois barres replient le bloc.
+     Le bouton se pose EN ABSOLU a gauche du titre, pour que le titre reste centre sur le bloc et non sur
+     la place qui reste a cote du bouton. Ses barres prennent `currentColor` : elles suivront le titre,
+     quelle que soit la couleur qu il prendra un jour. */
+  #toolsCol .panel > h2:first-child, #actionsCol .panel > h2:first-child,
+  #toolsCol .cartouche-row > h2:first-child, #actionsCol .cartouche-row > h2:first-child{
+    position:relative; padding-left:26px; padding-right:26px; }
+  .bloc-plier{
+    position:absolute; left:0; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:2px; background:none; border:none;
+    padding:3px; border-radius:4px; cursor:pointer; color:inherit; }
+  .bloc-plier:hover, .bloc-plier:focus-visible{ background:#ffffff1f; }
+  .bloc-plier i{ display:block; width:12px; height:2px; border-radius:1px; background:currentColor; }
+  /* Replie, il ne reste que le titre. Le `!important` est NECESSAIRE : plusieurs enfants de ces blocs
+     recoivent un `display` EN LIGNE ecrit par le script de l app, et un style en ligne bat une regle CSS.
+     C est la lecon des deux retraits d options d aujourd hui. */
+  .bloc-plie > *:not(:first-child){ display:none !important; }
+  #toolsCol .bloc-plie > h2:first-child, #actionsCol .bloc-plie > h2:first-child{ margin-bottom:0; }
   /* ================= fin du bloc ================= */
 </style>
 </head>
@@ -9451,6 +9482,47 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       defaut: function () { return { x: largeurRail() + MARGE, y: 96 }; }   /* contre le rail d icones, a GAUCHE */
     });
   }
+})();
+</script>
+<script>
+/* 19/09, fondateur : « unifier les volets lateraux comme les boutons flottants ».
+   Ce bloc ne fait qu UNE chose : poser le bouton qui replie, dans le titre de chaque bloc des volets.
+   Tout le reste — couleurs, etat replie — est dans la feuille de style. Si ce script n aboutit pas, les
+   blocs restent simplement toujours deplies : rien ne casse. */
+(function () {
+  var blocs = document.querySelectorAll(
+    '#toolsCol .panel, #toolsCol .cartouche-row, #actionsCol .panel, #actionsCol .cartouche-row');
+  Array.prototype.forEach.call(blocs, function (bloc) {
+    var h2 = bloc.firstElementChild;
+    /* on n habille que les blocs dont le titre est vraiment le premier element : c est la meme condition
+       qu en CSS, et un bouton pose ailleurs se retrouverait sans la place qui lui est reservee */
+    if (!h2 || h2.tagName !== 'H2' || h2.querySelector('.bloc-plier')) return;
+
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'bloc-plier';
+    b.innerHTML = '<i></i><i></i><i></i>';
+    h2.insertBefore(b, h2.firstChild);
+
+    var nom = (h2.textContent || '').replace(/\s+/g, ' ').trim();
+    var cle = 'quadretiBlocPlie_' + (bloc.id || nom.slice(0, 24));
+
+    function appliquer(plie, enregistrer) {
+      bloc.classList.toggle('bloc-plie', plie);
+      b.setAttribute('aria-expanded', plie ? 'false' : 'true');
+      b.setAttribute('aria-label', (plie ? 'Deplier' : 'Replier') + ' ' + nom);
+      b.title = plie ? 'Deplier' : 'Replier';
+      if (enregistrer) { try { localStorage.setItem(cle, plie ? '1' : '0'); } catch (e) {} }
+    }
+    b.addEventListener('click', function (e) {
+      e.stopPropagation();   /* certains titres portent deja un comportement au clic */
+      appliquer(!bloc.classList.contains('bloc-plie'), true);
+    });
+
+    var depart = false;
+    try { depart = localStorage.getItem(cle) === '1'; } catch (e) {}
+    appliquer(depart, false);
+  });
 })();
 </script>
 </body></html>
