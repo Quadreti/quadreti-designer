@@ -1353,7 +1353,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .appnav-inner #connectBtn{
     margin-left:auto;
     display:inline-flex; align-items:center; justify-content:center; gap:5px;
-    font-size:11.5px; line-height:1.2; padding:7px 15px; }
+    font-size:11.5px; line-height:1.2; padding:7px 15px;
+    /* le meme calage vertical que Mon espace, pose le 18/09 : sans lui les deux pastilles voisines
+       etaient decalees de 2 px l une par rapport a l autre (hauts mesures a 13 et 15). Si ce calage
+       change un jour sur Mon espace, il doit changer ici aussi — les deux vont par paire. */
+    align-self:center; margin-bottom:-4px; }
   .appnav-inner #connectBtn .v140-icon{ width:12px; height:12px; margin:0; }
   /* Il ne peut y avoir QU UNE marge automatique : « Mon espace » en a une depuis le 18/09, et deux marges
      automatiques dans le meme conteneur se PARTAGENT l espace libre a parts egales — mesure, 435,9 px
