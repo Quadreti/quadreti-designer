@@ -1330,6 +1330,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
      ligne bat toute regle, et c est ce qui empechait d habiller le bouton une fois deplace. La regle de
      la ligne suivante (mobile/tablette) peut de nouveau faire son travail. */
   .connect-btn .v140-icon{ width:14px; height:14px; margin-right:5px; }
+  /* 19/09, fondateur : le bouton doit etre A DROITE, avec Mon espace et le burger. La barre est en
+     `space-between` et le menu de liens est masque (le burger est partout) : l espace libre se repartissait
+     ENTRE les elements et laissait le bouton isole au milieu. Cette marge automatique absorbe tout l espace
+     d un coup — les trois se collent a droite, quelle que soit la largeur et que le menu soit affiche ou non. */
+  .appnav-inner #connectBtn{ margin-left:auto; }
   /* V142.9 — trop imposant sur mobile/tablette a cote du logo et du menu ☰ ; le PC
      (>=1024px, plus de place) garde la taille d'origine ci-dessus. */
   @media (max-width:1023px){
