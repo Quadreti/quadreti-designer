@@ -2908,10 +2908,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           <button type="button" id="voirDoubleLecture" style="width:100%; margin-top:4px;">Voir la double lecture en grand</button>
         </div>
         <div id="featureBlock_harmonize">
-          <label class="checkbox-row" for="harmonizeCheckbox">
-            <input type="checkbox" id="harmonizeCheckbox">
-            Harmoniser les tons de la bibliothèque
-          </label>
+          <div class="size-row dl-force bulle-ancre" style="max-width:none; margin: 8px 0 4px;">
+            <label for="harmonizeForce">Harmoniser <button type="button" class="info-bulle" id="iHarmonie" aria-expanded="false" aria-controls="bulleHarmonie" aria-label="À propos de l'harmonisation">i</button></label>
+            <input type="range" id="harmonizeForce" min="0" max="100" step="5" value="0">
+            <output id="harmonizeValeur" for="harmonizeForce">0 %</output>
+            <div id="bulleHarmonie" class="bulle" role="tooltip">Rapproche les couleurs dominantes de vos photos entre elles, pour une mosaïque plus homogène. Le noir, le blanc et les gris ne bougent pas. À 0 %, les photos restent telles quelles.<br>Changer ce réglage garde les mêmes photos aux mêmes places.</div>
+          </div>
         </div>
         <div class="add-color-row">
           <button id="clearLibraryBtn" style="flex:1;">Vider</button>
@@ -8223,6 +8225,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   // Style photo (Famille 2 — filtres génériques) : transforme les pixels déjà dessinés,
   // appliqué juste avant l'export, quel que soit le mode qui a rempli le canvas.
   function applyPhotoStyle(ctx, size, style, shift) {
+    // 23/09 : harmonisation propre (objet { harmonie: true, ... }), appliquee avant tout style
+    if (shift && shift.harmonie) { harmoniserCanvas(ctx, size, shift); shift = null; }
     if ((style === 'none' || !style) && !shift) return;
     // V132 — style "Pointillé" : la photo devient une trame de points (type carte du monde
     // en points) — fond blanc, un point charbon par sous-case, taille selon la luminosité.
@@ -8687,6 +8691,52 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     const Z = dlF((R * 0.0193 + G * 0.1192 + B * 0.9505) / 1.08883);
     o[0] = 116 * Y - 16; o[1] = 500 * (X - Y); o[2] = 200 * (Y - Z);
   }
+  // 23/09 -- HARMONISER, version propre (OKLab). L ancienne ajoutait la MEME dose de couleur a tous les
+  // points d une photo : le bas d une mer virait au marron, un appareil gris metal au vert-bleu, le
+  // blanc et le noir s affadissaient. Ici on ne touche qu a la couleur (a, b en OKLab, jamais la
+  // clarte), et chaque point n est corrige qu a proportion de ce qu il porte la teinte dominante de
+  // SA photo : un gris, un blanc, un noir ne bougent pas ; un point tres rouge dans une photo rouge
+  // est ramene vers la teinte commune de la bibliotheque.
+  function harmonieAB(a, b, hm) {
+    const n2 = hm.ma * hm.ma + hm.mb * hm.mb;
+    if (n2 < 0.0004) return [a, b];                                   // photo deja neutre : rien a corriger
+    const w = Math.max(0, Math.min(1, (a * hm.ma + b * hm.mb) / n2));
+    return [a + hm.force * w * hm.da, b + hm.force * w * hm.db];
+  }
+  // OKLab (Ottosson, 2020) plutot que Lab : en Lab, un bleu qu on desature tire vers le violet
+  // (mesure sur le court de tennis) ; OKLab garde la teinte droite.
+  function okLab(r, g, b, o) {
+    const R = DL_LIN[r], G = DL_LIN[g], B = DL_LIN[b];
+    const l = Math.cbrt(0.4122214708 * R + 0.5363325363 * G + 0.0514459929 * B);
+    const m = Math.cbrt(0.2119034982 * R + 0.6806995451 * G + 0.1073969566 * B);
+    const s = Math.cbrt(0.0883024619 * R + 0.2817188376 * G + 0.6299787005 * B);
+    o[0] = 0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s;
+    o[1] = 1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s;
+    o[2] = 0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s;
+  }
+  function okVersRgb(L, a, b) {
+    const l = Math.pow(L + 0.3963377774 * a + 0.2158037573 * b, 3), m = Math.pow(L - 0.1055613458 * a - 0.0638541728 * b, 3), s = Math.pow(L - 0.0894841775 * a - 1.2914855480 * b, 3);
+    return [dlGam(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s), dlGam(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s), dlGam(-0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s)];
+  }
+  function harmoniserCanvas(ctx, s, hm) {
+    const im = ctx.getImageData(0, 0, s, s), d = im.data, o = [0, 0, 0];
+    for (let p = 0; p < d.length; p += 4) {
+      okLab(d[p], d[p + 1], d[p + 2], o);
+      const ab = harmonieAB(o[1], o[2], hm), c = okVersRgb(o[0], ab[0], ab[1]);
+      d[p] = c[0]; d[p + 1] = c[1]; d[p + 2] = c[2];
+    }
+    ctx.putImageData(im, 0, 0);
+  }
+  // meme correction sur les couleurs qui servent a CHOISIR la photo (signature 3×3, moyenne)
+  function harmonieSignature(v, hm) {
+    const out = v.slice(), o = [0, 0, 0];
+    for (let k = 0; k < v.length; k += 3) {
+      okLab(Math.round(v[k]), Math.round(v[k + 1]), Math.round(v[k + 2]), o);
+      const ab = harmonieAB(o[1], o[2], hm), c = okVersRgb(o[0], ab[0], ab[1]);
+      out[k] = c[0]; out[k + 1] = c[1]; out[k + 2] = c[2];
+    }
+    return out;
+  }
   // zonesCible : 9 couleurs Lab (grille 3×3) ; force : 0 = photo intacte, 1 = zones à la couleur exacte de la cible
   function transfertZones(ctx, s, zonesCible, force) {
     const im = ctx.getImageData(0, 0, s, s), d = im.data, N = s * s;
@@ -8803,6 +8853,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     } finally { mosaicBusy = false; }
   }
   dlForce.addEventListener('change', recomposerDoubleLecture);
+  // 23/09 : le curseur Harmoniser suit la meme regle -- memes photos, memes places
+  const hForce = document.getElementById('harmonizeForce'), hValeur = document.getElementById('harmonizeValeur');
+  hForce.addEventListener('input', () => { hValeur.textContent = hForce.value + ' %'; });
+  hForce.addEventListener('change', recomposerDoubleLecture);
   dlMethode.addEventListener('change', recomposerDoubleLecture);
   document.getElementById('voirDoubleLecture').addEventListener('click', async () => {
     if (!derniereComposition) { statusMsg.textContent = 'Générez d\'abord une mosaïque'; return; }
@@ -8832,7 +8886,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     const filterOpacity = methodeDL === 'voile' ? forceDL : 0;
     const forceTransfert = methodeDL === 'couleurs' ? forceDL : 0;
     const photoStyle = mosaicStyleCarousel.getValue();
-    const harmonize = document.getElementById('harmonizeCheckbox').checked;
+    // 23/09 : « Harmoniser » est un curseur (0 = sans) et une vraie harmonisation (voir harmonieAB)
+    const forceHarmonie = (parseInt(document.getElementById('harmonizeForce').value, 10) || 0) / 100;
+    const harmonize = forceHarmonie > 0;
     const checkedIdx = new Set();
     let lowResCount = 0;
     // vérif qualité une seule fois par photo (indépendante du filtre couleur) — la barre
@@ -8850,18 +8906,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
     // Harmonisation : décalage propre à chaque photo, calculé une fois pour toute la bibliothèque,
     // pour rapprocher son propre ton moyen du ton moyen de l'ensemble (correction partielle, pas totale).
-    const HARMONIZE_STRENGTH = 0.4;
     let shiftByIdx = null;
     if (harmonize) {
-      const globalAvg = [0, 0, 0];
-      libraryImages.forEach(item => { globalAvg[0] += item.avg[0]; globalAvg[1] += item.avg[1]; globalAvg[2] += item.avg[2]; });
-      globalAvg[0] /= libraryImages.length; globalAvg[1] /= libraryImages.length; globalAvg[2] /= libraryImages.length;
-      shiftByIdx = libraryImages.map(item => [
-        (globalAvg[0] - item.avg[0]) * HARMONIZE_STRENGTH,
-        (globalAvg[1] - item.avg[1]) * HARMONIZE_STRENGTH,
-        (globalAvg[2] - item.avg[2]) * HARMONIZE_STRENGTH,
-      ]);
+      // teinte moyenne de la bibliotheque, en OKLab -- a et b seulement : la couleur, pas la clarte
+      const o = [0, 0, 0];
+      const moy = libraryImages.map(item => { okLab(Math.round(item.avg[0]), Math.round(item.avg[1]), Math.round(item.avg[2]), o); return [o[1], o[2]]; });
+      const ga = moy.reduce((s, m) => s + m[0], 0) / moy.length, gb = moy.reduce((s, m) => s + m[1], 0) / moy.length;
+      shiftByIdx = moy.map(m => ({ harmonie: true, ma: m[0], mb: m[1], da: ga - m[0], db: gb - m[1], force: forceHarmonie }));
     }
+    // 23/09 -- la photo etait CHOISIE sur sa couleur d origine puis recoloree : on choisit desormais
+    // sur la couleur qu elle aura vraiment une fois harmonisee (meme correction que harmoniserCanvas).
+    const sigChoix = libraryImages.map((item, idx) => shiftByIdx ? harmonieSignature(item.sig, shiftByIdx[idx]) : item.sig);
+    const avgChoix = libraryImages.map((item, idx) => shiftByIdx ? harmonieSignature(item.avg, shiftByIdx[idx]) : item.avg);
 
     // La grille d'échantillonnage est n fois plus fine que le nombre de tessellae — comme
     // pour le Mode Couleur, ce qui compte c'est ce réglage, pas la taille du mur choisie.
@@ -8947,7 +9003,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
     // 23/09 : si seul le rendu change (force, methode), on reprend EXACTEMENT les memes photos
     // aux memes places -- c est ce qui permet de comparer deux reglages a l oeil.
-    const cleComposition = [subW, subH, n, harmonize, sx, sy, sWidth, sHeight, libraryImages.length].join('|');
+    const cleComposition = [subW, subH, n, sx, sy, sWidth, sHeight, libraryImages.length].join('|');
     const reprise = !!recomposer && !!derniereComposition && derniereComposition.cle === cleComposition
                     && derniereComposition.img === img && derniereComposition.lib === libraryImages;
     if (reprise) { chosen = derniereComposition.chosen.slice(); chosen.forEach(checkQuality); rowsDone = subH; }
@@ -8971,7 +9027,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         // Distance = écart moyen par point de la signature (÷ SIG_POINTS pour rester à la même
         // échelle que l'ancien matching 1-point → USAGE_PENALTY / NEAR_TIE_MARGIN restent calibrés).
         const candidates = libraryImages.map((item, idx) => {
-          const s = item.sig;
+          const s = sigChoix[idx]; // 23/09 : couleur apres harmonisation
           let dsum = 0;
           for (let k = 0; k < SIG_LEN; k++) { const df = s[k] - tsig[k]; dsum += df * df; }
           return { idx, dist: dsum / SIG_POINTS + USAGE_PENALTY * usageCounts[idx] };
@@ -9029,7 +9085,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             }
             thumb = noFilterCache.get(idx);
           } else {
-            const op = adaptiveOpacity(filterOpacity, libraryImages[idx].avg, r, g, b); // voile adaptatif (V131)
+            const op = adaptiveOpacity(filterOpacity, avgChoix[idx], r, g, b); // voile adaptatif (V131), couleur apres harmonisation (23/09)
             thumb = cropToSquareThumbWithOverlay(libraryImages[idx].img, target, r, g, b, op, photoStyle, shift);
           }
           setGlobalCell(row, col, { type: 'image', value: thumb });
@@ -9044,7 +9100,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
               const idx = chosen[i2];
               const shift = shiftByIdx ? shiftByIdx[idx] : null;
               const or = data[i2 * 4], og = data[i2 * 4 + 1], ob = data[i2 * 4 + 2];
-              const op = adaptiveOpacity(filterOpacity, libraryImages[idx].avg, or, og, ob); // voile adaptatif (V131)
+              const op = adaptiveOpacity(filterOpacity, avgChoix[idx], or, og, ob); // voile adaptatif (V131), couleur apres harmonisation (23/09)
               const overlay = forceTransfert > 0 ? { zones: zonesCible(subRow, subCol), force: forceTransfert }
                             : (op > 0 ? `rgba(${or}, ${og}, ${ob}, ${op})` : null);
               drawSquareCropStyled(
