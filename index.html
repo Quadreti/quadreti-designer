@@ -2915,6 +2915,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             <div id="bulleHarmonie" class="bulle" role="tooltip">Rapproche les couleurs dominantes de vos photos entre elles, pour une mosaïque plus homogène. Le noir, le blanc et les gris ne bougent pas. À 0 %, les photos restent telles quelles.<br>Changer ce réglage garde les mêmes photos aux mêmes places.</div>
           </div>
         </div>
+        <div id="featureBlock_chaque_photo">
+          <label class="checkbox-row" for="chaquePhotoCheckbox">
+            <input type="checkbox" id="chaquePhotoCheckbox" checked>
+            Utiliser chaque photo au moins une fois
+          </label>
+        </div>
         <div class="add-color-row">
           <button id="clearLibraryBtn" style="flex:1;">Vider</button>
           <button id="generateLibraryBtn" style="flex:2;">Générer la mosaïque</button>
@@ -8863,6 +8869,25 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     openMosaicZoom(await generateWallZoomComposite());
   });
 
+  // 23/09 : hasard reproductible -- meme graine, meme suite de tirages (mulberry32)
+  function aleaGraine(graine) {
+    let s = graine >>> 0;
+    return function () { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  }
+  // 23/09 : cocher / decocher « chaque photo au moins une fois » rejoue le MEME tirage, puis ajoute
+  // (ou non) la passe qui pose les photos oubliees -- on compare donc sur la meme base.
+  document.getElementById('chaquePhotoCheckbox').addEventListener('change', async () => {
+    if (mosaicSubMode !== 'library' || !lastMosaicImage || !derniereComposition || mosaicBusy) return;
+    mosaicBusy = true;
+    try {
+      pushWallSnapshot();
+      openLoadingModal('Recomposition… 0 %');
+      const note = await applyMosaicLibrary(lastMosaicImage, mosaicProgress, 'meme-tirage');
+      buildPanelGrid(); buildPanelNav(); closeLoadingModal();
+      statusMsg.textContent = 'Mosaïque recomposée ✓' + (note ? ' — ' + note : '');
+    } finally { mosaicBusy = false; }
+  });
+
   // Pénalité de réutilisation : chaque usage supplémentaire d'une même image
   // l'écarte progressivement des futurs choix, pour répartir la bibliothèque
   // plutôt que de laisser 2-3 photos "moyennes" dominer tout le mur.
@@ -8990,7 +9015,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     // tranches de ~30 ms : entre deux tranches on rend la main au navigateur pour qu'il reste
     // réactif et repeigne la barre de progression, au lieu de figer l'onglet plusieurs secondes.
     // Le résultat produit est strictement identique — seul le rythme d'exécution change.
-    const totalRows = subH + totalH;
+    const totalRows = subH + totalH + 1;
     let rowsDone = 0, lastYield = performance.now();
     const tick = async () => {
       rowsDone++;
@@ -9004,12 +9029,31 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     // 23/09 : si seul le rendu change (force, methode), on reprend EXACTEMENT les memes photos
     // aux memes places -- c est ce qui permet de comparer deux reglages a l oeil.
     const cleComposition = [subW, subH, n, sx, sy, sWidth, sHeight, libraryImages.length].join('|');
-    const reprise = !!recomposer && !!derniereComposition && derniereComposition.cle === cleComposition
+    const memeMur = !!derniereComposition && derniereComposition.cle === cleComposition
                     && derniereComposition.img === img && derniereComposition.lib === libraryImages;
+    const reprise = recomposer === true && memeMur;
+    // 23/09 : le tirage des quasi-ex-aequo suit une GRAINE. « Generer » en tire une nouvelle ;
+    // cocher « chaque photo au moins une fois » rejoue la meme, donc part de la meme disposition.
+    const graine = (recomposer === 'meme-tirage' && memeMur) ? derniereComposition.graine : ((Math.random() * 4294967296) >>> 0);
+    const alea = aleaGraine(graine);
+    const chaquePhoto = document.getElementById('chaquePhotoCheckbox').checked;
+    let noteChaquePhoto = '';
     if (reprise) { chosen = derniereComposition.chosen.slice(); chosen.forEach(checkQuality); rowsDone = subH; }
     else {
     // Choix de la photo pour CHAQUE sous-case de la grille fine — identique à la logique
     // historique (n=1 en est simplement le cas particulier où sous-case = tesselle entière).
+    // 23/09 -- VITESSE : chaque case calculait la distance a TOUTE la bibliotheque, puis la triait en
+    // entier (1 000 photos, mur 5x5 en « Maximale 4x4 » : ~15 s de choix sur ~50 s au total, mesure du
+    // 23/09 au second calcul -- le reste est le dessin des petites photos). On ne garde plus que les
+    // CAND meilleures, dans le meme ordre qu un tri stable (a egalite, la photo importee la premiere).
+    // Suffisant : l anti-repetition n ecarte jamais plus de 12 photos (rayon 2), et le tirage n en
+    // regarde que 4 -- le choix est identique a l ancien, tirage compris.
+    const NB_PHOTOS = libraryImages.length;
+    const CAND = Math.min(NB_PHOTOS, 24);
+    const sigsPlates = new Float64Array(NB_PHOTOS * SIG_LEN);
+    sigChoix.forEach((sg, idx) => { for (let k = 0; k < SIG_LEN; k++) sigsPlates[idx * SIG_LEN + k] = sg[k]; });
+    const topIdx = new Int32Array(CAND), topDist = new Float64Array(CAND);
+    const ciblesSig = chaquePhoto ? new Float64Array(subW * subH * SIG_LEN) : null;   // pour la passe « chaque photo »
     for (let row = 0; row < subH; row++) {
       for (let col = 0; col < subW; col++) {
         const i = row * subW + col;
@@ -9026,12 +9070,20 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
         // Distance = écart moyen par point de la signature (÷ SIG_POINTS pour rester à la même
         // échelle que l'ancien matching 1-point → USAGE_PENALTY / NEAR_TIE_MARGIN restent calibrés).
-        const candidates = libraryImages.map((item, idx) => {
-          const s = sigChoix[idx]; // 23/09 : couleur apres harmonisation
+        if (ciblesSig) for (let k = 0; k < SIG_LEN; k++) ciblesSig[i * SIG_LEN + k] = tsig[k];
+        let nTop = 0;
+        for (let idx = 0; idx < NB_PHOTOS; idx++) {
+          const base = idx * SIG_LEN;
           let dsum = 0;
-          for (let k = 0; k < SIG_LEN; k++) { const df = s[k] - tsig[k]; dsum += df * df; }
-          return { idx, dist: dsum / SIG_POINTS + USAGE_PENALTY * usageCounts[idx] };
-        }).sort((a, b) => a.dist - b.dist);
+          for (let k = 0; k < SIG_LEN; k++) { const df = sigsPlates[base + k] - tsig[k]; dsum += df * df; } // 23/09 : couleur apres harmonisation
+          const dist = dsum / SIG_POINTS + USAGE_PENALTY * usageCounts[idx];
+          if (nTop === CAND && dist >= topDist[CAND - 1]) continue;
+          let p = nTop < CAND ? nTop++ : CAND - 1;
+          while (p > 0 && topDist[p - 1] > dist) { topDist[p] = topDist[p - 1]; topIdx[p] = topIdx[p - 1]; p--; }
+          topDist[p] = dist; topIdx[p] = idx;
+        }
+        const candidates = [];
+        for (let k = 0; k < nTop; k++) candidates.push({ idx: topIdx[k], dist: topDist[k] });
 
         // Rayon 2, puis rayon 1, puis sans contrainte — la bibliothèque décide de ce qui est tenable
         let pool = null;
@@ -9049,7 +9101,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         if (tiePool.length > 1) {
           const weights = TIE_WEIGHTS.slice(0, tiePool.length);
           const sum = weights.reduce((a, w) => a + w, 0);
-          let t = Math.random() * sum;
+          let t = alea() * sum;
           for (let k = 0; k < tiePool.length; k++) { t -= weights[k]; if (t <= 0) { pick = tiePool[k]; break; } }
         }
 
@@ -9060,7 +9112,41 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       await tick();
     }
 
-    derniereComposition = { cle: cleComposition, img: img, lib: libraryImages, chosen: chosen.slice() };
+    // 23/09 -- CHAQUE PHOTO AU MOINS UNE FOIS (option). Le mur compose, chaque photo restee de cote
+    // prend la case ou elle coute le moins en fidelite -- a deux conditions : la photo qu elle
+    // remplace reste presente ailleurs (utilisee 2 fois ou plus), et la meme photo n est pas deja a
+    // moins de 2 cases (l anti-repetition tient toujours).
+    if (chaquePhoto) {
+      const nbCases = subW * subH;
+      const dist = (idx, c) => { let s = 0; const a = idx * SIG_LEN, b = c * SIG_LEN; for (let k = 0; k < SIG_LEN; k++) { const df = sigsPlates[a + k] - ciblesSig[b + k]; s += df * df; } return s; };
+      const voisin = (c, idx) => { const r0 = (c / subW) | 0, c0 = c % subW;
+        for (let r2 = Math.max(0, r0 - EXCLUSION_RADIUS); r2 <= Math.min(subH - 1, r0 + EXCLUSION_RADIUS); r2++)
+          for (let c2 = Math.max(0, c0 - EXCLUSION_RADIUS); c2 <= Math.min(subW - 1, c0 + EXCLUSION_RADIUS); c2++)
+            if (chosen[r2 * subW + c2] === idx) return true;
+        return false; };
+      const oubliees = []; for (let idx = 0; idx < NB_PHOTOS; idx++) if (!usageCounts[idx]) oubliees.push(idx);
+      if (NB_PHOTOS > nbCases) {
+        noteChaquePhoto = NB_PHOTOS + ' photos pour ' + nbCases + ' cases : impossible de toutes les poser — agrandissez le mur ou montez la résolution par tesselle';
+      } else {
+        let posees = 0;
+        for (const u of oubliees) {
+          let meilleure = -1, cout = Infinity;
+          for (let c = 0; c < nbCases; c++) {
+            if (usageCounts[chosen[c]] < 2 || voisin(c, u)) continue;
+            const d = dist(u, c) - dist(chosen[c], c);
+            if (d < cout) { cout = d; meilleure = c; }
+          }
+          if (meilleure < 0) continue;
+          usageCounts[chosen[meilleure]]--; chosen[meilleure] = u; usageCounts[u] = 1; posees++;
+        }
+        noteChaquePhoto = posees === oubliees.length ? 'chacune des ' + NB_PHOTOS + ' photos est posée au moins une fois'
+                        : (oubliees.length - posees) + ' photo(s) sans place possible (anti-répétition)';
+        chosen.forEach(checkQuality);
+      }
+      await tick();
+    }
+
+    derniereComposition = { cle: cleComposition, img: img, lib: libraryImages, chosen: chosen.slice(), graine: graine };
     }
 
     // Composition : n=1 -> une photo occupe toute la tesselle (rendu inchangé depuis V124).
@@ -9127,6 +9213,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     if (onProgress) onProgress(1); // barre à 100 % avant la révélation
 
     const notes = [];
+    if (noteChaquePhoto) notes.push(noteChaquePhoto);
     if (libraryImages.length < 13) {
       notes.push(`avec ${libraryImages.length} photo${libraryImages.length > 1 ? 's' : ''}, des répétitions proches restent possibles — 13 photos ou plus garantissent qu'aucune ne revient à moins de 2 cases`);
     }
