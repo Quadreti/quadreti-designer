@@ -630,6 +630,57 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   .submode-btn.active{ background: var(--teal); color: var(--accent-ink); border-color: transparent; }
   #submodeLibraryBtn{ grid-column: 1 / -1; }
   .hint{ font-size: 11.5px; color: var(--text-muted); line-height:1.5; margin: 8px 0; text-align:center; }
+  /* 23/09 : curseur de double lecture */
+  .dl-force{ display:flex; align-items:center; gap:10px; }
+  .dl-force input[type=range]{ flex:1; min-width:0; accent-color: var(--terracotta, #d96c2f); }
+  .dl-force output{ min-width:44px; text-align:right; font-weight:700; }
+  /* HARMONISATION 23/09 -- les fenetres (.modal-box) etaient restees BLANCHES apres le passage au
+     theme sombre, alors que leurs textes suivaient le theme : titres clairs sur blanc (1,35),
+     boutons #dedede sur #dedede (1, invisibles). Elles prennent la grammaire des cartes flottantes :
+     fond navy 2, texte clair, bouton principal orange de marque avec l encre (charte). */
+  :root{ --fenetre-fond:#33434f; --fenetre-texte:#dedede; --fenetre-bord:rgba(222,222,222,.14); --fenetre-contour:rgba(222,222,222,.45); }
+  /* html body : la regle d origine .modal-box est plus loin dans le fichier, a specificite egale elle gagnait */
+  html body .modal-box{ background:var(--fenetre-fond); color:var(--fenetre-texte); border:1px solid var(--fenetre-bord); --text-strong:var(--fenetre-texte); }
+  html body .modal-box h2, html body .modal-box h3, html body .modal-box h4{ color:var(--fenetre-texte); }
+  html body .modal-box .modal-close{ color:var(--fenetre-texte); }
+  html body .modal-box .modal-link-btn{ background:var(--terracotta); color:var(--accent-ink); border-color:var(--terracotta); }
+  html body .modal-box .modal-link-btn.modal-cancel-btn{ background:transparent; color:var(--fenetre-texte); border:1.5px solid var(--fenetre-contour); }
+  /* texte pose sur l orange de marque : l encre, jamais le clair (charte : 5,23 contre 2,54) */
+  .preview-toggle.has-ind button.on, .has-ind .tab-btn.active, .has-ind .profile-btn.active, .has-ind .submode-btn.active{ color:var(--accent-ink); }
+  html body .modal-box .preview-toggle button:not(.on){ color:var(--fenetre-texte); }
+  /* hors des fenetres : le texte d accueil etait ecrit en dur #5c646c (2,41 sur le navy) */
+  html body #introSeq .intro-pitch, html body header p{ color:var(--text-muted); }
+  html body #clearBtn{ color:var(--accent-ink); }
+  /* BULLES D INFO : une icone « i » a cote du libelle ; la bulle s ouvre au survol, reste ouverte
+     au clic (ou a Entree), se ferme par un second clic, un clic ailleurs ou Echap. */
+  #mosaicLibraryResolutionRow, .bulle-ancre{ position:relative; }
+  .info-bulle{ display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; margin-left:6px;
+    border-radius:50%; border:1.5px solid var(--text-muted); background:transparent; color:var(--text-muted);
+    font:700 10px/1 Georgia, serif; font-style:italic; text-transform:none; letter-spacing:0; padding:0; cursor:pointer;
+    vertical-align:1px; position:relative; }
+  .info-bulle:hover, .info-bulle:focus-visible, .info-bulle[aria-expanded="true"]{ border-color:var(--terracotta); color:var(--terracotta); outline:none; }
+  /* une pastille orange sur le « i » quand la bulle a un conseil a donner */
+  .info-bulle.a-conseil::after{ content:''; position:absolute; top:-3px; right:-4px; width:7px; height:7px; border-radius:50%; background:var(--terracotta); }
+  .bulle{ display:none; position:absolute; z-index:60; left:0; right:0; top:calc(100% + 6px); text-align:left;
+    background:var(--fenetre-fond); color:var(--fenetre-texte); border:1px solid var(--fenetre-bord); border-radius:10px;
+    padding:10px 12px; font-size:12px; line-height:1.55; box-shadow:0 14px 34px -14px rgba(0,0,0,.65); }
+  .bulle.ouverte{ display:block; }
+  .bulle strong{ color:inherit; }
+  /* menus + et - : l icone poussait le libelle de 12,5 px -> elle passe dans la marge gauche, le texte se centre */
+  #v140FabMenu button, #v140FabMenuMinus button{ position:relative; justify-content:center; padding-left:41px; padding-right:41px; }
+  #v140FabMenu button .v140-icon, #v140FabMenuMinus button .v140-icon{ position:absolute; left:16px; }
+  /* Se connecter : meme cause (8,5 px). Sous 561 px le bouton n est plus qu une icone : regle hors de portee */
+  @media (min-width:561px){
+    /* html body : la regle d origine du bouton est plus loin dans le fichier, a specificite egale elle gagnait */
+    html body .appnav-inner #connectBtn{ position:relative; padding-left:32px; padding-right:32px; }
+    html body .appnav-inner #connectBtn .v140-icon{ position:absolute; left:15px; }
+  }
+  /* titres repliables : la fleche ▾ comptait dans le centrage et tirait le titre de 10 px a gauche */
+  #toolsCol .panel > h2:first-child::after, #actionsCol .panel > h2:first-child::after{ position:absolute; right:8px; top:50%; margin:-0.5em 0 0; line-height:1; }
+  /* quatre boutons etaient restes en Arial (police par defaut du navigateur), texte 1,4 px trop haut.
+     En Jura comme le reste de l app, leur texte tombe pile au centre sans retoucher les marges (mesure : 0 px). */
+  html body #clearLibraryBtn, html body #generateLibraryBtn, html body #textStickerBtn, html body #addColorBtn{ font-family:var(--font-main); }
+  .bulle button{ margin-left:6px; padding:2px 8px; font-size:11px; background:var(--terracotta); color:var(--accent-ink); border:none; border-radius:6px; cursor:pointer; }
   #clearLibraryBtn{
     background: var(--grid-bg); color: var(--panel-ink); border:none;
     border-radius:7px; font-size:12.5px; font-weight:600; cursor:pointer; padding: 9px 6px;
@@ -2728,7 +2779,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             </div>
             <div style="display:flex; gap:6px; margin-bottom:10px;">
               <input type="text" id="textStickerInput" placeholder="Texte…" maxlength="12" class="hexval-input" style="flex:1; text-transform:none; width:auto; padding:12px 10px; font-size:14px; min-width:0;">
-              <button id="textStickerBtn" style="flex-shrink:0; background:#F5F5F5; color:var(--title); border:1px solid var(--border-light); border-radius:7px; font-size:12.5px; font-weight:600; padding:0 12px; cursor:pointer;">Générer</button>
+              <button id="textStickerBtn" style="flex-shrink:0; background:var(--terracotta); color:var(--accent-ink); border:1px solid var(--terracotta); border-radius:7px; font-size:12.5px; font-weight:600; padding:0 12px; cursor:pointer;">Générer</button>
             </div>
             <!-- V128 — palette dédiée à l'arrière-plan du texte, visible uniquement ici (dans
                  le bloc d'édition de texte), séparée de la palette générale qui pilote la
@@ -2819,13 +2870,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       <div id="libraryBlock" style="display:none; margin-top:14px;">
         <div class="mode-note">Ajoutez plusieurs photos : chaque case du mur affichera celle dont la couleur moyenne se rapproche le plus de la zone qu'elle représente.</div>
         <div class="size-row" style="max-width:none; margin: 4px 0 12px;" id="mosaicLibraryResolutionRow">
-          <label for="mosaicLibraryResolutionSelect">Résolution par tesselle</label>
+          <label for="mosaicLibraryResolutionSelect">Résolution par tesselle <button type="button" class="info-bulle" id="iResolution" aria-expanded="false" aria-controls="infoResolution" aria-label="À propos de la résolution par tesselle">i</button></label>
           <select id="mosaicLibraryResolutionSelect">
             <option value="1">Standard (1 photo)</option>
             <option value="2">Fine (2×2 photos)</option>
             <option value="3">Très fine (3×3 photos)</option>
             <option value="4">Maximale (4×4 photos)</option>
           </select>
+          <div id="infoResolution" class="bulle" role="tooltip">
+            <div id="infoResolutionTaille"></div>
+            <div id="infoResolutionConseil"></div>
+          </div>
         </div>
         <div class="upload-zone" id="libraryUploadZone">
           Bibliothèque — déposez plusieurs images ici
@@ -2833,15 +2888,24 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         </div>
         <p class="hint" id="libraryCountLabel">0 image dans la bibliothèque</p>
         <div id="featureBlock_double_lecture">
-          <div class="size-row" style="max-width:none; margin: 12px 0 4px;">
-            <label for="doubleLectureSelect">Filtre double lecture</label>
-            <select id="doubleLectureSelect">
-              <option value="0">Désactivé</option>
-              <option value="0.25">25%</option>
-              <option value="0.5">50%</option>
-              <option value="0.75" selected="">75%</option>
+          <div class="size-row bulle-ancre" style="max-width:none; margin: 12px 0 4px;">
+            <label for="doubleLectureMethode">Double lecture <button type="button" class="info-bulle" id="iDoubleLecture" aria-expanded="false" aria-controls="bulleDoubleLecture" aria-label="À propos de la double lecture">i</button></label>
+            <select id="doubleLectureMethode">
+              <option value="couleurs" selected>Couleurs préservées (nouveau)</option>
+              <option value="voile">Voile (actuel)</option>
             </select>
+            <div id="bulleDoubleLecture" class="bulle" role="tooltip">
+              <strong>Couleurs préservées</strong> : les couleurs de chaque photo glissent vers celles du portrait, sans perdre leur contraste.
+              <strong>Voile</strong> : un aplat de couleur posé par-dessus la photo.<br>
+              Changer la force ou la méthode recompose le mur avec les mêmes photos, aux mêmes places. « Générer » tire une nouvelle disposition.
+            </div>
           </div>
+          <div class="size-row dl-force" style="max-width:none; margin: 4px 0 4px;">
+            <label for="doubleLectureForce">Force</label>
+            <input type="range" id="doubleLectureForce" min="0" max="100" step="5" value="75">
+            <output id="doubleLectureValeur" for="doubleLectureForce">75 %</output>
+          </div>
+          <button type="button" id="voirDoubleLecture" style="width:100%; margin-top:4px;">Voir la double lecture en grand</button>
         </div>
         <div id="featureBlock_harmonize">
           <label class="checkbox-row" for="harmonizeCheckbox">
@@ -5234,7 +5298,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     else { sSize = img.width; sx = 0; sy = (img.height - sSize) / 2; }
     octx.drawImage(img, sx, sy, sSize, sSize, 0, 0, s, s);
     applyPhotoStyle(octx, s, style, shift);
-    if (overlayRGBA) {
+    if (overlayRGBA && overlayRGBA.zones) transfertZones(octx, s, overlayRGBA.zones, overlayRGBA.force); // 23/09 : couleurs preservees
+    else if (overlayRGBA) {
       octx.fillStyle = overlayRGBA;
       octx.fillRect(0, 0, s, s);
     }
@@ -8600,12 +8665,156 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     });
   });
 
+
+  // ---------- 23/09 : double lecture « couleurs préservées » ----------
+  // Le voile posait un aplat de couleur PAR-DESSUS la photo : de près, elle perdait jusqu'aux
+  // trois quarts de son contraste (mesuré : 25 % gardés avec 60 photos). Ici on DÉPLACE les
+  // couleurs de la photo vers celles de la cible, zone par zone (3×3, interpolées en douceur),
+  // sans toucher à ses écarts internes : les ombres et les détails restent. Calcul en Lab,
+  // l'espace où un même écart de chiffres correspond à un même écart vu par l'œil.
+  let derniereComposition = null;
+  const DL_LIN = new Float32Array(256);
+  for (let i = 0; i < 256; i++) { const c = i / 255; DL_LIN[i] = c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
+  const DL_GN = 4096, DL_GAM = new Uint8ClampedArray(DL_GN + 1);
+  for (let k = 0; k <= DL_GN; k++) { const c = k / DL_GN; DL_GAM[k] = Math.round(255 * (c <= 0.0031308 ? 12.92 * c : 1.055 * Math.pow(c, 1 / 2.4) - 0.055)); }
+  function dlF(t) { return t > 0.008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116; }
+  function dlFinv(t) { const t3 = t * t * t; return t3 > 0.008856 ? t3 : (t - 16 / 116) / 7.787; }
+  function dlGam(c) { return DL_GAM[c <= 0 ? 0 : c >= 1 ? DL_GN : Math.round(c * DL_GN)]; }
+  function dlLab(r, g, b, o) {
+    const R = DL_LIN[r], G = DL_LIN[g], B = DL_LIN[b];
+    const X = dlF((R * 0.4124 + G * 0.3576 + B * 0.1805) / 0.95047);
+    const Y = dlF(R * 0.2126 + G * 0.7152 + B * 0.0722);
+    const Z = dlF((R * 0.0193 + G * 0.1192 + B * 0.9505) / 1.08883);
+    o[0] = 116 * Y - 16; o[1] = 500 * (X - Y); o[2] = 200 * (Y - Z);
+  }
+  // zonesCible : 9 couleurs Lab (grille 3×3) ; force : 0 = photo intacte, 1 = zones à la couleur exacte de la cible
+  function transfertZones(ctx, s, zonesCible, force) {
+    const im = ctx.getImageData(0, 0, s, s), d = im.data, N = s * s;
+    const L = new Float32Array(N), A = new Float32Array(N), B = new Float32Array(N), o = [0, 0, 0];
+    const somme = new Float64Array(27), compte = new Float64Array(9);
+    for (let y = 0; y < s; y++) {
+      const zy = Math.min(2, (y * 3 / s) | 0);
+      for (let x = 0; x < s; x++) {
+        const i = y * s + x, p = i * 4;
+        dlLab(d[p], d[p + 1], d[p + 2], o);
+        L[i] = o[0]; A[i] = o[1]; B[i] = o[2];
+        const z = zy * 3 + Math.min(2, (x * 3 / s) | 0);
+        somme[z * 3] += o[0]; somme[z * 3 + 1] += o[1]; somme[z * 3 + 2] += o[2]; compte[z]++;
+      }
+    }
+    const ec = new Float32Array(27);
+    for (let z = 0; z < 9; z++) for (let k = 0; k < 3; k++) ec[z * 3 + k] = force * (zonesCible[z * 3 + k] - somme[z * 3 + k] / Math.max(1, compte[z]));
+    for (let y = 0; y < s; y++) {
+      const gy = Math.min(1.999, Math.max(0, (y + 0.5) / s * 3 - 0.5)), y0 = gy | 0, fy = gy - y0;
+      for (let x = 0; x < s; x++) {
+        const gx = Math.min(1.999, Math.max(0, (x + 0.5) / s * 3 - 0.5)), x0 = gx | 0, fx = gx - x0;
+        const a = (y0 * 3 + x0) * 3, b = a + 3, c = a + 9, e = a + 12;
+        const w1 = (1 - fx) * (1 - fy), w2 = fx * (1 - fy), w3 = (1 - fx) * fy, w4 = fx * fy;
+        const i = y * s + x, p = i * 4;
+        const l = L[i] + ec[a] * w1 + ec[b] * w2 + ec[c] * w3 + ec[e] * w4;
+        const aa = A[i] + ec[a + 1] * w1 + ec[b + 1] * w2 + ec[c + 1] * w3 + ec[e + 1] * w4;
+        const bb = B[i] + ec[a + 2] * w1 + ec[b + 2] * w2 + ec[c + 2] * w3 + ec[e + 2] * w4;
+        let Y = (l + 16) / 116; const X = dlFinv(aa / 500 + Y) * 0.95047, Z = dlFinv(Y - bb / 200) * 1.08883; Y = dlFinv(Y);
+        d[p] = dlGam(X * 3.2406 - Y * 1.5372 - Z * 0.4986);
+        d[p + 1] = dlGam(-X * 0.9689 + Y * 1.8758 + Z * 0.0415);
+        d[p + 2] = dlGam(X * 0.0557 - Y * 0.2040 + Z * 1.0570);
+      }
+    }
+    ctx.putImageData(im, 0, 0);
+  }
+  function cropToSquareThumbTransfert(img, size, zones, force, style, shift) {
+    const off = document.createElement('canvas');
+    off.width = size; off.height = size;
+    const ctx = off.getContext('2d', { willReadFrequently: true });
+    const ratio = img.width / img.height;
+    let sx, sy, sSize;
+    if (ratio > 1) { sSize = img.height; sx = (img.width - sSize) / 2; sy = 0; }
+    else { sSize = img.width; sx = 0; sy = (img.height - sSize) / 2; }
+    ctx.drawImage(img, sx, sy, sSize, sSize, 0, 0, size, size);
+    applyPhotoStyle(ctx, size, style, shift);
+    transfertZones(ctx, size, zones, force);
+    return off.toDataURL('image/jpeg', 0.85);
+  }
+
+  // 23/09 : sous « Résolution par tesselle », la taille RÉELLE de chaque photo sur la tesselle
+  // découpée, et la finesse conseillée pour ce mur. Règle tirée des mesures du 23/09 : la double
+  // lecture tient quand la grille de lecture fait au moins ~35 photos de côté (au-delà, le gain
+  // se voit peu) ; en dessous, le portrait reste flou même avec la meilleure méthode.
+  const GRILLE_CIBLE = 35;
+  function finesseConseillee() {
+    const cote = Math.max(panelsCols, panelsRows) * PANEL_SIZE;
+    for (let n = 1; n <= 4; n++) if (cote * n >= GRILLE_CIBLE) return n;
+    return 4;
+  }
+  function majInfoResolution() {
+    const sel = document.getElementById('mosaicLibraryResolutionSelect');
+    const n = parseInt(sel.value, 10) || 1;
+    const mm = (REAL_CELL_MM / n).toFixed(n === 1 ? 1 : 2).replace('.', ',').replace(/,?0+$/, '');
+    const gC = panelsCols * PANEL_SIZE * n, gR = panelsRows * PANEL_SIZE * n;
+    document.getElementById('infoResolutionTaille').innerHTML =
+      'Chaque photo : <strong>' + mm + ' mm</strong> de côté · grille de lecture : <strong>' + gC + '×' + gR + '</strong>';
+    const c = finesseConseillee();
+    document.getElementById('iResolution').classList.toggle('a-conseil', c !== n);
+    const zone = document.getElementById('infoResolutionConseil');
+    if (c === n) { zone.textContent = 'Finesse conseillée pour ce mur ✓'; return; }
+    zone.innerHTML = '<br>Conseillé pour un mur ' + panelsCols + '×' + panelsRows + ' : <strong>' + (c === 1 ? '1 photo' : c + '×' + c) + '</strong>' +
+      (c > n ? ' (le portrait sera plus lisible)' : ' (photos plus grandes, portrait déjà lisible)') +
+      '<button type="button" id="appliquerConseil">Appliquer</button>';
+    document.getElementById('appliquerConseil').onclick = () => { sel.value = String(c); sel.dispatchEvent(new Event('change')); majInfoResolution(); };
+  }
+  document.getElementById('mosaicLibraryResolutionSelect').addEventListener('change', majInfoResolution);
+  // le mur change de taille (ou de profil de tesselle) : buildPanelGrid est toujours rappelée
+  const buildPanelGridOrigine = buildPanelGrid;
+  buildPanelGrid = function () { const r = buildPanelGridOrigine.apply(this, arguments); try { majInfoResolution(); } catch (e) {} return r; };
+  majInfoResolution();
+
+  // Bulles d info : survol = apercu, clic = epinglee. Meme geste a la souris et au clavier.
+  document.querySelectorAll('.info-bulle').forEach(btn => {
+    const bulle = document.getElementById(btn.getAttribute('aria-controls'));
+    let epinglee = false, minuterie = null;
+    const ouvrir = () => { clearTimeout(minuterie); bulle.classList.add('ouverte'); btn.setAttribute('aria-expanded', 'true'); };
+    const fermer = () => { clearTimeout(minuterie); epinglee = false; bulle.classList.remove('ouverte'); btn.setAttribute('aria-expanded', 'false'); };
+    const fermerBientot = () => { if (!epinglee) minuterie = setTimeout(fermer, 250); };
+    btn.addEventListener('mouseenter', ouvrir);
+    btn.addEventListener('mouseleave', fermerBientot);
+    bulle.addEventListener('mouseenter', () => clearTimeout(minuterie));
+    bulle.addEventListener('mouseleave', fermerBientot);
+    btn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); if (epinglee) fermer(); else { epinglee = true; ouvrir(); } });
+    [btn, bulle].forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Escape') { fermer(); btn.focus(); } }));
+    document.addEventListener('click', e => { if (epinglee && !bulle.contains(e.target) && e.target !== btn) fermer(); });
+  });
+
+  // Curseur : l'étiquette suit le doigt, le mur se recompose quand on relâche (pas à chaque cran)
+  const dlForce = document.getElementById('doubleLectureForce');
+  const dlValeur = document.getElementById('doubleLectureValeur');
+  const dlMethode = document.getElementById('doubleLectureMethode');
+  dlForce.addEventListener('input', () => { dlValeur.textContent = dlForce.value + ' %'; });
+  async function recomposerDoubleLecture() {
+    if (mosaicSubMode !== 'library' || !lastMosaicImage || !derniereComposition || mosaicBusy) return;
+    mosaicBusy = true;
+    try {
+      pushWallSnapshot();
+      openLoadingModal('Recomposition… 0 %');
+      const note = await applyMosaicLibrary(lastMosaicImage, mosaicProgress, true);
+      buildPanelGrid();
+      buildPanelNav();
+      closeLoadingModal();
+      statusMsg.textContent = 'Double lecture recomposée — mêmes photos, mêmes places ✓' + (note ? ' — ' + note : '');
+    } finally { mosaicBusy = false; }
+  }
+  dlForce.addEventListener('change', recomposerDoubleLecture);
+  dlMethode.addEventListener('change', recomposerDoubleLecture);
+  document.getElementById('voirDoubleLecture').addEventListener('click', async () => {
+    if (!derniereComposition) { statusMsg.textContent = 'Générez d\'abord une mosaïque'; return; }
+    openMosaicZoom(await generateWallZoomComposite());
+  });
+
   // Pénalité de réutilisation : chaque usage supplémentaire d'une même image
   // l'écarte progressivement des futurs choix, pour répartir la bibliothèque
   // plutôt que de laisser 2-3 photos "moyennes" dominer tout le mur.
   const USAGE_PENALTY = 700;
 
-  async function applyMosaicLibrary(img, onProgress) {
+  async function applyMosaicLibrary(img, onProgress, recomposer) {
     if (!img || libraryImages.length === 0) return '';
     const totalW = panelsCols * PANEL_SIZE;
     const totalH = panelsRows * PANEL_SIZE;
@@ -8617,7 +8826,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     // au lieu d'une seule. Gain de définition, notamment utile sur un mur petit ou peu large.
     const n = parseInt(document.getElementById('mosaicLibraryResolutionSelect').value, 10) || 1;
     const subTarget = n === 1 ? target : Math.max(24, Math.round(target / n));
-    const filterOpacity = parseFloat(document.getElementById('doubleLectureSelect').value) || 0;
+    // 23/09 : une methode + une force de 0 a 100 %, au lieu de 4 crans de voile
+    const methodeDL = document.getElementById('doubleLectureMethode').value;
+    const forceDL = (parseInt(document.getElementById('doubleLectureForce').value, 10) || 0) / 100;
+    const filterOpacity = methodeDL === 'voile' ? forceDL : 0;
+    const forceTransfert = methodeDL === 'couleurs' ? forceDL : 0;
     const photoStyle = mosaicStyleCarousel.getValue();
     const harmonize = document.getElementById('harmonizeCheckbox').checked;
     const checkedIdx = new Set();
@@ -8669,9 +8882,19 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     sctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, sigW, sigH);
     const sigData = sctx.getImageData(0, 0, sigW, sigH).data;
     const tsig = new Array(SIG_LEN); // signature réutilisable de la sous-case courante
+    // 23/09 : les 9 zones de la cible sous une sous-case, en Lab
+    const zonesCible = (sr, sc) => {
+      const z = new Float32Array(27), o = [0, 0, 0];
+      for (let kr = 0; kr < SIG_K; kr++) for (let kc = 0; kc < SIG_K; kc++) {
+        const p = ((sr * SIG_K + kr) * sigW + (sc * SIG_K + kc)) * 4;
+        dlLab(sigData[p], sigData[p + 1], sigData[p + 2], o);
+        const k = (kr * 3 + kc) * 3; z[k] = o[0]; z[k + 1] = o[1]; z[k + 2] = o[2];
+      }
+      return z;
+    };
 
     const usageCounts = new Array(libraryImages.length).fill(0);
-    const chosen = new Array(subW * subH).fill(-1);
+    let chosen = new Array(subW * subH).fill(-1);
     // Filtre désactivé : le rendu d'une photo est identique quelle que soit la case -> on peut la mettre en cache.
     // Filtre actif : le voile dépend de la couleur de CETTE case précise -> jamais deux fois le même rendu.
     const noFilterCache = new Map();
@@ -8722,6 +8945,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }
     };
 
+    // 23/09 : si seul le rendu change (force, methode), on reprend EXACTEMENT les memes photos
+    // aux memes places -- c est ce qui permet de comparer deux reglages a l oeil.
+    const cleComposition = [subW, subH, n, harmonize, sx, sy, sWidth, sHeight, libraryImages.length].join('|');
+    const reprise = !!recomposer && !!derniereComposition && derniereComposition.cle === cleComposition
+                    && derniereComposition.img === img && derniereComposition.lib === libraryImages;
+    if (reprise) { chosen = derniereComposition.chosen.slice(); chosen.forEach(checkQuality); rowsDone = subH; }
+    else {
     // Choix de la photo pour CHAQUE sous-case de la grille fine — identique à la logique
     // historique (n=1 en est simplement le cas particulier où sous-case = tesselle entière).
     for (let row = 0; row < subH; row++) {
@@ -8774,6 +9004,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       await tick();
     }
 
+    derniereComposition = { cle: cleComposition, img: img, lib: libraryImages, chosen: chosen.slice() };
+    }
+
     // Composition : n=1 -> une photo occupe toute la tesselle (rendu inchangé depuis V124).
     // n>1 -> chaque tesselle devient un petit collage n×n de photos distinctes, dessinées
     // directement dans un même canvas via drawSquareCropStyled (pas de dataURL intermédiaire).
@@ -8788,7 +9021,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           const idx = chosen[i];
           const shift = shiftByIdx ? shiftByIdx[idx] : null;
           let thumb;
-          if (filterOpacity === 0) {
+          if (forceTransfert > 0) {
+            thumb = cropToSquareThumbTransfert(libraryImages[idx].img, target, zonesCible(row, col), forceTransfert, photoStyle, shift);
+          } else if (filterOpacity === 0) {
             if (!noFilterCache.has(idx)) {
               noFilterCache.set(idx, cropToSquareThumb(libraryImages[idx].img, target, photoStyle, shift));
             }
@@ -8810,7 +9045,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
               const shift = shiftByIdx ? shiftByIdx[idx] : null;
               const or = data[i2 * 4], og = data[i2 * 4 + 1], ob = data[i2 * 4 + 2];
               const op = adaptiveOpacity(filterOpacity, libraryImages[idx].avg, or, og, ob); // voile adaptatif (V131)
-              const overlay = op > 0 ? `rgba(${or}, ${og}, ${ob}, ${op})` : null;
+              const overlay = forceTransfert > 0 ? { zones: zonesCible(subRow, subCol), force: forceTransfert }
+                            : (op > 0 ? `rgba(${or}, ${og}, ${ob}, ${op})` : null);
               drawSquareCropStyled(
                 tctx, libraryImages[idx].img,
                 bounds[sc], bounds[sr], bounds[sc + 1] - bounds[sc], bounds[sr + 1] - bounds[sr],
